@@ -67,7 +67,7 @@ public class RequestThread extends Thread {
 
 					DBConnection db = new DBConnection();
 					try {
-						db.connection(varietyList);
+						//db.connection(varietyList);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

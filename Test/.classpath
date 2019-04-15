@@ -2,13 +2,13 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/khj/Downloads/jsoup-1.11.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/khj/Downloads/poi-4.0.1/poi-4.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/khj/Downloads/poi-4.0.1/poi-examples-4.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/khj/Downloads/poi-4.0.1/poi-excelant-4.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/khj/Downloads/poi-4.0.1/poi-ooxml-4.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/khj/Downloads/poi-4.0.1/poi-ooxml-schemas-4.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/khj/Downloads/poi-4.0.1/poi-scratchpad-4.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/khj/Downloads/mysql-connector-java-5.1.47/mysql-connector-java-5.1.47-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/jsoup-1.11.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/mysql-connector-java-5.1.47-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/poi-4.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/poi-examples-4.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/poi-excelant-4.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/poi-ooxml-4.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/poi-ooxml-schemas-4.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/poi-scratchpad-4.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
