@@ -1,3 +1,4 @@
+package ingredients;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -44,14 +45,10 @@ public class ReadExcel {
 						continue;
 					if (val.contains("기타"))
 						continue;
-						if (!saveList.contains(val)) {
 
-							saveList.add(val);
-						}
-						if (!saveList.contains(item)) {
-							saveList.add(item);
-						}
-
+					if (!saveList.contains(val)) {
+						saveList.add(item + "#" + val);
+					}
 				}
 			}
 		} catch (FileNotFoundException e) {

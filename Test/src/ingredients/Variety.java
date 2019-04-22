@@ -1,27 +1,14 @@
+package ingredients;
 
 public class Variety {
-	// ssg
-	private String name;
-	private String img;
-	private String price;
-	private String unit = "정보 미제공";
-	// db
-	private  String UUID;
-	private String variety;
+	String name;
+	String img;
+	String price;
+	String unit;
 
-	public String getUUID() {
-		return UUID;
+	public Variety() {
+		unit = "정보 미제공";
 	}
-	public void setUUID(String uuid) {
-		this.UUID = uuid;
-	}
-	public String getVariety() {
-		return variety;
-	}
-	public void setVariety(String vairety) {
-		this.variety = vairety;
-	}
-
 	public String getName() {
 		return name;
 	}
