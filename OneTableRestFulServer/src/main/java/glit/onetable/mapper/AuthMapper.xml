@@ -23,7 +23,11 @@
 		SELECT EXISTS(SELECT 1 FROM user WHERE nickname = #{nickname} LIMIT 1) as count
 	</select>
 	
-	<select id="idFindToEmailChange" parameterType="User">
+	<select id="idFindToEmailChange" parameterType="String" resultType="User">
+		SELECT id FROM user WHERE email = #{email}
+	</select>
+	
+	<select id="pwFindToEmailChange" parameterType="User" resultType="int">
 		UPDATE User SET pw = #{pw} WHERE email = #{email}
 	</select>
 	

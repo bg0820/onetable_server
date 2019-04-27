@@ -201,6 +201,35 @@ public class AuthController {
 		int emailExists = authMapper.registerDuplicateEmail(email);
 		if(emailExists == 0)
 			throw new CustomException(ErrorCode.NON_REGISTERED);
+
+
+		User user = authMapper.idFindToEmailChange(email);
+				
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("onetable@onetable.com");
+        message.setTo(email);
+        message.setSubject("한상차림  - 아이디 찾기");
+        message.setText("아이디 : " + user.getId());
+        emailSender.send(message);
+		
+		return new ResponseEntity<ApiResponseResult>(resResult, hs);
+	}
+	
+	@RequestMapping(value="/find/pw", method = RequestMethod.POST)
+	public ResponseEntity<ApiResponseResult> findId(
+			@RequestHeader(value = "API_Version") String version,
+			@RequestParam String id,
+			@RequestParam String email
+			) throws CustomException {
+		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
+		HttpStatus hs = HttpStatus.OK;
+
+		if (!version.equals("1.0"))
+			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
+		
+		int emailExists = authMapper.registerDuplicateEmail(email);
+		if(emailExists == 0)
+			throw new CustomException(ErrorCode.NON_REGISTERED);
 		
 		StringBuffer temp = new StringBuffer();
 		Random rnd = new Random();
@@ -225,31 +254,15 @@ public class AuthController {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom("onetable@onetable.com");
         message.setTo(email);
-        message.setSubject("한상차림  - 아이디 찾기");
-        message.setText(temp.toString());
+        message.setSubject("한상차림 - 비밀번호 찾기");
+        message.setText("변경된 비밀번호 : " + temp.toString());
         emailSender.send(message);
 		
         User user = new User();
         user.setEmail(email);
         user.setPw(Util.SHA256(temp.toString()));
         
-        authMapper.idFindToEmailChange(user);
-        
-		return new ResponseEntity<ApiResponseResult>(resResult, hs);
-	}
-	
-	@RequestMapping(value="/find/pw", method = RequestMethod.POST)
-	public ResponseEntity<ApiResponseResult> findId(
-			@RequestHeader(value = "API_Version") String version,
-			@RequestParam String id,
-			@RequestParam String email
-			) throws CustomException {
-		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
-		HttpStatus hs = HttpStatus.OK;
-
-		if (!version.equals("1.0"))
-			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
-
+        authMapper.pwFindToEmailChange(user);
 		
 		
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);

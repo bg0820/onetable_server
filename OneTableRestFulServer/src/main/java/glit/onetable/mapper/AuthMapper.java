@@ -29,7 +29,8 @@ public interface AuthMapper {
 	public int registerDuplicateNickname(String nickname);
 	
 	
-	public void idFindToEmailChange(User user);
+	public User idFindToEmailChange(String email);
+	public int pwFindToEmailChange(User user);
 	
 	public int withdrawal(String userUUID);
 	
