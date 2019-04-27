@@ -15,6 +15,18 @@
 		SELECT EXISTS(SELECT 1 FROM user WHERE id = #{id} LIMIT 1) as count
 	</select>
 	
+	<select id="registerDuplicateEmail" resultType="int" parameterType="String">
+		SELECT EXISTS(SELECT 1 FROM user WHERE email = #{email} LIMIT 1) as count
+	</select>
+	
+	<select id="registerDuplicateNickname" resultType="int" parameterType="String">
+		SELECT EXISTS(SELECT 1 FROM user WHERE nickname = #{nickname} LIMIT 1) as count
+	</select>
+	
+	<select id="idFindToEmailChange" parameterType="User">
+		UPDATE User SET pw = #{pw} WHERE email = #{email}
+	</select>
+	
 	<update id="withdrawal">
 		UPDATE FROM user where userUUID = #{userUUID}
 	</update>

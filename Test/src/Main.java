@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,36 +10,65 @@ public class Main {
 	public static HashMap<String, ArrayList<Variety>> hashMap = new HashMap<String, ArrayList<Variety>>();
 
 	public static void main(String[] args) throws Exception {
-		DBConnectionPool.getInstance();
-		RequestThread[] rt;
 		try {
-			// ReadExcel re = new ReadExcel();
-			// ArrayList<String> saveList = re.getVarietyList();
+			FileManager fm = new FileManager();
+			fm.start();
+			ProxyManager pm = new ProxyManager();
+			pm.start();
+			DBIngredientsManager.getInstance().start();
+			
+			ArrayList<String> readList = new ArrayList<String>();
+			try {
+				BufferedReader br = new BufferedReader(new FileReader("ignore.txt"));
+				String line = "";
+				while((line = br.readLine()) != null)
+				{
+					readList.add(line);
+				}
+			} catch (IOException er) {
+
+			}
+			
 			System.out.println("DB 연결");
 			DBConnection db = new DBConnection();
-			ArrayList<IngredientsSubject> list = db.connection();
+			ArrayList<Variety> list = db.connection();
 			System.out.println("List 가져옴 : " + list.size());
-			rt = new RequestThread[list.size()];
-			// System.out.println(list.size());
+			
+			SSGThread[] rt = new SSGThread[list.size()];
+
 			ArrayList<String> proxyList = new ArrayList<String>();
-			//파일 객체 생성
-            File file = new File("proxyList.txt");
-            //입력 스트림 생성
-            FileReader filereader = new FileReader(file);
             //입력 버퍼 생성
-            BufferedReader bufReader = new BufferedReader(filereader);
+            BufferedReader bufReader = new BufferedReader(new FileReader("proxyList.txt"));
             String line = "";
             while((line = bufReader.readLine()) != null){
             	proxyList.add(line);
             }
-            //.readLine()은 끝에 개행문자를 읽지 않는다.
+            
             bufReader.close();
 
+            ArrayList<String> ignoreProxyList = new ArrayList<String>();
+            //입력 버퍼 생성
+            BufferedReader ignoreBufReader = new BufferedReader(new FileReader("proxyIgnoreList.txt"));
+            String successline = "";
+            while((successline = ignoreBufReader.readLine()) != null){
+            	ignoreProxyList.add(line);
+            }
+            
+            ignoreBufReader.close();
+            
+            
+            
             int proxyIndex = 0;
 			for (int i = 0; i < list.size(); i++) {
-
 				String proxyIP = proxyList.get(proxyIndex);
-				rt[i] = new RequestThread(list.get(i), proxyIP);
+				if(ignoreProxyList.contains(proxyIP))
+					continue;
+				
+				
+				if(readList.contains(list.get(i).getVariety()))
+					continue;
+				
+				rt[i] = new SSGThread(list.get(i), proxyIP);
 				rt[i].start();
 				try {
 					Thread.sleep(100);
@@ -51,32 +81,13 @@ public class Main {
 				proxyIndex++;
 			}
 
-			for(int i = 0; i< list.size(); i++)
-			{
-				rt[i].join();
-			}
-
-			DBConnection db2 = new DBConnection();
-			db2.insetIngredient(hashMap);
-
 
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/*
-		 * Main main = new Main(); ReadExcel re = new ReadExcel(); ArrayList<ItemInfo>
-		 * itemlist = new ArrayList<ItemInfo>(); itemlist = re.readExcel(); // Scanner
-		 * scanner = new Scanner(System.in); // System.out.println("검색어 입력 : "); //
-		 * String search = scanner.next();
-		 *
-		 * System.out.println(itemlist.size()); for (ItemInfo info : itemlist) { //
-		 * System.out.println(info.getVariety()); // test.getSSG(info.getVariety());
-		 * RequestThread rt = new RequestThread(info.getVariety()); rt.start(); try {
-		 * Thread.sleep(3000); } catch (InterruptedException e) { // TODO Auto-generated
-		 * catch block e.printStackTrace(); } }
-		 */
+		
 		System.out.println("성공");
 	}
 

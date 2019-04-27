@@ -25,6 +25,11 @@ public interface AuthMapper {
 	 * @return 0, 1
 	 */
 	public int registerDuplicateId(String id);
+	public int registerDuplicateEmail(String email);
+	public int registerDuplicateNickname(String nickname);
+	
+	
+	public void idFindToEmailChange(User user);
 	
 	public int withdrawal(String userUUID);
 	
