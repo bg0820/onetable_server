@@ -2,12 +2,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DBConnection {
-	public ArrayList<Variety> connection() {
+	public ArrayDeque<Variety> connection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -18,19 +19,14 @@ public class DBConnection {
 
 		try (Connection conn = DriverManager.getConnection(url, "onetable", "62066407")) {
 
-			// String sql = "DELETE FROM ingredientssubject WHERE variety='007'";
-			// + "SELECT HEX(IngredientsSubjectUUID) as isUUID, variety FROM
-			// ingredientssubject";
-
-			// PreparedStatement statement = conn.prepareStatement(sql);
-			// statement.execute();
 
 			String sql = "SELECT HEX(IngredientsSubjectUUID) as isUUID, variety FROM ingredientssubject";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
 
-			ArrayList<Variety> isList = new ArrayList<Variety>();
+			ArrayDeque<Variety> isList = new ArrayDeque<Variety>();
+			//ArrayList<Variety> isList = new ArrayList<Variety>();
 			while (rs.next()) {
 				Variety is = new Variety();
 				
@@ -47,14 +43,6 @@ public class DBConnection {
 			er.printStackTrace();
 			return null;
 		}
-		/*
-		 * for (Variety v : varietyList) { System.out.println(v.getName()); String sql =
-		 * "INSERT INTO ingredientssubject(subjectUUID, name, imgUrl) " +
-		 * "VALUES (UNHEX(REPLACE(UUID(), '-', '')) , " + v.getName() + ", '" +
-		 * v.getImg() + "')"; try (Connection conn = DriverManager.getConnection(url,
-		 * "sgyy", "62066407"); PreparedStatement statement =
-		 * conn.prepareStatement(sql)) { statement.executeQuery(); } }
-		 */
 
 	}
 

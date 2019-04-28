@@ -8,6 +8,7 @@ import glit.onetable.enums.ErrorCode;
 import glit.onetable.model.ApiResponseResult;
 
 @RestController
+@RequestMapping("/s")
 public class MainRouterController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)

@@ -27,8 +27,8 @@
 		SELECT id FROM user WHERE email = #{email}
 	</select>
 	
-	<select id="pwFindToEmailChange" parameterType="User" resultType="int">
-		UPDATE User SET pw = #{pw} WHERE email = #{email}
+	<select id="pwFindToEmailChange" parameterType="User" >
+		UPDATE User SET pw = #{pw} WHERE email = #{email} and id = #{id}
 	</select>
 	
 	<update id="withdrawal">

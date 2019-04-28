@@ -30,7 +30,7 @@ public interface AuthMapper {
 	
 	
 	public User idFindToEmailChange(String email);
-	public int pwFindToEmailChange(User user);
+	public void pwFindToEmailChange(User user);
 	
 	public int withdrawal(String userUUID);
 	

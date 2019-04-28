@@ -1,38 +1,26 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 
-public class FileManager extends Thread {
-	public static ArrayDeque<String> queue = new ArrayDeque<String>();
-	private BufferedWriter bw;
-	
+public class FileManager {
 
-	@Override
-	public void run() {
-		while (true) {
-
-			try {
-				System.out.println("파일 쓰기 : " + queue.size() + "개");
-				bw = new BufferedWriter(new FileWriter("ignore.txt", true));
-				for (int i = 0; i < queue.size(); i++) {
-					String s = queue.pop();
-					bw.append(s);
-					bw.newLine();
-				}
-				bw.close();
-				Thread.sleep(10000);
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public ArrayList<String> readFile(String file) {
+		try {
+			ArrayList<String> fileContent = new ArrayList<String>();
+			// 입력 버퍼 생성
+			BufferedReader bufReader = new BufferedReader(new FileReader(file));
+			String line = "";
+			while ((line = bufReader.readLine()) != null) {
+				fileContent.add(line);
 			}
 
-		}
+			bufReader.close();
 
+			return fileContent;
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 

@@ -44,15 +44,14 @@ public class AuthController {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponseResult> login(
 			@RequestHeader(value = "API_Version") String version,
 			@NotBlank(message = "아이디를 입력해 주세요.") @Size(max = 20) @RequestParam String id,
 			@NotBlank(message = "비밀번호를 입력해 주세요.") @Size(min = 8) @RequestParam String pw)
 			throws CustomException {
 
-		ApiResponseResult<Object> resResult =
-				new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
+		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
 		HttpStatus hs = HttpStatus.OK;
 		String pwHash = Util.SHA256(pw);
 
@@ -231,8 +230,9 @@ public class AuthController {
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
+		int idExists = authMapper.registerDuplicateId(id);
 		int emailExists = authMapper.registerDuplicateEmail(email);
-		if (emailExists == 0)
+		if (emailExists == 0 || idExists == 0)
 			throw new CustomException(ErrorCode.NON_REGISTERED);
 
 		StringBuffer temp = new StringBuffer();
@@ -265,6 +265,7 @@ public class AuthController {
 
 		User user = new User();
 		user.setEmail(email);
+		user.setId(id);
 		user.setPw(Util.SHA256(temp.toString()));
 
 		authMapper.pwFindToEmailChange(user);
