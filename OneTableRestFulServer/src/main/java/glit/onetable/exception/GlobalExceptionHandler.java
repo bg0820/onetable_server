@@ -34,20 +34,26 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiResponseResult> handleCustomError(CustomException e)
 	{
 		ApiResponseResult responseResult = new ApiResponseResult(ErrorCode.SUCCESS, "", null);
-		HttpStatus hs = HttpStatus.INTERNAL_SERVER_ERROR;
+		HttpStatus hs = HttpStatus.valueOf(e.getErrorCode().name());
 
 		switch(e.getErrorCode())
 		{
 			case API_VERSION_INVAILD:
 				responseResult.setErrorCode(ErrorCode.API_VERSION_INVAILD);
 				responseResult.setMsg("API_VERSION 헤더가 맞지 않습니다.");
-				hs = HttpStatus.PRECONDITION_FAILED;
 				break;
 			case LOGIN_FAILED:
 				responseResult.setErrorCode(ErrorCode.LOGIN_FAILED);
 				responseResult.setMsg("아이디 또는 비밀번호가 잘못 되었습니다.");
-				hs = HttpStatus.CONFLICT;
 				break;
+			case NON_REGISTERED:
+				responseResult.setErrorCode(ErrorCode.NON_REGISTERED);
+				responseResult.setMsg("가입되어 있지 않은 사용자 입니다.");
+				break;
+			default :
+				responseResult.setErrorCode(ErrorCode.UNKNOWN);
+				responseResult.setMsg(e.getMessage());
+				hs = HttpStatus.INTERNAL_SERVER_ERROR;
 		
 		}
 				

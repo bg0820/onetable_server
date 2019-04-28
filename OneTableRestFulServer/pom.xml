@@ -62,7 +62,11 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-mail</artifactId>
-		    <version>1.4.3.RELEASE</version>
+		    </dependency>
+		<!-- java mail 추가 -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
 		</dependency>
 	</dependencies>
 
