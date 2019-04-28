@@ -8,6 +8,6 @@
 	</select>
 	
 	<select id='ingredientQuery' parameterType="String" resultType="Ingredient">
-		SELECT HEX(IngredientsUUID) as IngredientsUUID, HEX(IngredientsSubjectUUID) as IngredientsSubjectUUID, currentPrice, priceDate, displayName, imgUrl FROM onetable.ingredients WHERE IngredientsSubjectUUID = UNHEX(#{uuid});
+		SELECT currentPrice, priceDate, displayName, imgUrl FROM onetable.ingredients WHERE IngredientsSubjectUUID = UNHEX(#{uuid});
 	</select>
 </mapper>
