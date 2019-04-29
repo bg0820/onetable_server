@@ -10,5 +10,6 @@ public enum ErrorCode {
     HEADER_NON_VALUE,
     NON_REGISTERED,
     UNKNOWN,
-    EMAIL_TYPE_INVALID
+    EMAIL_TYPE_INVALID,
+    PARAMETER_NOT_INVALID // 파라미터 없음
 }
