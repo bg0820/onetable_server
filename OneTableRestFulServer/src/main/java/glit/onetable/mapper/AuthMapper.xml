@@ -28,11 +28,11 @@
 	</select>
 	
 	<select id="pwFindToEmailChange" parameterType="User" >
-		UPDATE User SET pw = #{pw} WHERE email = #{email} and id = #{id}
+		UPDATE user SET pw = #{pw} WHERE email = #{email} and id = #{id}
 	</select>
 	
-	<update id="withdrawal">
-		UPDATE FROM user where userUUID = #{userUUID}
+	<update id="withdrawal" parameterType="String">
+		UPDATE user FROM SET status = 0 WHERE token = #{token}
 	</update>
 	
 	<select id="getUser" parameterType="String" resultType="User">
