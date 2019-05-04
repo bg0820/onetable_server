@@ -103,6 +103,8 @@ public class SSGThread extends Thread {
 								.selectFirst("em").text().replaceAll(",", ""));
 						variety.setUUID(query.getUUID());
 						variety.setVariety(query.getVariety());
+						
+						HangleAnalyze.getInstance().analyze(variety.getName());
 
 						// 단위 있는거만
 						if (info.selectFirst("div[class='unit']") != null) {
@@ -127,8 +129,8 @@ public class SSGThread extends Thread {
 			} while (true);*/
 
 			System.out.println(query.getVariety() + " - " + lis.size() +  "개 - 끝남");
-			DBIngredientsManager.getInstance().queue.add(lis);
-			IgnoreManagerThread.proxyIgnoreQueue.add(proxyIP);
+			//DBIngredientsManager.getInstance().queue.add(lis);
+			//IgnoreManagerThread.proxyIgnoreQueue.add(proxyIP);
 
 
 		} catch (IOException e) {

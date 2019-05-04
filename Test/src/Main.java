@@ -16,7 +16,7 @@ public class Main {
 			ifmt.start();
 
 			DBIngredientsManager.getInstance().start();
-
+			HangleAnalyze.getInstance().initilze();
 
 
 			System.out.println("DB 연결");
