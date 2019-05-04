@@ -2,6 +2,7 @@
 import java.util.List;
 
 import org.snu.ids.kkma.ma.CharSetType;
+import org.snu.ids.kkma.ma.Eojeol;
 import org.snu.ids.kkma.ma.MExpression;
 import org.snu.ids.kkma.ma.Morpheme;
 import org.snu.ids.kkma.ma.MorphemeAnalyzer;
