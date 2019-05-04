@@ -18,7 +18,8 @@ public class Main {
 			DBIngredientsManager.getInstance().start();
 			HangleAnalyze.getInstance().initilze();
 
-
+			
+			
 			System.out.println("DB 연결");
 			DBConnection db = new DBConnection();
 			list = db.connection();
