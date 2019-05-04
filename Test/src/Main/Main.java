@@ -1,10 +1,12 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+package Main;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
+import DB.DBConnection;
+import ManagerThread.DBIngredientsManager;
+import ManagerThread.FileManager;
+import ManagerThread.IgnoreManagerThread;
+import Model.HangleAnalyze;
+import Model.Variety;
 
 public class Main {
 

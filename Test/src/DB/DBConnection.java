@@ -1,11 +1,11 @@
+package DB;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import Model.Variety;
 
 public class DBConnection {
 	public ArrayDeque<Variety> connection() {

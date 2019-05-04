@@ -1,3 +1,4 @@
+package Main;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -7,6 +8,9 @@ import org.jsoup.UncheckedIOException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ManagerThread.IgnoreManagerThread;
+import Model.HangleAnalyze;
+import Model.Variety;
 
 public class SSGThread extends Thread {
 

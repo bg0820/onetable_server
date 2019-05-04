@@ -1,8 +1,11 @@
+package ManagerThread;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import DB.DBConnectionPool;
+import Model.Variety;
 
 public class DBIngredientsManager extends Thread {
 	private Connection conn;
