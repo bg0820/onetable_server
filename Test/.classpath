@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/Users/kimbogyu/Desktop/작업/GitHub Repos/onetable_server/Test/lib/jsoup-1.11.3.jar"/>
-	<classpathentry kind="lib" path="/Users/kimbogyu/Desktop/작업/GitHub Repos/onetable_server/Test/lib/mysql-connector-java-5.1.47-bin.jar"/>
-	<classpathentry kind="lib" path="/Users/kimbogyu/Desktop/작업/GitHub Repos/onetable_server/Test/lib/kkma-2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/jsoup-1.11.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/kkma-2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/khj/Documents/onetable_server/Test/lib/mysql-connector-java-5.1.47-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
