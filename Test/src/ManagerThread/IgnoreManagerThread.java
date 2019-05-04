@@ -2,13 +2,11 @@ package ManagerThread;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class IgnoreManagerThread extends Thread {
-	public static ArrayDeque<String> varietyIgnoreQueue = new ArrayDeque<String>();
-	public static ArrayDeque<String> proxyIgnoreQueue = new ArrayDeque<String>();
+	public static LinkedBlockingQueue<String> varietyIgnoreQueue = new LinkedBlockingQueue<String>();
 	private BufferedWriter varietyBw;
-	private BufferedWriter proxyBw;
 	
 
 	@Override
@@ -20,21 +18,12 @@ public class IgnoreManagerThread extends Thread {
 				varietyBw = new BufferedWriter(new FileWriter("ignore.txt", true));
 				
 				for (int i = 0; i < varietyIgnoreQueue.size(); i++) {
-					String s = varietyIgnoreQueue.pop();
+					String s = varietyIgnoreQueue.take();
 					varietyBw.append(s);
 					varietyBw.newLine();
 				}
 				varietyBw.close();
 				
-				
-				System.out.println("IgnoreManagerThread Proxy Write : " + varietyIgnoreQueue.size() + "개");
-				proxyBw = new BufferedWriter(new FileWriter("proxySuccess.txt", true));
-				for (int i = 0; i < proxyIgnoreQueue.size(); i++) {
-					String s = proxyIgnoreQueue.pop();
-					proxyBw.append(s);
-					proxyBw.newLine();
-				}
-				proxyBw.close();
 				
 				Thread.sleep(10000);
 

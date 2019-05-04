@@ -4,11 +4,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import Model.AnalyzeVariety;
 
 public class DBConnection {
-	public ArrayDeque<AnalyzeVariety> connection() {
+	public ConcurrentLinkedQueue<AnalyzeVariety> connection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -25,7 +26,7 @@ public class DBConnection {
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
 
-			ArrayDeque<AnalyzeVariety> isList = new ArrayDeque<AnalyzeVariety>();
+			ConcurrentLinkedQueue<AnalyzeVariety> isList = new ConcurrentLinkedQueue<AnalyzeVariety>();
 			//ArrayList<Variety> isList = new ArrayList<Variety>();
 			while (rs.next()) {
 				AnalyzeVariety is = new AnalyzeVariety();

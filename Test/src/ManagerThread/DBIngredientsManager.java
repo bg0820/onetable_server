@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 import DB.DBConnectionPool;
 import Model.AnalyzeVariety;
 import Model.UnitVO;
@@ -28,8 +28,8 @@ public class DBIngredientsManager extends Thread {
 		conn = DBConnectionPool.getInstance().getConnection();
 	}
 
-	public ArrayDeque<ArrayList<AnalyzeVariety>> queue =
-			new ArrayDeque<ArrayList<AnalyzeVariety>>();
+	public LinkedBlockingQueue<ArrayList<AnalyzeVariety>> queue =
+			new LinkedBlockingQueue<ArrayList<AnalyzeVariety>>();
 
 	@Override
 	public void run() {
@@ -39,7 +39,7 @@ public class DBIngredientsManager extends Thread {
 
 				for (int queueIdx = 0; queueIdx < queue.size(); queueIdx++) {
 
-					ArrayList<AnalyzeVariety> item = queue.pop();
+					ArrayList<AnalyzeVariety> item = queue.take();
 
 					for (int varListIdx = 0; varListIdx < item.size(); varListIdx++) {
 
@@ -48,7 +48,7 @@ public class DBIngredientsManager extends Thread {
 						String selectSQL =
 								"SELECT HEX(UnitUUID) as UnitUUID, unit.unitName, ml, g, cc, cm, amount FROM onetable.unit WHERE unitName = ?";
 						PreparedStatement statement = conn.prepareStatement(selectSQL);
-						
+
 						statement.setString(1, variety.getUnitStr());
 						ResultSet rs = statement.executeQuery();
 						int cnt = 0;
