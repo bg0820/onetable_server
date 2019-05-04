@@ -5,12 +5,12 @@ import DB.DBConnection;
 import ManagerThread.DBIngredientsManager;
 import ManagerThread.FileManager;
 import ManagerThread.IgnoreManagerThread;
+import Model.AnalyzeVariety;
 import Model.HangleAnalyze;
-import Model.Variety;
 
 public class Main {
 
-	public static ArrayDeque<Variety> list;
+	public static ArrayDeque<AnalyzeVariety> list;
 
 	public static void main(String[] args) throws Exception {
 		try {
@@ -37,7 +37,7 @@ public class Main {
 			while (list.size() != 0) {
 				String proxyIP = proxyList.get(proxyIndex);
 
-				Variety var = list.pop();
+				AnalyzeVariety var = list.pop();
 
 				System.out.println("남은 조회해야할 항목 개수 : " + list.size());
 				if (varietyIgnoreList.contains(var.getVariety())) {
@@ -53,7 +53,7 @@ public class Main {
 
 				
 				try {
-					Thread.sleep(500);
+					Thread.sleep(600);
 				} catch (InterruptedException e) { // TODO Auto-generated
 					e.printStackTrace();
 				}

@@ -1,4 +1,5 @@
 package Main;
+
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -8,16 +9,17 @@ import org.jsoup.UncheckedIOException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ManagerThread.DBIngredientsManager;
 import ManagerThread.IgnoreManagerThread;
+import Model.AnalyzeVariety;
 import Model.HangleAnalyze;
-import Model.Variety;
 
 public class SSGThread extends Thread {
 
-	private Variety query;
+	private AnalyzeVariety query;
 	private String proxyIP;
 
-	public SSGThread(Variety query,
+	public SSGThread(AnalyzeVariety query,
 			String proxyIP) {
 		// TODO Auto-generated constructor stub
 		this.query = query;
@@ -29,112 +31,102 @@ public class SSGThread extends Thread {
 		int page = 1;
 
 		try {
-			ArrayList<Variety> lis = new ArrayList<Variety>();
-			//do {
-				String URL = "http://www.ssg.com/search.ssg?target=all&query=" + query.getVariety()
-						+ "&page=" + page;
+			ArrayList<AnalyzeVariety> lis = new ArrayList<AnalyzeVariety>();
+			// do {
+			String URL = "http://www.ssg.com/search.ssg?target=all&query=" + query.getVariety()
+					+ "&page=" + page;
 
-				Connection.Response resp = getResponse(URL);
-				if (resp == null || resp.body().length() == 0) {
+			Connection.Response resp = getResponse(URL);
+			if (resp == null || resp.body().length() == 0) {
 
-					return;
+				return;
+			}
+
+			Document doc = resp.parse();
+
+			if (resp.statusCode() != 200) {
+				System.out.println(query.getVariety() + " : 서버 연결 실패");
+				synchronized (Main.list) {
+					Main.list.add(query);
+				}
+				return;
+			}
+
+			while (true) {
+
+				if (doc.selectFirst("input[id='itemCount']") != null) {
+					Element inputType = doc.selectFirst("input[id='parmTarget']");
+					// System.out.println(query.getVariety() + " : " +
+					// doc.selectFirst("input[id='itemCount']") + ", " + inputType.attr("value"));
+
+					if (inputType.attr("value").equals("book"))
+						return;
+
+					if (!doc.selectFirst("input[id='itemCount']").attr("value").equals(""))
+						break;
+
 				}
 
-				Document doc = resp.parse();
+				Thread.sleep(300);
+			}
 
-				if(resp.statusCode() != 200)
+			// 조회 했는데 조회 결과가 0개인 경우 다시 queue 에 넣을 필요 없음
+			if (Integer.parseInt(doc.selectFirst("input[id='itemCount']").attr("value")) == 0) {
+				System.out.println(this.query.getVariety() + " : 조회 결과 없음");
+				IgnoreManagerThread.varietyIgnoreQueue.add(this.query.getVariety());
+				return;
+			}
+
+			/*
+			 * int itemCnt = Integer.parseInt(
+			 * doc.selectFirst("input[id='itemCount']").attr("value").replaceAll(",", "")); if
+			 * (itemCnt == 0) break; int pageCnt = itemCnt / 80; int pageRemainCnt = itemCnt % 80;
+			 * int maxPageCnt = pageCnt;
+			 * 
+			 * if (pageRemainCnt != 0) maxPageCnt = pageCnt + 1;
+			 * 
+			 * System.out.println(query.getVariety() + ", " + itemCnt + ", " + maxPageCnt);
+			 */
+
+			Element ullist = doc.select("ul[id='idProductImg']").first(); // selectFirst도있음,
+																			// select안에는 태그
+																			// 이름
+			// select의 리턴 타입은 Element
+			Elements liListItemArr = ullist.select("li");
+
+			for (Element liListItem : liListItemArr) {
+				Element info = liListItem.selectFirst("div[class='cunit_info']");
+				String displayName = info.selectFirst("div[class='title']").selectFirst("a")
+						.selectFirst("em").text();
+				AnalyzeVariety variety = HangleAnalyze.getInstance().analyze(displayName);
+				if (variety != null)
 				{
-					System.out.println(query.getVariety() + " : 서버 연결 실패");
-					synchronized (Main.list) {
-						Main.list.add(query);
-					}
-					return;
-				}
+					//System.out.println(av.getUnitStr());
+					variety.setImg("http:" + liListItem.getElementsByClass("cunit_prod").get(0)
+							.selectFirst("img").attr("src"));
+					variety.setName(displayName);
+					variety.setPrice(info.selectFirst("div[class='opt_price']").selectFirst("em").text()
+							.replaceAll(",", ""));
+					variety.setUUID(query.getUUID());
+					variety.setVariety(query.getVariety());
 				
-				while (true) {
-					
-					if (doc.selectFirst("input[id='itemCount']") != null) {
-						Element inputType = doc.selectFirst("input[id='parmTarget']");
-						//System.out.println(query.getVariety() + " : "  + doc.selectFirst("input[id='itemCount']") + ", " + inputType.attr("value"));
-						
-						if(inputType.attr("value").equals("book"))
-							return;
-						
-						if (!doc.selectFirst("input[id='itemCount']").attr("value").equals(""))
-							break;
-
+	
+					// 단위 있는거만
+					if (info.selectFirst("div[class='unit']") != null) {
+						variety.setPerUnit(info.selectFirst("div[class='unit']").text());
 					}
-					
-					Thread.sleep(300);
-				}
-
-				// 조회 했는데 조회 결과가 0개인 경우 다시 queue 에 넣을 필요 없음
-				if (Integer.parseInt(doc.selectFirst("input[id='itemCount']").attr("value")) == 0) {
-					System.out.println(this.query.getVariety() + " : 조회 결과 없음");
-					IgnoreManagerThread.varietyIgnoreQueue.add(this.query.getVariety());
-					return;
-				}
-
-				/*int itemCnt = Integer.parseInt(
-						doc.selectFirst("input[id='itemCount']").attr("value").replaceAll(",", ""));
-				if (itemCnt == 0)
-					break;
-				int pageCnt = itemCnt
-						/ 80;
-				int pageRemainCnt = itemCnt
-						% 80;
-				int maxPageCnt = pageCnt;
-
-				if (pageRemainCnt != 0)
-					maxPageCnt = pageCnt + 1;
-
-				System.out.println(query.getVariety() + ", " + itemCnt + ", " + maxPageCnt);*/
-
-					Element ullist = doc.select("ul[id='idProductImg']").first(); // selectFirst도있음,
-																					// select안에는 태그
-																					// 이름
-					// select의 리턴 타입은 Element
-					Elements liListItemArr = ullist.select("li");
-
-					for (Element liListItem : liListItemArr) {
-						Variety variety = new Variety();
-						variety.setImg("http:" + liListItem.getElementsByClass("cunit_prod").get(0)
-								.selectFirst("img").attr("src"));
-						Element info = liListItem.selectFirst("div[class='cunit_info']");
-						variety.setName(info.selectFirst("div[class='title']").selectFirst("a")
-								.selectFirst("em").text());
-						variety.setPrice(info.selectFirst("div[class='opt_price']")
-								.selectFirst("em").text().replaceAll(",", ""));
-						variety.setUUID(query.getUUID());
-						variety.setVariety(query.getVariety());
-						
-						HangleAnalyze.getInstance().analyze(variety.getName());
-
-						// 단위 있는거만
-						if (info.selectFirst("div[class='unit']") != null) {
-							variety.setUnit(info.selectFirst("div[class='unit']").text());
-						}
-
-						String s = variety.getName().replaceAll("\\p{Z}", ""); // 문자열 중간 공백 제거
-
-						if (s.contains(query.getVariety())) {
-							lis.add(variety);
-						}
+	
+					String s = variety.getName().replaceAll("\\p{Z}", ""); // 문자열 중간 공백 제거
+	
+					if (s.contains(query.getVariety())) {
+						lis.add(variety);
 					}
-
-
-				/*
-				if (page == maxPageCnt)
-					break;
-				else
-					page++;
-
-				Thread.sleep(4000);
-			} while (true);*/
-
-			System.out.println(query.getVariety() + " - " + lis.size() +  "개 - 끝남");
-			//DBIngredientsManager.getInstance().queue.add(lis);
-			//IgnoreManagerThread.proxyIgnoreQueue.add(proxyIP);
+				}
+			}
+			
+			System.out.println(query.getVariety() + " - " + lis.size() + "개 - 끝남");
+			DBIngredientsManager.getInstance().queue.add(lis);
+			// IgnoreManagerThread.proxyIgnoreQueue.add(proxyIP);
 
 
 		} catch (IOException e) {
@@ -142,7 +134,7 @@ public class SSGThread extends Thread {
 			synchronized (Main.list) {
 				Main.list.add(query);
 			}
-			
+
 		} catch (UncheckedIOException e) {
 			synchronized (Main.list) {
 				Main.list.add(query);
@@ -172,8 +164,7 @@ public class SSGThread extends Thread {
 					.header("Upgrade-Insecure-Requests", "1")
 					.header("User-Agent",
 							"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36")
-					.header("Pragma", "no-cache")
-					.timeout(5000)
+					.header("Pragma", "no-cache").timeout(5000)
 					// .header("Cookie",
 					// "_xm_webid_1_=-543998881; PCID=15520262812008641085763;
 					// _fbp=fb.1.1552026282430.1275330372; RC_COLOR=24;
@@ -194,7 +185,7 @@ public class SSGThread extends Thread {
 			synchronized (Main.list) {
 				Main.list.add(query);
 			}
-			System.out.println(query.getVariety() + " : "  + proxyIP + " : 연결 실패");
+			System.out.println(query.getVariety() + " : " + proxyIP + " : 연결 실패");
 		}
 
 		return null;

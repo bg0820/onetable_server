@@ -1,9 +1,7 @@
 package Model;
 
 import java.util.List;
-
 import org.snu.ids.kkma.ma.CharSetType;
-import org.snu.ids.kkma.ma.Eojeol;
 import org.snu.ids.kkma.ma.MExpression;
 import org.snu.ids.kkma.ma.Morpheme;
 import org.snu.ids.kkma.ma.MorphemeAnalyzer;
@@ -26,66 +24,83 @@ public class HangleAnalyze {
 		ma.createLogger(null);
 	}
 
-	public void analyze(String content) {
+	public AnalyzeVariety analyze(String content) {
 		try {
+			//String resultContent = content.replaceAll("\\p{Z}", "");
 			List<MExpression> ret = ma.analyze(content);
 
 			ret = ma.postProcess(ret);
 			ret = ma.leaveJustBest(ret);
+			AnalyzeVariety av = new AnalyzeVariety();
+			double unitNum = 0;
+			String unitStr = "";
+			int unitCnt = 0;
 
 			List<Sentence> stl = ma.divideToSentences(ret);
 			for (int i = 0; i < stl.size(); i++) {
 				Sentence st = stl.get(i);
 
-				System.out.println("=============================================  " + st.getSentence());
 
 				for (int j = 0; j < st.size(); j++) {
+					// j = 띄어쓰기
+					// k = 형태소
 					for (int k = 0; k < st.get(j).size(); k++) {
 						Morpheme mo = st.get(j).get(k);
-						String charStr = mo.getString();
-						String tagStr = mo.getTag();
-						// System.out.println(charStr+", "+tagStr);
 
-						if(mo.getCharSet() == CharSetType.NUMBER)
-						{
-							if(k + 1 < st.get(j).size() )
-							{
+
+						// System.out.println("-----------------------");
+						// System.out.println(mo.getCharSetName());
+						// System.out.println(mo.getComposed());
+						// System.out.println(mo.getSmplStr());
+						// System.out.println(mo.getSmplStr2()); System.out.println(mo.getString());
+						// System.out.println(mo.getTag()); System.out.println(mo.getTagNum());
+						// System.out.println(mo.getCharSet());
+						//
+						// System.out.println("-----------------------");
+
+
+						if (mo.getCharSet() == CharSetType.NUMBER) {
+
+							unitNum = Double.parseDouble(mo.getString().replaceAll("\\,", ""));
+
+							if (k + 1 < st.get(j).size()) {
 								Morpheme nextMo = st.get(j).get(k + 1);
-								System.out.println(mo.getString());
-								System.out.println(nextMo.getString());
+								if (nextMo.getTag().equals("NNG") || nextMo.getTag().equals("OL"))
+									unitStr = nextMo.getString();
+
+
+
+							} else if (j + 1 < st.size()) {
+
+								Morpheme nextMo = st.get(j + 1).get(0);
+
+								if (nextMo.getTag().equals("NNG") || nextMo.getTag().equals("OL"))
+									unitStr = nextMo.getString();
+
 
 							}
 
+							unitCnt++;
+
 						}
-						/*
-						System.out.println(mo.toString());
-						if (tagStr.equals("NR") || tagStr.equals("OL")) {
-							System.out.println(charStr);
-						}
-						if (tagStr.equals("NNG") || tagStr.equals("UN")) {
-							if (j - 1 > 0) {
-								if (st.get(j - 1).get(k).getTag().equals("NR")) {
-									System.out.println(charStr);
-								}
-							}
-						}*/
+
 					}
-					/*
-					 * for(int k = 0; k< ss.length ; k++) { String str[] = ss[k].split("\\/");
-					 * String charStr = str[0]; String tagStr = str[1]; if(tagStr.equals("NR")) {
-					 *
-					 * //String strr[] = ss[k+1].split("\\/"); //if(strr[1].equals(")) }
-					 *
-					 * }
-					 */
 
 				}
 
-				System.out.println("=============================================");
+				if (unitNum != 0 && unitStr != "" && unitCnt == 1) {
+					av.setDispalyName(content);
+					av.setUnitNum(unitNum);
+					av.setUnitStr(unitStr);
+
+					return av;
+				} else
+					return null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 }
