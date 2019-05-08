@@ -1,13 +1,14 @@
 package ManagerThread;
 
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import Main.SSGThread;
 import Model.AnalyzeVariety;
 
 public class CrawlerManagerThread extends Thread {
 	
-	public ConcurrentLinkedQueue<AnalyzeVariety> list;
+	public Stack<AnalyzeVariety> list;
 	
 	private static class CrawlerManagerThreadLazy {
 		public static final CrawlerManagerThread INSTANCE = new CrawlerManagerThread();
@@ -31,7 +32,7 @@ public class CrawlerManagerThread extends Thread {
 	public void run() {
 		while (true) {
 			String proxyIP = proxyList.get(proxyIndex);
-			AnalyzeVariety var = list.poll();
+			AnalyzeVariety var = list.pop();
 
 			if (var == null)
 				break;

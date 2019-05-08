@@ -115,7 +115,7 @@ public class SSGThread extends Thread {
 		} catch (Exception e) {
 			// IgnoreManagerThread.proxyIgnoreQueue.add(proxyIP);
 
-			CrawlerManagerThread.getInstance().list.offer(query);
+			CrawlerManagerThread.getInstance().list.push(query);
 			System.out.println("[Exception]" + query.getVariety() + " : " + proxyIP + " : 연결 실패 - "
 					+ e.getMessage());
 

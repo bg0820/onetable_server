@@ -3,13 +3,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import Model.AnalyzeVariety;
 
 public class DBConnection {
-	public ConcurrentLinkedQueue<AnalyzeVariety> connection() {
+	public Stack<AnalyzeVariety> connection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -26,7 +25,7 @@ public class DBConnection {
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
 
-			ConcurrentLinkedQueue<AnalyzeVariety> isList = new ConcurrentLinkedQueue<AnalyzeVariety>();
+			Stack<AnalyzeVariety> isList = new Stack<AnalyzeVariety>();
 			//ArrayList<Variety> isList = new ArrayList<Variety>();
 			while (rs.next()) {
 				AnalyzeVariety is = new AnalyzeVariety();
@@ -34,8 +33,7 @@ public class DBConnection {
 				is.setUUID(rs.getString("isUUID"));
 				is.setVariety(rs.getString("variety"));
 				
-				isList.add(is);
-
+				isList.push(is);
 			}
 
 			return isList;
