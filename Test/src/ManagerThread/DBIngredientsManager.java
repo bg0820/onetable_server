@@ -53,33 +53,59 @@ public class DBIngredientsManager extends Thread {
 						statement.setString(1, variety.getAnayUnit().getUnitStr());
 						
 						ResultSet rs = statement.executeQuery();
+						
 						int cnt = 0;
 						UnitVO unit = new UnitVO();
 						while (rs.next()) {
 							unit.setUnitIdx(rs.getInt("unitIdx"));
 							cnt++;
 						}
-
-						// 아무 타입도 속하지 않는경우
-						if (cnt == 0) 
-							unit.setUnitIdx(DEFAULT_UNIT_UUID);
 						
+						statement.close();
+						
+						// 아무 타입도 속하지 않는경우
+						if (cnt == 0)
+							unit.setUnitIdx(DEFAULT_UNIT_UUID);
 
+						/*
+						 * System.out.println("==================");
+						 * System.out.println(variety.getIngredientItemId());
+						 * System.out.println(variety.getIngredientSubject().getIngredientSubjectIdx
+						 * ()); System.out.println(unit.getUnitIdx());
+						 * System.out.println(variety.getAnayUnit().getUnitAmount());
+						 * System.out.println(variety.getPrice());
+						 * System.out.println(variety.getDisplayName());
+						 * System.out.println(variety.getImgUrl());
+						 */
 
 						String sql =
-								"INSERT INTO ingredient (ingredientItemId, ingredientSubjectIdx, UnitUUID, unitAmount, currentPrice, priceDate, displayName, imgURL)"
-										+ " VALUES (?, ?, ?, ?, ?, CURDATE(), ?, ?)";
+								"INSERT INTO ingredient (ingredientItemId, ingredientSubjectIdx, unitIdx, unitAmount, displayName, imgURL)"
+										+ " VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE unitIdx = ?, unitAmount = ?, displayName = ?, imgURL = ?";
 						statement = conn.prepareStatement(sql);
 						statement.setString(1, variety.getIngredientItemId());
-						statement.setInt(2, variety.getIngredientSubject().getIngredientSubjectIdx());
+						statement.setInt(2,
+								variety.getIngredientSubject().getIngredientSubjectIdx());
 						statement.setInt(3, unit.getUnitIdx());
 						statement.setDouble(4, variety.getAnayUnit().getUnitAmount());
-						
-						statement.setInt(5, variety.getPrice()); // 2,000
-						statement.setString(6, variety.getDisplayName());
-						statement.setString(7, variety.getImgUrl());
-						statement.executeUpdate();
 
+						statement.setString(5, variety.getDisplayName());
+						statement.setString(6, variety.getImgUrl());
+						statement.setInt(7, variety.getIngredientSubject().getIngredientSubjectIdx());
+						statement.setDouble(8,  variety.getAnayUnit().getUnitAmount());
+						statement.setString(9, variety.getDisplayName());
+						statement.setString(10, variety.getImgUrl());
+						statement.executeUpdate();
+						
+						statement.close();
+						
+						String priceSql =
+								"INSERT INTO ingredient_price (ingredientItemId,  price, priceDate) VALUES(?, ?, CURDATE())";
+						statement = conn.prepareStatement(priceSql);
+						statement.setString(1, variety.getIngredientItemId());
+						statement.setInt(2, variety.getPrice());
+						statement.executeUpdate();
+						
+						statement.close();
 					}
 				}
 
