@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.snu.ids.kkma.ma.CharSetType;
+import org.snu.ids.kkma.ma.Eojeol;
 import org.snu.ids.kkma.ma.MExpression;
 import org.snu.ids.kkma.ma.Morpheme;
 import org.snu.ids.kkma.ma.MorphemeAnalyzer;
@@ -20,96 +21,99 @@ public class HangleAnalyze {
 	}
 
 	private MorphemeAnalyzer ma;
-	private List<String> unitList = new ArrayList<String>();
+	private ArrayList<String> unitList = new ArrayList<String>();
 
 	public void initilze() {
 		ma = new MorphemeAnalyzer();
 		ma.createLogger(null);
-
 		unitList.add("kg");
-		unitList.add("ml");
-		unitList.add("l");
-		unitList.add("cc");
-		unitList.add("개");
 		unitList.add("g");
 		unitList.add("cm");
+		unitList.add("개");
+		unitList.add("l");
+		unitList.add("ml");
+		unitList.add("cc");
+		unitList.add("m");
+		unitList.add("mm");
 	}
 
-	public AnalyzeVariety analyze(String content) {
+	public AnalyzeUnit analyze(String content) {
 		try {
-			//String resultContent = content.replaceAll("\\p{Z}", "");
-			List<MExpression> ret = ma.analyze(content);
+			String resultContent = content.replaceAll("\\p{Z}", "");
+			List<MExpression> ret = ma.analyze(resultContent);
 
 			ret = ma.postProcess(ret);
 			ret = ma.leaveJustBest(ret);
-			AnalyzeVariety av = new AnalyzeVariety();
+			AnalyzeUnit anaUnit = new AnalyzeUnit();
+			
 			double unitNum = 0;
 			String unitStr = "";
-			int unitCnt = 0;
+			boolean isSelect =  false;
 
 			List<Sentence> stl = ma.divideToSentences(ret);
-			for (int i = 0; i < stl.size(); i++) {
-				Sentence st = stl.get(i);
+			Sentence st = stl.get(0);
 
-				System.out.println(st);
-				for (int j = 0; j < st.size(); j++) {
-					// j = 띄어쓰기
-					// k = 형태소
-					for (int k = 0; k < st.get(j).size(); k++) {
-						Morpheme mo = st.get(j).get(k);
+			for (int i = 0; i < st.size(); i++) {
+				Eojeol eoj = st.get(i);
+				// System.out.println(eoj.getSmplStr2());
 
-
-						 System.out.println("-----------------------");
+				//  = 띄어쓰기
+				// j = 형태소
+				for (int k = 0; k < eoj.size(); k++) {
+					Morpheme mo = eoj.get(k);
+					
+						 
+					/*
+						 System.out.println(mo.getCharSetName());
 						 System.out.println(mo.getComposed());
-						  System.out.println(mo.getCharSetName());
 						 System.out.println(mo.getSmplStr());
-						 System.out.println(mo.getSmplStr2()); System.out.println(mo.getString());
-						 System.out.println(mo.getTag()); System.out.println(mo.getTagNum());
+						 System.out.println(mo.getSmplStr2());
+						 System.out.println(mo.getString());
+						 System.out.println(mo.getTag()); 
+						 System.out.println(mo.getTagNum());
 						 System.out.println(mo.getCharSet());
-
-						 System.out.println("-----------------------");
-
-
+						
+						*/
+					
 						if (mo.getCharSet() == CharSetType.NUMBER) {
-
-							// 숫자 존재여부
-							unitNum = Double.parseDouble(mo.getString().replaceAll("\\,", ""));
-
-							if (k + 1 < st.get(j).size()) {
-								Morpheme nextMo = st.get(j).get(k + 1);
-								if (nextMo.getTag().equals("NNG") || nextMo.getTag().equals("OL"))
-									unitStr = nextMo.getString();
-
-
-
-							} else if (j + 1 < st.size()) {
-
-								Morpheme nextMo = st.get(j + 1).get(0);
-
-								if (nextMo.getTag().equals("NNG") || nextMo.getTag().equals("OL"))
-									unitStr = nextMo.getString();
-
-
+							if (k + 1 < eoj.size()) {
+								
+								Morpheme nextMo = eoj.get(k + 1);
+								System.out.println(nextMo.getString());
+								
+								for(int unitIdx = 0; unitIdx < unitList.size(); unitIdx++)
+								{
+									if(nextMo.getString().contains(unitList.get(unitIdx)))
+									{
+										// 곱하기 기호가 없는경우에만
+										//if(!nextMo.getString().toLowerCase().contentEquals("x") || !nextMo.getString().toLowerCase().contentEquals("*"))
+										//{
+											unitNum = Double.parseDouble(mo.getString().replaceAll("\\,", ""));
+											isSelect = true;
+											unitStr = unitList.get(unitIdx); 
+											break;
+										//}				
+										
+									}
+								}
+								
+							} else if (i + 1 < st.size()) {
+								// 띄어쓰기
 							}
-
-							unitCnt++;
-
-						}
+							
 
 					}
-
 				}
-
-				//
-				if (unitNum != 0 && unitStr != "" && unitCnt == 1) {
-					av.setDispalyName(content);
-					av.setUnitNum(unitNum);
-					av.setUnitStr(unitStr);
-
-					return av;
-				} else
-					return null;
+				
 			}
+			if (isSelect) {
+				anaUnit.setUnitAmount(unitNum);
+				anaUnit.setUnitStr(unitStr);
+				System.out.println(anaUnit.toString());
+
+				return anaUnit;
+			} else
+				return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

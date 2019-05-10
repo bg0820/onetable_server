@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
-	private String userIdx;
+	private int userIdx;
 	private String token;
 	private String id;
 	private String pw;
@@ -27,14 +27,7 @@ public class User {
 	}
 
 
-	public String getUserIdx() {
-		return userIdx;
-	}
 
-
-	public void setUserUUID(String userIdx) {
-		this.userIdx = userIdx;
-	}
 
 
 	public String getId() {
@@ -106,6 +99,17 @@ public class User {
 		this.profileImgUrl = profileImgUrl;
 	}
 
+
+	public int getUserIdx() {
+		return userIdx;
+	}
+
+
+	public void setUserIdx(int userIdx) {
+		this.userIdx = userIdx;
+	}
+
+	
 
 
 }

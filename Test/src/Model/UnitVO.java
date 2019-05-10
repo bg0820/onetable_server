@@ -1,7 +1,7 @@
 package Model;
 
 public class UnitVO {
-	private String UnitUUID;
+	private int unitIdx;
 	private String unitName;
 	private double ml;
 	private double g;
@@ -9,13 +9,6 @@ public class UnitVO {
 	private double cm;
 	private double amount;
 
-	public String getUnitUUID() {
-		return UnitUUID;
-	}
-
-	public void setUnitUUID(String unitUUID) {
-		UnitUUID = unitUUID;
-	}
 
 	public String getUnitName() {
 		return unitName;
@@ -63,6 +56,14 @@ public class UnitVO {
 
 	public void setAmount(double amount) {
 		this.amount = amount;
+	}
+
+	public int getUnitIdx() {
+		return unitIdx;
+	}
+
+	public void setUnitIdx(int unitIdx) {
+		this.unitIdx = unitIdx;
 	}
 
 

@@ -4,11 +4,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Stack;
-
-import Model.AnalyzeVariety;
+import Model.Ingredient;
+import Model.IngredientSubject;
 
 public class DBConnection {
-	public Stack<AnalyzeVariety> connection() {
+	public Stack<IngredientSubject> connection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -20,24 +20,23 @@ public class DBConnection {
 		try (Connection conn = DriverManager.getConnection(url, "onetable", "62066407")) {
 
 
-			String sql = "SELECT HEX(IngredientsSubjectUUID) as isUUID, variety FROM ingredientssubject";
+			String sql = "SELECT ingredientSubjectIdx, variety FROM ingredient_subject";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
 
-			Stack<AnalyzeVariety> isList = new Stack<AnalyzeVariety>();
+			Stack<IngredientSubject> isList = new Stack<IngredientSubject>();
 			//ArrayList<Variety> isList = new ArrayList<Variety>();
 			while (rs.next()) {
-				AnalyzeVariety is = new AnalyzeVariety();
-
-				is.setIdx(rs.getString("isUUID"));
+				IngredientSubject is = new IngredientSubject();
+				
+				is.setIngredientSubjectIdx(rs.getInt("ingredientSubjectIdx"));
 				is.setVariety(rs.getString("variety"));
 
 				isList.push(is);
 			}
 
 			return isList;
-
 		} catch (Exception er) {
 			er.printStackTrace();
 			return null;
