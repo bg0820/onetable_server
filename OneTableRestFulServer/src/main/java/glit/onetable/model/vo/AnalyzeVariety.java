@@ -1,4 +1,4 @@
-package Model;
+package glit.onetable.model.vo;
 
 public class AnalyzeVariety {
 	private String name;

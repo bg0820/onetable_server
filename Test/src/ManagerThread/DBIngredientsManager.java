@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
+
 import DB.DBConnectionPool;
 import Model.AnalyzeVariety;
 import Model.UnitVO;
@@ -46,7 +47,7 @@ public class DBIngredientsManager extends Thread {
 						AnalyzeVariety variety = item.get(varListIdx);
 
 						String selectSQL =
-								"SELECT HEX(UnitUUID) as UnitUUID, unit.unitName, ml, g, cc, cm, amount FROM onetable.unit WHERE unitName = ?";
+								"SELECT unitIdx, unit.unitName, ml, g, cc, cm, amount FROM onetable.unit WHERE unitName = ?";
 						PreparedStatement statement = conn.prepareStatement(selectSQL);
 
 						statement.setString(1, variety.getUnitStr());
@@ -66,10 +67,10 @@ public class DBIngredientsManager extends Thread {
 
 
 						String sql =
-								"INSERT INTO ingredients (IngredientsUUID, IngredientsSubjectUUID, UnitUUID, unitAmount, currentPrice, priceDate, displayName, imgURL)"
+								"INSERT INTO ingredient (ingredientItemId, IngredientSubjectIdx, unitIdx, unitAmount, displayName, imgURL)"
 										+ " VALUES (UNHEX(REPLACE(UUID(), '-', '')), UNHEX(?), UNHEX(?), ?, ?, CURDATE(), ?, ?)";
 						statement = conn.prepareStatement(sql);
-						statement.setString(1, variety.getUUID());
+						statement.setString(1, variety.getIdx());
 						statement.setString(2, unit.getUnitUUID());
 						statement.setDouble(3, variety.getUnitNum());
 						statement.setInt(4, Integer.parseInt(variety.getPrice())); // 2,000

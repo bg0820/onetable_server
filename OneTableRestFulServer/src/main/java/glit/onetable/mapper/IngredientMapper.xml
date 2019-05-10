@@ -3,11 +3,15 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="glit.onetable.mapper.IngredientMapper">
-	<select id='search' parameterType="String" resultType="IngredientsSubject">
-		SELECT HEX(IngredientsSubjectUUID) as IngredientsSubjectUUID, variety FROM ingredientssubject WHERE variety LIKE CONCAT('%',#{query},'%')
+	<select id='search' parameterType="String" resultType="IngredientSubject">
+		SELECT ingredientSubjectIdx, variety FROM ingredient_subject WHERE variety LIKE CONCAT('%',#{query},'%')
 	</select>
 	
-	<select id='ingredientQuery' parameterType="String" resultType="Ingredient">
-		SELECT currentPrice, priceDate, displayName, imgUrl FROM onetable.ingredients WHERE IngredientsSubjectUUID = UNHEX(#{uuid});
+	<select id='ingredientQuery' parameterType="int" resultType="Ingredient">
+		SELECT displayName, imgUrl FROM ingredient WHERE ingredientSubjectIdx = #{idx};
+	</select>
+	
+	<select id='priceHistroy' parameterType="String" resultType="IngredientPrice">
+		SELECT ingredientItemId, price, priceDate FROM ingredient_price WHERE ingredientItemId = #{ingredientItemId} ORDER BY priceDate desc LIMIT 7;
 	</select>
 </mapper>

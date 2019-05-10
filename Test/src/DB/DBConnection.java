@@ -4,7 +4,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentLinkedQueue;
+
 import Model.AnalyzeVariety;
 
 public class DBConnection {
@@ -29,10 +29,10 @@ public class DBConnection {
 			//ArrayList<Variety> isList = new ArrayList<Variety>();
 			while (rs.next()) {
 				AnalyzeVariety is = new AnalyzeVariety();
-				
-				is.setUUID(rs.getString("isUUID"));
+
+				is.setIdx(rs.getString("isUUID"));
 				is.setVariety(rs.getString("variety"));
-				
+
 				isList.push(is);
 			}
 

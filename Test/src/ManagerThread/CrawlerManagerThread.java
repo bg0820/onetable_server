@@ -2,18 +2,18 @@ package ManagerThread;
 
 import java.util.ArrayList;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentLinkedQueue;
+
 import Main.SSGThread;
 import Model.AnalyzeVariety;
 
 public class CrawlerManagerThread extends Thread {
-	
+
 	public Stack<AnalyzeVariety> list;
-	
+
 	private static class CrawlerManagerThreadLazy {
 		public static final CrawlerManagerThread INSTANCE = new CrawlerManagerThread();
 	}
-	
+
 	public static CrawlerManagerThread getInstance() {
 		return CrawlerManagerThreadLazy.INSTANCE;
 	}
@@ -21,13 +21,13 @@ public class CrawlerManagerThread extends Thread {
 	private ArrayList<String> varietyIgnoreList;
 	private ArrayList<String> proxyList;
 	private int proxyIndex = 0;
-	
+
 	public void initilize() {
 		FileManager fileManager = new FileManager();
 		varietyIgnoreList = fileManager.readFile("ignore.txt");
 		proxyList = fileManager.readFile("koreaProxy.txt");
 	}
-	
+
 	@Override
 	public void run() {
 		while (true) {

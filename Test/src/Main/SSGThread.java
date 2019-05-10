@@ -1,14 +1,14 @@
 package Main;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.UncheckedIOException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import ManagerThread.CrawlerManagerThread;
 import ManagerThread.DBIngredientsManager;
 import ManagerThread.IgnoreManagerThread;
@@ -93,7 +93,7 @@ public class SSGThread extends Thread {
 					variety.setName(displayName);
 					variety.setPrice(info.selectFirst("div[class='opt_price']").selectFirst("em")
 							.text().replaceAll(",", ""));
-					variety.setUUID(query.getUUID());
+					variety.setIdx(query.getIdx());
 					variety.setVariety(query.getVariety());
 
 

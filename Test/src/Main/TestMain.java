@@ -20,7 +20,7 @@ public class TestMain {
 
 		System.out.println("DB 연결");
 		DBConnection db = new DBConnection();
-		
+
 		CrawlerManagerThread.getInstance().list = db.connection();
 		System.out.println("List 가져옴 : " + CrawlerManagerThread.getInstance().list.size());
 		System.out.println("크롤러 관리 스레드 Initilize");

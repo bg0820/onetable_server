@@ -1,48 +1,29 @@
 package glit.onetable.model.vo;
 
-import java.sql.Date;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Ingredient {
-	private String IngredientsUUID;
-	private String IngredientsSubjectUUID;
-	private int currentPrice;
-	private Date priceDate;
+	private String ingredientIdx;
+	private String ingredientSubjectIdx;
 	private int queryCnt;
 	private String displayName;
 	private String imgUrl;
 
-	public String getIngredientsUUID() {
-		return IngredientsUUID;
+	public String getIngredientsIdx() {
+		return ingredientIdx;
 	}
 
-	public void setIngredientsUUID(String ingredientsUUID) {
-		IngredientsUUID = ingredientsUUID;
+	public void setIngredientIdx(String ingredientIdx) {
+		this.ingredientIdx = ingredientIdx;
 	}
 
-	public String getIngredientsSubjectUUID() {
-		return IngredientsSubjectUUID;
+	public String getIngredientSubjectIdx() {
+		return ingredientSubjectIdx;
 	}
 
-	public void setIngredientsSubjectUUID(String ingredientsSubjectUUID) {
-		IngredientsSubjectUUID = ingredientsSubjectUUID;
-	}
-
-	public int getCurrentPrice() {
-		return currentPrice;
-	}
-
-	public void setCurrentPrice(int currentPrice) {
-		this.currentPrice = currentPrice;
-	}
-
-	public Date getPriceDate() {
-		return priceDate;
-	}
-
-	public void setPriceDate(Date priceDate) {
-		this.priceDate = priceDate;
+	public void setIngredientSubjectIdx(String ingredientSubjectIdx) {
+		this.ingredientSubjectIdx = ingredientSubjectIdx;
 	}
 
 	public int getQueryCnt() {

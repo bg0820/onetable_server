@@ -3,16 +3,16 @@ package glit.onetable.model.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class IngredientsSubject {
-	private String IngredientsSubjectUUID;
+public class IngredientSubject {
+	private int ingredientSubjectIdx;
 	private String variety;
 
-	public String getIngredientsSubjectUUID() {
-		return IngredientsSubjectUUID;
+	public int getIngredientSubjectIdx() {
+		return ingredientSubjectIdx;
 	}
 
-	public void setIngredientsSubjectUUID(String ingredientsSubjectUUID) {
-		IngredientsSubjectUUID = ingredientsSubjectUUID;
+	public void setIngredientSubjectIdx(int ingredientSubjectIdx) {
+		this.ingredientSubjectIdx = ingredientSubjectIdx;
 	}
 
 	public String getVariety() {
