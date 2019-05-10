@@ -4,7 +4,7 @@
 
 <mapper namespace="glit.onetable.mapper.AuthMapper">
 	<insert id="registerInsert" parameterType="User">
-		INSERT INTO user (userUUID, token, id, pw, nickname, email, birthday, regTime) VALUES (UNHEX(REPLACE(UUID(), '-', '')), #{token}, #{id}, #{pw}, #{nickname}, #{email}, #{birthday}, CURRENT_TIMESTAMP)
+		INSERT INTO user (token, id, pw, nickname, email, birthday, regTime) VALUES (#{token}, #{id}, #{pw}, #{nickname}, #{email}, #{birthday}, CURRENT_TIMESTAMP)
 	</insert>
 	
 	<select id="login" parameterType="User" resultType="User">
