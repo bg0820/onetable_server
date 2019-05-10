@@ -15,6 +15,14 @@ public class DBIngredientsManager extends Thread {
 	private Connection conn;
 
 	private static final int DEFAULT_UNIT_UUID = 26;
+	private static final int KG_UNIT_UUID = 10;
+	private static final int G_UNIT_UUID = 27;
+	private static final int CM_UNIT_UUID = 30;
+	private static final int AMOUNT_UNIT_UUID = 31;
+	private static final int L_UNIT_UUID = 12;
+	private static final int ML_UNIT_UUID = 28;
+	private static final int CC_UNIT_UUID = 29;
+	private static final int M_UNIT_UUID = 25;
 
 	// lazy init 로 인한 싱글톤 멀티스레딩 문제 해결
 	private static class DBIngredientsManagerLazy {
@@ -44,8 +52,8 @@ public class DBIngredientsManager extends Thread {
 
 					for (int varListIdx = 0; varListIdx < item.size(); varListIdx++) {
 
-						Ingredient variety = item.get(varListIdx);
-
+						Ingredient variety = item.get(varListIdx);						
+					
 						String selectSQL =
 								"SELECT unitIdx, unitName, ml, g, cc, cm, amount FROM onetable.unit WHERE unitName = ?";
 						PreparedStatement statement = conn.prepareStatement(selectSQL);
@@ -61,42 +69,32 @@ public class DBIngredientsManager extends Thread {
 							cnt++;
 						}
 						
-						statement.close();
-						
+						statement.closeOnCompletion();
 						// 아무 타입도 속하지 않는경우
 						if (cnt == 0)
 							unit.setUnitIdx(DEFAULT_UNIT_UUID);
-
-						/*
-						 * System.out.println("==================");
-						 * System.out.println(variety.getIngredientItemId());
-						 * System.out.println(variety.getIngredientSubject().getIngredientSubjectIdx
-						 * ()); System.out.println(unit.getUnitIdx());
-						 * System.out.println(variety.getAnayUnit().getUnitAmount());
-						 * System.out.println(variety.getPrice());
-						 * System.out.println(variety.getDisplayName());
-						 * System.out.println(variety.getImgUrl());
-						 */
+						 
 
 						String sql =
 								"INSERT INTO ingredient (ingredientItemId, ingredientSubjectIdx, unitIdx, unitAmount, displayName, imgURL)"
-										+ " VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE unitIdx = ?, unitAmount = ?, displayName = ?, imgURL = ?";
+										+ " VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE ingredientSubjectIdx=?, unitIdx = ?, unitAmount = ?, displayName = ?, imgURL = ?";
 						statement = conn.prepareStatement(sql);
 						statement.setString(1, variety.getIngredientItemId());
 						statement.setInt(2,
 								variety.getIngredientSubject().getIngredientSubjectIdx());
 						statement.setInt(3, unit.getUnitIdx());
 						statement.setDouble(4, variety.getAnayUnit().getUnitAmount());
-
 						statement.setString(5, variety.getDisplayName());
 						statement.setString(6, variety.getImgUrl());
+						
 						statement.setInt(7, variety.getIngredientSubject().getIngredientSubjectIdx());
-						statement.setDouble(8,  variety.getAnayUnit().getUnitAmount());
-						statement.setString(9, variety.getDisplayName());
-						statement.setString(10, variety.getImgUrl());
+						statement.setInt(8, unit.getUnitIdx());
+						statement.setDouble(9,  variety.getAnayUnit().getUnitAmount());
+						statement.setString(10, variety.getDisplayName());
+						statement.setString(11, variety.getImgUrl());
 						statement.executeUpdate();
 						
-						statement.close();
+						statement.closeOnCompletion();
 						
 						String priceSql =
 								"INSERT INTO ingredient_price (ingredientItemId,  price, priceDate) VALUES(?, ?, CURDATE())";
@@ -105,7 +103,7 @@ public class DBIngredientsManager extends Thread {
 						statement.setInt(2, variety.getPrice());
 						statement.executeUpdate();
 						
-						statement.close();
+						statement.closeOnCompletion();
 					}
 				}
 

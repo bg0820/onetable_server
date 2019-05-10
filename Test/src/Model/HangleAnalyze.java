@@ -33,7 +33,6 @@ public class HangleAnalyze {
 		unitList.add("ml");
 		unitList.add("cc");
 		unitList.add("m");
-		unitList.add("mm");
 	}
 
 	public AnalyzeUnit analyze(String content) {

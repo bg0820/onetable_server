@@ -13,65 +13,65 @@ import org.jsoup.select.Elements;
 public class SSGCrawler {
 	private final String QUERY_URL = "http://www.ssg.com/search.ssg?target=all&query=";
 	private String proxyIP;
-	
-	public SSGCrawler(String proxyIP)
-	{
+
+	public SSGCrawler(String proxyIP) {
 		this.proxyIP = proxyIP;
 	}
-	
-	public ArrayList<Ingredient> getItemList(IngredientSubject ingredientSubject, int page) throws IOException
-	{
+
+	public ArrayList<Ingredient> getItemList(IngredientSubject ingredientSubject, int page)
+			throws IOException {
 		ArrayList<Ingredient> lis = new ArrayList<Ingredient>();
-		
+
 		Response resp = getResponse(QUERY_URL + ingredientSubject.getVariety() + "&page=" + page);
 
 		if (resp.statusCode() == 200) {
 			Document doc = resp.parse();
-		
-			if(doc.selectFirst("ul[id='idProductImg']") == null)
+
+			if (doc.selectFirst("ul[id='idProductImg']") == null)
 				return null;
-			
+
 			Elements liList = doc.selectFirst("ul[id='idProductImg']").select("li");
-			
-			for(int i = 0 ; i < liList.size(); i++)
-			{
+
+			for (int i = 0; i < liList.size(); i++) {
 				Element liListItem = liList.get(i);
-			
+
 				String itemId = liListItem.attr("data-adtgtid");
 				Element info = liListItem.selectFirst("div[class='cunit_info']");
 				String displayName = info.selectFirst("div[class='title']").selectFirst("a")
 						.selectFirst("em").text();
-				String imgUrl = "http:" + liListItem.getElementsByClass("cunit_prod")
-				.get(0).selectFirst("img").attr("src");
+				String imgUrl = "http:" + liListItem.getElementsByClass("cunit_prod").get(0)
+						.selectFirst("img").attr("src");
 				int price = Integer.parseInt(info.selectFirst("div[class='opt_price']")
 						.selectFirst("em").text().replaceAll(",", ""));
-				Ingredient ingredient  = new Ingredient();
+				Ingredient ingredient = new Ingredient();
 				ingredient.setImgUrl(imgUrl);
 				ingredient.setDisplayName(displayName);
 				ingredient.setPrice(price);
 				ingredient.setIngredientSubject(ingredientSubject);
 				ingredient.setIngredientItemId(itemId);
-				
-				// 형태소 분석해서 객체에 저장
-				/*Ingredient variety = HangleAnalyze.getInstance().analyze(displayName);
-				if (variety != null) {
 
-					// System.out.println(av.getUnitStr());
-					variety.setImgUrl();
-					variety.setDisplayName(displayName);
-					variety.setPrice();
-					variety.setIngredientSubject(ingredientSubject);
-					variety.setIngredientItemId(itemId);
-				}*/
-				lis.add(ingredient);
+				// 형태소 분석해서 객체에 저장
+				/*
+				 * Ingredient variety = HangleAnalyze.getInstance().analyze(displayName); if
+				 * (variety != null) {
+				 * 
+				 * // System.out.println(av.getUnitStr()); variety.setImgUrl();
+				 * variety.setDisplayName(displayName); variety.setPrice();
+				 * variety.setIngredientSubject(ingredientSubject);
+				 * variety.setIngredientItemId(itemId); }
+				 */
+				if (itemId != null) {
+					if (!itemId.equals("")) {
+						lis.add(ingredient);
+					}
+				}
 			}
 			return lis;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
-	
+
 	public int getRecordCnt(String query) throws IOException {
 		Response resp = getResponse(QUERY_URL + query);
 
@@ -86,7 +86,7 @@ public class SSGCrawler {
 			// 페이지 개수만큼 반복
 			return Integer.parseInt(doc.selectFirst("input[id='itemCount']").attr("value"));
 		}
-		
+
 		return 0;
 	}
 
