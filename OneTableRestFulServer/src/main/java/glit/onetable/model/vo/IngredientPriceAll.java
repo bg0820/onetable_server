@@ -3,16 +3,17 @@ package glit.onetable.model.vo;
 import java.sql.Date;
 
 public class IngredientPriceAll {
+	private int idx;
 	private String displayName;
 	private int price;
 	private String imgUrl;
 	private String ingredientItemId;
 	private Date priceDate;
 	private int queryCnt;
-	
+
 	private int limitIndex;
 	private int limitCnt;
-	
+
 
 	public int getLimitIndex() {
 		return limitIndex;

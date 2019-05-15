@@ -3,20 +3,25 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="glit.onetable.mapper.IngredientMapper">
-	<select id='search' parameterType="String" resultType="IngredientSubject">
+<!--  	<select id='search' parameterType="String" resultType="IngredientSubject">
 		SELECT ingredientSubjectIdx, variety FROM ingredient_subject WHERE variety LIKE CONCAT('%',#{query},'%');
 	</select>
-	
+	-->
 	<select id='searchAll' parameterType="IngredientPriceAll" resultType="IngredientPriceAll">
 		SELECT displayName, ingredientItemId, price, priceDate, imgUrl, queryCnt FROM onetable.ingredient_price_all order by queryCnt LIMIT #{limitIndex}, #{limitCnt};
 	</select>
 	
-	<select id='firstSearch' parameterType="String" resultType="int">
+	<select id='getIngredientSubjectIdx' parameterType="String" resultType="int">
 		SELECT ingredientSubjectIdx FROM ingredient_subject WHERE variety = #{query};
 	</select>
 	
-	<select id='ingredientQuery' parameterType="int" resultType="Ingredient">
-		SELECT displayName, imgUrl FROM ingredient WHERE ingredientSubjectIdx = #{idx};
+	<select id="ingredientSubjectSearch" parameterType="String" resultType="IngredientSubject">
+		SELECT ingredientSubjectIdx FROM ingredient_subject WHERE variety LIKE CONCAT('%', #{variety}, '%')
+	</select>
+	
+	
+	<select id='search' parameterType="String" resultType="IngredientPriceAll">
+		SELECT displayName, price, ingredientItemId, imgUrl, priceDate FROM ingredient_price_all WHERE displayName LIKE CONCAT('%',#{query},'%');
 	</select>
 	
 	<select id='priceHistroy' parameterType="String" resultType="IngredientPrice">
@@ -35,8 +40,16 @@
 		INSERT INTO onetable.ingredient_subject (variety) SELECT #{variety} from DUAL WHERE NOT EXISTS (SELECT variety FROM onetable.ingredient_subject WHERE variety = #{variety});
 	</insert>
 
-	<insert id='ingredientNotExistsInsert' parameterType="IngredientSubject" useGeneratedKeys="true"  keyProperty="ingredientSubjectIdx">
-		
+	<insert id='ingredientNotExistsInsert' parameterType="Ingredient" useGeneratedKeys="true"  keyProperty="idx">
+		INSERT INTO onetable.ingredient (ingredientItemId, ingredientSubjectIdx, unitIdx, unitAmount, displayName, imgUrl) SELECT #{ingredientItemId}, #{ingredientSubjectIdx}, #{unitIdx}, #{unitAmount}, #{displayName}, #{imgUrl} from DUAL WHERE NOT EXISTS (SELECT ingredientItemId FROM onetable.ingredient WHERE ingredientItemId = #{ingredientItemId});
+	</insert>
+	
+	<select id='unitSearch' parameterType="String" resultType="Int">
+		SELECT unitIdx FROM onetable.unit WHERE unitName = #{unitStr};
+	</select>
+	
+	<insert id='insertIngredientPrice' parameterType="IngredientPrice" useGeneratedKeys="true"  keyProperty="ingredientPriceIdx">
+		INSERT INTO onetable.ingredient_price (ingredientItemId, price, priceDate) SELECT #{ingredientItemId}, #{price}, CURDATE() from DUAL WHERE NOT EXISTS (SELECT priceDate FROM onetable.ingredient_price WHERE ingredientItemId = #{ingredientItemId} and priceDate = CURDATE());
 	</insert>
 	
 
