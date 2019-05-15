@@ -4,6 +4,7 @@ import DB.DBConnection;
 import ManagerThread.CrawlerManagerThread;
 import ManagerThread.DBIngredientsManager;
 import ManagerThread.IgnoreManagerThread;
+import ManagerThread.IngredientSubjectListManager;
 import Model.HangleAnalyze;
 
 public class TestMain {
@@ -28,6 +29,9 @@ public class TestMain {
 		System.out.println("크롤러 관리 스레드 시작");
 		CrawlerManagerThread.getInstance().start();
 
+		IngredientSubjectListManager islm = new IngredientSubjectListManager();
+		islm.start();
+		
 		System.out.println("성공");
 	}
 

@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import DB.DBConnectionPool;
-import Model.AnalyzeUnit;
 import Model.Ingredient;
 import Model.UnitVO;
+import Util.PrintColor;
 
 public class DBIngredientsManager extends Thread {
 	private Connection conn;
@@ -44,7 +44,8 @@ public class DBIngredientsManager extends Thread {
 	public void run() {
 		while (true) {
 			try {
-				System.out.println("DB 쓰기 : " + queue.size() + "개");
+				Thread.sleep(20000);
+				System.out.println(PrintColor.CYAN_BACKGROUND + PrintColor.WHITE + "[DB Queue] 쓰기 작업 " + queue.size() + "개 시작" + PrintColor.RESET);
 
 				for (int queueIdx = 0; queueIdx < queue.size(); queueIdx++) {
 
@@ -69,7 +70,7 @@ public class DBIngredientsManager extends Thread {
 							cnt++;
 						}
 						
-						statement.closeOnCompletion();
+						statement.close();
 						// 아무 타입도 속하지 않는경우
 						if (cnt == 0)
 							unit.setUnitIdx(DEFAULT_UNIT_UUID);
@@ -94,20 +95,34 @@ public class DBIngredientsManager extends Thread {
 						statement.setString(11, variety.getImgUrl());
 						statement.executeUpdate();
 						
-						statement.closeOnCompletion();
+						statement.close();
 						
-						String priceSql =
-								"INSERT INTO ingredient_price (ingredientItemId,  price, priceDate) VALUES(?, ?, CURDATE())";
-						statement = conn.prepareStatement(priceSql);
+						String todayIsPrice = "SELECT count(ingredientPriceIdx) as ingredientPriceIdx FROM ingredient_price WHERE ingredientItemId = ? and priceDate = CURDATE()";
+						statement = conn.prepareStatement(todayIsPrice);
 						statement.setString(1, variety.getIngredientItemId());
-						statement.setInt(2, variety.getPrice());
-						statement.executeUpdate();
+						ResultSet rss = statement.executeQuery();
 						
-						statement.closeOnCompletion();
+						int todayIsPriceCnt = 0;
+						while (rss.next()) {
+							todayIsPriceCnt = rss.getInt("ingredientPriceIdx");
+						}						
+						statement.close();
+						
+						if(todayIsPriceCnt == 0)
+						{
+							String priceSql =
+									"INSERT INTO ingredient_price (ingredientItemId,  price, priceDate) VALUES(?, ?, CURDATE())";
+							statement = conn.prepareStatement(priceSql);
+							statement.setString(1, variety.getIngredientItemId());
+							statement.setInt(2, variety.getPrice());
+							statement.executeUpdate();
+							
+							statement.close();
+						}
+						
 					}
 				}
 
-				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

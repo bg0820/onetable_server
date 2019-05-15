@@ -105,7 +105,7 @@ public class SSGCrawler {
 				.header("Upgrade-Insecure-Requests", "1")
 				.header("User-Agent",
 						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36")
-				.header("Pragma", "no-cache").timeout(5000)
+				.header("Pragma", "no-cache").timeout(10000)
 				.proxy(proxy[0], Integer.parseInt(proxy[1])).execute();
 
 		return rp;
