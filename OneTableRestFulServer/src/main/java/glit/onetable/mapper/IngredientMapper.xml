@@ -4,7 +4,7 @@
 
 <mapper namespace="glit.onetable.mapper.IngredientMapper">
 	<select id='search' parameterType="String" resultType="IngredientSubject">
-		SELECT ingredientSubjectIdx, variety FROM ingredient_subject WHERE variety LIKE CONCAT('%',#{query},'%')
+		SELECT ingredientSubjectIdx, variety FROM ingredient_subject WHERE variety LIKE CONCAT('%',#{query},'%');
 	</select>
 	
 	<select id='ingredientQuery' parameterType="int" resultType="Ingredient">
@@ -14,4 +14,12 @@
 	<select id='priceHistroy' parameterType="String" resultType="IngredientPrice">
 		SELECT ingredientItemId, price, priceDate FROM ingredient_price WHERE ingredientItemId = #{ingredientItemId} ORDER BY priceDate desc LIMIT 7;
 	</select>
+	
+	<insert id='subjectInsert' parameterType="String">
+		INSERT INTO ingredient_subject(variety) VALUES (#{query});
+	</insert>
+	
+	<insert id='ingredientInsert'>
+		INSERT INTO ingredient(ingredientItemId, displayName, imgUrl, unitAmount) VALUES (#{query});
+	</insert>
 </mapper>

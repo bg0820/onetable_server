@@ -4,18 +4,27 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Ingredient {
-	private String ingredientIdx;
+	private String ingredientItemId;
 	private String ingredientSubjectIdx;
 	private int queryCnt;
 	private String displayName;
 	private String imgUrl;
+	private double unitAmount;
 
-	public String getIngredientsIdx() {
-		return ingredientIdx;
+	public double getUnitAmount() {
+		return unitAmount;
 	}
 
-	public void setIngredientIdx(String ingredientIdx) {
-		this.ingredientIdx = ingredientIdx;
+	public void setUnitAmount(double unitAmount) {
+		this.unitAmount = unitAmount;
+	}
+
+	public String getIngredientItemId() {
+		return ingredientItemId;
+	}
+
+	public void setIngredientItemId(String ingredientItemId) {
+		this.ingredientItemId = ingredientItemId;
 	}
 
 	public String getIngredientSubjectIdx() {

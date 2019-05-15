@@ -3,13 +3,13 @@ package glit.onetable.model.vo;
 public class AnalyzeVariety {
 	private String name;
 	private String img;
-	private String price;
+	private int price;
 	private String perUnit = "정보 미제공";
 	// db
-	private String idx;
-	private String variety;
+	private String itemId;
+	//private String variety;
 	//
-	private String dispalyName;
+	private String displayName;
 	private double unitNum;
 	private String unitStr;
 
@@ -29,11 +29,11 @@ public class AnalyzeVariety {
 		this.img = img;
 	}
 
-	public String getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 
@@ -45,13 +45,15 @@ public class AnalyzeVariety {
 		this.perUnit = perUnit;
 	}
 
-	public String getIdx() {
-		return idx;
+
+	public String getItemId() {
+		return itemId;
 	}
 
-	public void setIdx(String idx) {
-		idx = idx;
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
 	}
+	/*
 
 	public String getVariety() {
 		return variety;
@@ -60,13 +62,14 @@ public class AnalyzeVariety {
 	public void setVariety(String variety) {
 		this.variety = variety;
 	}
+	*/
 
-	public String getDispalyName() {
-		return dispalyName;
+	public String getDisplayName() {
+		return displayName;
 	}
 
-	public void setDispalyName(String dispalyName) {
-		this.dispalyName = dispalyName;
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	public double getUnitNum() {
@@ -88,7 +91,7 @@ public class AnalyzeVariety {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "[displayName=" + dispalyName + ", unitNum=" + unitNum + ", unitStr=" + unitStr
+		return "[displayName=" + displayName + ", unitNum=" + unitNum + ", unitStr=" + unitStr
 				+ "]";
 	}
 

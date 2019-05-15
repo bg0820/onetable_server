@@ -14,6 +14,7 @@ public interface IngredientMapper {
 	public List<IngredientSubject> search(String query);
 	public List<Ingredient> ingredientQuery(int idx);
 	public List<IngredientPrice> priceHistroy(String ingredientItemId);
-	public List<Ingredient> ingredientUpload();
+	//public List<Ingredient> ingredientUpload();
+	public int subjectInsert(String query);
 
 }

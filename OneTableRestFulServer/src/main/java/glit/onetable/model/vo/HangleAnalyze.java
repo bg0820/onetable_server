@@ -102,7 +102,7 @@ public class HangleAnalyze {
 
 				//
 				if (unitNum != 0 && unitStr != "" && unitCnt == 1) {
-					av.setDispalyName(content);
+					av.setDisplayName(content);
 					av.setUnitNum(unitNum);
 					av.setUnitStr(unitStr);
 
