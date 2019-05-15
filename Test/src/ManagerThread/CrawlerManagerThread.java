@@ -5,6 +5,7 @@ import java.util.Stack;
 import Main.SSGThread;
 import Model.Ingredient;
 import Model.IngredientSubject;
+import Util.PrintColor;
 
 public class CrawlerManagerThread extends Thread {
 	
@@ -32,24 +33,24 @@ public class CrawlerManagerThread extends Thread {
 	public void run() {
 		while (true) {
 			String proxyIP = proxyList.get(proxyIndex);
+			
+			if(list.size() == 0)
+				continue;
+			
 			IngredientSubject var = list.pop();
 
 			if (var == null)
-				break;
-
-			System.out.println("남은 조회해야할 항목 개수 : " + list.size());
-
-
-			if (varietyIgnoreList.contains(var.getVariety())) {
 				continue;
-			}
 
-			System.out.println(var.getVariety() + " 조회 스레드 실행");
+			if (varietyIgnoreList.contains(var.getVariety()))
+				continue;
+
+			System.out.println(PrintColor.BLUE_BACKGROUND + PrintColor.YELLOW + var.getVariety() + " 조회 스레드 실행" + PrintColor.RESET);
 			SSGThread ssgThread = new SSGThread(var, proxyIP);
 			ssgThread.start();
-
+ 
 			try {
-				Thread.sleep(500);
+				Thread.sleep(70);
 			} catch (InterruptedException e) { // TODO Auto-generated
 				e.printStackTrace();
 			}

@@ -3,8 +3,10 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
+import Util.PrintColor;
 
 public class IgnoreManagerThread extends Thread {
+	
 	public static LinkedBlockingQueue<String> varietyIgnoreQueue = new LinkedBlockingQueue<String>();
 	private BufferedWriter varietyBw;
 	
@@ -14,7 +16,9 @@ public class IgnoreManagerThread extends Thread {
 		while (true) {
 
 			try {
-				System.out.println("IgnoreManagerThread Variety Write : " + varietyIgnoreQueue.size() + "개");
+				Thread.sleep(20000);
+				System.out.println(PrintColor.CYAN_BACKGROUND + PrintColor.WHITE + "[Ignore Queue] 쓰기 작업 " + varietyIgnoreQueue.size() + "개 시작" + PrintColor.RESET);
+				
 				varietyBw = new BufferedWriter(new FileWriter("ignore.txt", true));
 				
 				for (int i = 0; i < varietyIgnoreQueue.size(); i++) {
@@ -25,7 +29,7 @@ public class IgnoreManagerThread extends Thread {
 				varietyBw.close();
 				
 				
-				Thread.sleep(10000);
+				
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

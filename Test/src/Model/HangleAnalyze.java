@@ -34,7 +34,6 @@ public class HangleAnalyze {
 		unitList.add("ml");
 		unitList.add("cc");
 		unitList.add("m");
-		unitList.add("mm");
 	}
 
 	public AnalyzeUnit analyze(String content) {
@@ -79,7 +78,7 @@ public class HangleAnalyze {
 							if (k + 1 < eoj.size()) {
 								
 								Morpheme nextMo = eoj.get(k + 1);
-								System.out.println(nextMo.getString());
+								//System.out.println(nextMo.getString());
 								
 								for(int unitIdx = 0; unitIdx < unitList.size(); unitIdx++)
 								{
@@ -109,8 +108,7 @@ public class HangleAnalyze {
 			if (isSelect) {
 				anaUnit.setUnitAmount(unitNum);
 				anaUnit.setUnitStr(unitStr);
-				System.out.println(anaUnit.toString());
-
+				
 				return anaUnit;
 			} else
 				return null;
