@@ -1,12 +1,7 @@
 package glit.onetable.model;
 
-import java.util.ArrayList;
-
-import glit.onetable.model.vo.AnalyzeVariety;
-import glit.onetable.model.vo.Ingredient;
-import glit.onetable.model.vo.IngredientPrice;
-
 public class Changer {
+	/*
 	public ArrayList<Ingredient> ingredientChanger(ArrayList<AnalyzeVariety> avList) {
 		ArrayList<Ingredient> il = new ArrayList<Ingredient>();
 		Ingredient ingredient = new Ingredient();
@@ -34,6 +29,6 @@ public class Changer {
 
 	}
 
-
+*/
 
 }

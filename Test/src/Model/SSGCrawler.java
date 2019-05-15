@@ -2,9 +2,8 @@ package Model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
 import org.jsoup.Connection;
+import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

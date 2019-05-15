@@ -7,6 +7,14 @@
 		SELECT ingredientSubjectIdx, variety FROM ingredient_subject WHERE variety LIKE CONCAT('%',#{query},'%');
 	</select>
 	
+	<select id='searchAll' parameterType="IngredientPriceAll" resultType="IngredientPriceAll">
+		SELECT displayName, ingredientItemId, price, priceDate, imgUrl, queryCnt FROM onetable.ingredient_price_all order by queryCnt LIMIT #{limitIndex}, #{limitCnt};
+	</select>
+	
+	<select id='firstSearch' parameterType="String" resultType="int">
+		SELECT ingredientSubjectIdx FROM ingredient_subject WHERE variety = #{query};
+	</select>
+	
 	<select id='ingredientQuery' parameterType="int" resultType="Ingredient">
 		SELECT displayName, imgUrl FROM ingredient WHERE ingredientSubjectIdx = #{idx};
 	</select>
@@ -22,4 +30,14 @@
 	<insert id='ingredientInsert'>
 		INSERT INTO ingredient(ingredientItemId, displayName, imgUrl, unitAmount) VALUES (#{query});
 	</insert>
+	
+	<insert id='varietyNotExistsInsert' parameterType="IngredientSubject" useGeneratedKeys="true"  keyProperty="ingredientSubjectIdx">
+		INSERT INTO onetable.ingredient_subject (variety) SELECT #{variety} from DUAL WHERE NOT EXISTS (SELECT variety FROM onetable.ingredient_subject WHERE variety = #{variety});
+	</insert>
+
+	<insert id='ingredientNotExistsInsert' parameterType="IngredientSubject" useGeneratedKeys="true"  keyProperty="ingredientSubjectIdx">
+		
+	</insert>
+	
+
 </mapper>

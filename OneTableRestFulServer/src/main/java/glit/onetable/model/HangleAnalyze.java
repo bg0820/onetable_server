@@ -1,4 +1,4 @@
-package Model;
+package glit.onetable.model;
 
 import java.util.ArrayList;
 import java.util.List;
