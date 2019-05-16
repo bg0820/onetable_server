@@ -13,6 +13,26 @@ public class Recipe {
 	public double kcal;
 	public String contentHtml;
 
+	private int limitIndex;
+	private int limitCnt;
+
+
+	public int getLimitIndex() {
+		return limitIndex;
+	}
+
+	public void setLimitIndex(int limitIndex) {
+		this.limitIndex = limitIndex;
+	}
+
+	public int getLimitCnt() {
+		return limitCnt;
+	}
+
+	public void setLimitCnt(int limitCnt) {
+		this.limitCnt = limitCnt;
+	}
+
 	public int getRecipeIdx() {
 		return recipeIdx;
 	}

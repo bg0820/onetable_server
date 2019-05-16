@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="glit.onetable.mapper.RecipeMapper">
+	
+	<select id='searchAll' parameterType="Recipe" resultType="Recipe">
+		SELECT recipeIdx, userIdx, name, price, recipeImg FROM onetable.recipe order by recipeIdx DESC LIMIT #{limitIndex}, #{limitCnt};
+	</select>
+	
+	<select id='search' parameterType="String" resultType="Recipe">
+		SELECT recipeIdx, userIdx, name, price, recipeImg FROM onetable.recipe WHERE name LIKE CONCAT('%',#{query},'%');
+	</select>
+	
+	<select id='detail' parameterType="int" resultType="Recipe">
+		SELECT * FROM onetable.recipe WHERE recipeIdx = #{recipeIdx};
+	</select>
+	
+</mapper>
