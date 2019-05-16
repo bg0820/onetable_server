@@ -40,7 +40,7 @@ public class DBIngredientsManager extends Thread {
 
 	public LinkedBlockingQueue<ArrayList<Ingredient>> queue =
 			new LinkedBlockingQueue<ArrayList<Ingredient>>();
-
+		
 	@Override
 	public void run() {
 		while (true) {
