@@ -112,61 +112,6 @@ public class IngredientsController {
 
 		resResult.setData(ingredientPriceAll);
 
-		//ArrayList<IngredientSubject>>
-
-
-		/*
-		Changer ic = new Changer();
-
-		ArrayList<Ingredient> resultList = new ArrayList<Ingredient>();
-
-		//사용자가 입력하면 ssg에 검색
-		SSGCrawler sc = new SSGCrawler();
-		int recordCnt = sc.getRecordCnt(query);
-		int maxPageCnt = (int) Math.ceil(recordCnt
-				/ 80.0);
-
-		if (recordCnt == 0) {
-			System.out.println(query + " : 조회 결과 없음");
-			//return;
-		}
-		ArrayList<AnalyzeVariety> avList = new ArrayList<AnalyzeVariety>();
-		ArrayList<IngredientPrice> inPrice = new ArrayList<IngredientPrice>();
-
-		//query ssg에 검색
-		for(int i=0; i< maxPageCnt; i++) {
-			avList = sc.crawler(query, i);
-		}
-		//db에 사용자가 찾는게 있는지 검색
-		List<IngredientSubject> is = ingredientMapper.search(query);
-
-
-		//db에 사용자가 검색한 재료가 없을때
-		if (is.size() == 0) {
-			//ingredient_subject 테이블에 재료 삽입
-			ingredientMapper.subjectInsert(query);
-
-			ArrayList<Ingredient> inList = ic.ingredientChanger(avList);
-			inPrice = ic.priceChanger(avList);
-
-			// db에 없으면 ssg.com에 다시 검색하고 db에 저장하는 함수 호출, 다시 search하는 문장
-		}
-
-		// 검색한거랑 db에 있는거랑 비교하고 다르면 검색한거 db에 저장하는 함수 호출
-		else {
-			// System.out.println(is.size());
-			for (int i = 0; i < is.size(); i++) {
-				IngredientSubject item = is.get(i);
-
-				List<Ingredient> ingredientList = ingredientMapper.ingredientQuery(item.getIngredientSubjectIdx());
-				for (int j = 0; j < ingredientList.size(); j++)
-					resultList.add(ingredientList.get(j));
-
-			}
-		}
-
-		resResult.setData(resultList);
-*/
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
 

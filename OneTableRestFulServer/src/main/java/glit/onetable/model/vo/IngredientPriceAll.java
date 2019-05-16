@@ -1,7 +1,9 @@
 package glit.onetable.model.vo;
 
 import java.sql.Date;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class IngredientPriceAll {
 	private int idx;
 	private String displayName;

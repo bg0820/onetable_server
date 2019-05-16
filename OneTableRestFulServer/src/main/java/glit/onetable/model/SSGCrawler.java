@@ -10,7 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class SSGCrawler {
-	private final String QUERY_URL = "http://www.ssg.com/search.ssg?target=all&query=";
+	private final String QUERY_URL = "http://www.ssg.com/search/jsonSearch.ssg?target=item&query="; //http://www.ssg.com/search.ssg?target=all&query=";
 
 
 	public ArrayList<IngredientModel> getItemList(glit.onetable.model.vo.IngredientSubject ingredientSubject, int page)
@@ -30,31 +30,22 @@ public class SSGCrawler {
 			for (int i = 0; i < liList.size(); i++) {
 				Element liListItem = liList.get(i);
 
-				String itemId = liListItem.attr("data-adtgtid");
+				Element prod = liListItem.selectFirst("div[class='cunit_prod']");
 				Element info = liListItem.selectFirst("div[class='cunit_info']");
-				String displayName = info.selectFirst("div[class='title']").selectFirst("a")
-						.selectFirst("em").text();
-				String imgUrl = "http:" + liListItem.getElementsByClass("cunit_prod").get(0)
-						.selectFirst("img").attr("src");
-				int price = Integer.parseInt(info.selectFirst("div[class='opt_price']")
-						.selectFirst("em").text().replaceAll(",", ""));
+				
+				String itemId = liListItem.attr("data-adtgtid");
+				String displayName = prod.selectFirst("input[name='notiTitle']").val();
+				String imgUrl = "http:" + prod.selectFirst("input[name='notiImgPath']").val();
+				String priceStr =  info.selectFirst("em[class='ssg_price']").text().replaceAll(",", "");
+				int price = Integer.parseInt(priceStr);
+			
 				IngredientModel ingredient = new IngredientModel();
 				ingredient.setImgUrl(imgUrl);
 				ingredient.setDisplayName(displayName);
 				ingredient.setPrice(price);
 				ingredient.setIngredientSubject(ingredientSubject);
 				ingredient.setIngredientItemId(itemId);
-
-				// 형태소 분석해서 객체에 저장
-				/*
-				 * Ingredient variety = HangleAnalyze.getInstance().analyze(displayName); if
-				 * (variety != null) {
-				 * 
-				 * // System.out.println(av.getUnitStr()); variety.setImgUrl();
-				 * variety.setDisplayName(displayName); variety.setPrice();
-				 * variety.setIngredientSubject(ingredientSubject);
-				 * variety.setIngredientItemId(itemId); }
-				 */
+				
 				if (itemId != null) {
 					if (!itemId.equals("")) {
 						lis.add(ingredient);
@@ -73,13 +64,8 @@ public class SSGCrawler {
 		if (resp.statusCode() == 200) {
 			Document doc = resp.parse();
 
-			Element inputType = doc.selectFirst("input[id='parmTarget']");
-			if (inputType.attr("value").equals("book")) {
-				return 0;
-			}
-
 			// 페이지 개수만큼 반복
-			return Integer.parseInt(doc.selectFirst("input[id='itemCount']").attr("value"));
+			return Integer.parseInt(doc.selectFirst("input[id='target_item_count']").attr("value"));
 		}
 
 		return 0;
