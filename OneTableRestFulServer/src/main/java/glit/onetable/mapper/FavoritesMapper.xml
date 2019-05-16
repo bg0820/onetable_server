@@ -1,7 +1,35 @@
-<insert id='favoritesInsert' parameterType="Favorites" useGeneratedKeys="true"  keyProperty="userIdx">
-	INSERT INTO onetable.favorites (userIdx, favoriteIdx, favoritesType) SELECT #{variety} from DUAL WHERE NOT EXISTS (SELECT variety FROM onetable.ingredient_subject WHERE variety = #{variety});
-</insert>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<select id='search' parameterType="FavoritesModel" resultType="FavoritesModel">
-	SELECT userIdx, favoriteIdx FROM onetable.favorites WHERE userIdx = #{};
-</select>
+<mapper namespace="glit.onetable.mapper.FavoritesMapper">
+
+	<insert id='favoritesInsert' parameterType="Favorites" useGeneratedKeys="true"  keyProperty="userIdx">
+		INSERT INTO onetable.favorites (userIdx, favoriteIdx, favoritesType) SELECT #{userIdx}, #{favoriteIdx}, #{favoritesType} from DUAL WHERE NOT EXISTS (SELECT userIdx, favoriteIdx FROM onetable.favorites WHERE userIdx = #{userIdx} and favoriteIdx = #{favoriteIdx});
+	</insert>
+	
+	<delete id='favoritesDelete' parameterType="Favorites">
+		DELETE FROM onetable.favorites WHERE userIdx = #{userIdx} and favoriteIdx = #{favoriteIdx};
+	</delete>
+	
+	<select id='myRecipeFavorites' parameterType="Favorites" resultType="Recipe">
+		SELECT * FROM onetable.recipe WHERE recipeIdx = (SELECT favoriteIdx as recipeIdx FROM favorites WHERE userIdx = #{userIdx} and favoritesType = #{favoritesType});
+	</select>
+	
+	<!-- 밑에서 조회한 내용이 재료의idx와 같으면 그 재료 가져오기 -->
+	<select id='myIngredientFavorites' parameterType="hashmap" resultType="hashmap">
+		SELECT * FROM onetable.ingredient_price_all 
+		<where>
+		idx IN
+			<foreach collection="list" item = "item" open="(" close= ")" separator=",">
+				#{item.value}
+			</foreach>
+		</where>
+	</select>
+	
+	<!-- favorites테이블에서 파라미터값으로 받은 userIdx 같고 favoritesType이 재료일때 그 재료의 idx 조회 -->
+	<select id='myIngredient' parameterType="Favorites" resultType="int">
+		SELECT favoriteIdx as idx FROM favorites WHERE userIdx = #{userIdx} and favoritesType = #{favoritesType};
+	</select>
+	
+</mapper>

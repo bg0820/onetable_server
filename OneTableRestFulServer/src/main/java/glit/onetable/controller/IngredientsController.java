@@ -67,45 +67,51 @@ public class IngredientsController {
 		IngredientSubject is = new IngredientSubject();
 		is.setVariety(query);
 		// 품종 없을때 품종 삽입
-		ingredientMapper.varietyNotExistsInsert(is);
-		// 품종 삽입후 품종 아이디 가져오기
-		int ingredientSubjectIdx =  ingredientMapper.getIngredientSubjectIdx(query);
-		is.setIngredientSubjectIdx(ingredientSubjectIdx);
+		int success = ingredientMapper.varietyNotExistsInsert(is);
 
-		SSGCrawler ssgCrawler = new SSGCrawler();
-		ArrayList<IngredientModel> modelIngredient = ssgCrawler.getItemList(is, 1);
-
-		if(modelIngredient != null)
+		if(success != 0)
 		{
-			for(int i = 0 ; i < modelIngredient.size(); i++)
+			// 품종 삽입후 품종 아이디 가져오기
+			int ingredientSubjectIdx =  ingredientMapper.getIngredientSubjectIdx(query);
+
+			is.setIngredientSubjectIdx(ingredientSubjectIdx);
+
+			SSGCrawler ssgCrawler = new SSGCrawler();
+			ArrayList<IngredientModel> modelIngredient = ssgCrawler.getItemList(is, 1);
+
+			if(modelIngredient != null)
 			{
-				IngredientModel im = modelIngredient.get(i);
-				AnalyzeUnit analyzeUnit = HangleAnalyze.getInstance()
-						.analyze(im.getDisplayName());
-
-				if(analyzeUnit !=null)
+				for(int i = 0 ; i < modelIngredient.size(); i++)
 				{
-					modelIngredient.get(i).setAnayUnit(analyzeUnit);
+					IngredientModel im = modelIngredient.get(i);
+					AnalyzeUnit analyzeUnit = HangleAnalyze.getInstance()
+							.analyze(im.getDisplayName());
 
-					int unitIdx = ingredientMapper.unitSearch(analyzeUnit.getUnitStr());
+					if(analyzeUnit !=null)
+					{
+						modelIngredient.get(i).setAnayUnit(analyzeUnit);
 
-					Ingredient in = new Ingredient();
-					in.setDisplayName(im.getDisplayName());
-					in.setIngredientItemId(im.getIngredientItemId());
-					in.setImgUrl(im.getImgUrl());
-					in.setIngredientSubjectIdx(ingredientSubjectIdx);
-					in.setUnitIdx(unitIdx);
-					in.setUnitAmount(analyzeUnit.getUnitAmount());
+						int unitIdx = ingredientMapper.unitSearch(analyzeUnit.getUnitStr());
 
-					int ingredientIdx = ingredientMapper.ingredientNotExistsInsert(in);
-					IngredientPrice ingredientPrice = new IngredientPrice();
+						Ingredient in = new Ingredient();
+						in.setDisplayName(im.getDisplayName());
+						in.setIngredientItemId(im.getIngredientItemId());
+						in.setImgUrl(im.getImgUrl());
+						in.setIngredientSubjectIdx(ingredientSubjectIdx);
+						in.setUnitIdx(unitIdx);
+						in.setUnitAmount(analyzeUnit.getUnitAmount());
 
-					ingredientPrice.setIngredientItemId(im.getIngredientItemId());
-					ingredientPrice.setPrice(im.getPrice());
+						int ingredientIdx = ingredientMapper.ingredientNotExistsInsert(in);
+						IngredientPrice ingredientPrice = new IngredientPrice();
 
-					int ingredientPriceIdx = ingredientMapper.insertIngredientPrice(ingredientPrice);
+						ingredientPrice.setIngredientItemId(im.getIngredientItemId());
+						ingredientPrice.setPrice(im.getPrice());
+
+						int ingredientPriceIdx = ingredientMapper.insertIngredientPrice(ingredientPrice);
+					}
 				}
 			}
+
 		}
 
 		List<IngredientPriceAll> ingredientPriceAll = ingredientMapper.search(query);
