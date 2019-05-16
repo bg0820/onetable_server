@@ -42,7 +42,7 @@ public class FavoritesController {
 		favorites.setFavoritesType(favoritesType);
 
 		//같은게 있는지 select문으로 userIdx, favoriteIdx받아와서 비교하고 있으면 delete, 없으면 insert
-		
+
 
 		List<IngredientPriceAll> ipaList = ingredientMapper.searchAll(ipa);
 
