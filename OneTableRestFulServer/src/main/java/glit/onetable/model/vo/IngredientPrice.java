@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class IngredientPrice {
 	private int ingredientPriceIdx;
 
