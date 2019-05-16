@@ -1,0 +1,7 @@
+<insert id='favoritesInsert' parameterType="Favorites" useGeneratedKeys="true"  keyProperty="userIdx">
+	INSERT INTO onetable.favorites (userIdx, favoriteIdx, favoritesType) SELECT #{variety} from DUAL WHERE NOT EXISTS (SELECT variety FROM onetable.ingredient_subject WHERE variety = #{variety});
+</insert>
+
+<select id='search' parameterType="FavoritesModel" resultType="FavoritesModel">
+	SELECT userIdx, favoriteIdx FROM onetable.favorites WHERE userIdx = #{};
+</select>
