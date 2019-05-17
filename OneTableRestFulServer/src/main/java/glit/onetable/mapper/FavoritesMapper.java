@@ -12,7 +12,8 @@ import glit.onetable.model.vo.Recipe;
 public interface FavoritesMapper {
 	public int favoritesInsert(Favorites favorites);
 	public int favoritesDelete(Favorites favorites);
-	public List<Recipe> myRecipeFavorites(Favorites favorites);
+	public List<Recipe> myRecipeFavorites(List<Integer> list);
+	public List<Integer> myRecipe(Favorites favorites);
 	public List<IngredientPriceAll> myIngredientFavorites(List<Integer> list);
 	public List<Integer> myIngredient(Favorites favorites);
 

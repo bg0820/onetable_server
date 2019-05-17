@@ -16,7 +16,7 @@
 	</select>
 	
 	<select id="ingredientSubjectSearch" parameterType="String" resultType="IngredientSubject">
-		SELECT ingredientSubjectIdx FROM ingredient_subject WHERE variety LIKE CONCAT('%', #{variety}, '%')
+		SELECT ingredientSubjectIdx FROM ingredient_subject WHERE variety LIKE CONCAT('%', #{variety}, '%');
 	</select>
 	
 	
