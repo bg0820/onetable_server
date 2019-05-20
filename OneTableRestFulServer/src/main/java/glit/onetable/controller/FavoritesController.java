@@ -87,8 +87,13 @@ public class FavoritesController {
 		favorites.setFavoritesType(favoritesType);
 
 		if (favoritesType == 1) {
-			List<Recipe> recipeList = favoritesMapper.myRecipeFavorites(favorites);
-			resResult.setData(recipeList);
+			List<Integer> recipeIdxList = favoritesMapper.myRecipe(favorites);
+
+			if (recipeIdxList != null) {
+				List<Recipe> recipeList = favoritesMapper.myRecipeFavorites(recipeIdxList);
+				resResult.setData(recipeList);
+			}
+
 		} else {
 			List<Integer> ingredientIdxList = favoritesMapper.myIngredient(favorites);
 
