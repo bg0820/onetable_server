@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +24,7 @@ import glit.onetable.model.vo.Recipe;
 import glit.onetable.model.vo.RecipeIngredient;
 import glit.onetable.model.vo.Unit;
 import glit.onetable.model.vo.User;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/recipe")
 public class RecipeController {
@@ -61,7 +62,8 @@ public class RecipeController {
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponseResult> search(@RequestHeader(value = "API_Version") String version,
-			@RequestParam String query) throws CustomException, IOException {
+			@RequestParam String query, @RequestParam int page,
+			@RequestParam int itemCnt) throws CustomException, IOException {
 		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
 		HttpStatus hs = HttpStatus.OK;
 
@@ -74,7 +76,7 @@ public class RecipeController {
 		int searchQueryCnt = recipeMapper.searchCnt(query);
 		List<Recipe> recipeList = recipeMapper.search(query);
 		
-		ric.setCnt(searchQueryCnt);
+		ric.setCnt(searchQueryCnt); 
 		ric.setObj(recipeList);
 		
 		resResult.setData(ric);
@@ -103,7 +105,7 @@ public class RecipeController {
 		resultData.setRecipeName(recipe.getName());
 		resultData.setServingMax(recipe.getServingMax());
 		resultData.setServingMin(recipe.getServingMin());
-		
+		resultData.setPrice(recipe.getPrice());
 		resultData.setContentHtml(recipe.getContentHtml());
 		
 		User user = recipeMapper.getUserInfo(recipe.getUserIdx());
@@ -134,6 +136,7 @@ public class RecipeController {
 			rdi.setCalcPrice(recipeIngredientPrice);
 			rdi.setUnitStr(unit.getUnitName());
 			rdi.setUnitDisplayName(item.getDisplayAmount());
+			
 			
 			totalPrice += recipeIngredientPrice;
 			

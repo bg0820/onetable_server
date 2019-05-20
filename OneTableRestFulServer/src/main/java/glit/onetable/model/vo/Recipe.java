@@ -1,5 +1,6 @@
 package glit.onetable.model.vo;
 
+import java.sql.Timestamp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -16,6 +17,7 @@ public class Recipe {
 	private double kcal;
 	private String contentHtml;
 	private String nickName;
+	private Timestamp recipeDate;
 	
 
 	private int limitIndex;
@@ -132,6 +134,14 @@ public class Recipe {
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
+	}
+
+	public Timestamp getRecipeDate() {
+		return recipeDate;
+	}
+
+	public void setRecipeDate(Timestamp recipeDate) {
+		this.recipeDate = recipeDate;
 	}
 
 

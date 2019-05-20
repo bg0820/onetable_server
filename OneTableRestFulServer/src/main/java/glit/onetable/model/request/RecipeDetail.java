@@ -13,6 +13,7 @@ public class RecipeDetail {
 	private String cookTimeMin;
 	private double kcal;
 	private String contentHtml;
+	private int price;
 
 	public ArrayList<RecipeDetailIngredient> recipeIngredient =
 			new ArrayList<RecipeDetailIngredient>();
@@ -79,6 +80,14 @@ public class RecipeDetail {
 
 	public void setContentHtml(String contentHtml) {
 		this.contentHtml = contentHtml;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
 	}
 
 

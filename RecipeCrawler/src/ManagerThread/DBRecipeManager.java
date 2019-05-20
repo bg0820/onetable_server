@@ -20,15 +20,6 @@ import Model.Recipe;
 public class DBRecipeManager extends Thread {
 	private Connection conn;
 
-	private static final int DEFAULT_UNIT_UUID = 26;
-	private static final int KG_UNIT_UUID = 10;
-	private static final int G_UNIT_UUID = 27;
-	private static final int CM_UNIT_UUID = 30;
-	private static final int AMOUNT_UNIT_UUID = 31;
-	private static final int L_UNIT_UUID = 12;
-	private static final int ML_UNIT_UUID = 28;
-	private static final int CC_UNIT_UUID = 29;
-	private static final int M_UNIT_UUID = 25;
 
 	// lazy init 로 인한 싱글톤 멀티스레딩 문제 해결
 	private static class DBRecipeManagerLazy {
@@ -96,7 +87,7 @@ public class DBRecipeManager extends Thread {
 					statement = conn.prepareStatement(deleteSQL_recipeInf);
 					statement.setInt(1, recipeIdx); //앞에 처음 insert에서 입력한 recipeIdx 넣어야함
 					statement.executeUpdate();
-					
+					int totalPrice = 0;
 					for(int i = 0 ; i < ingredientCnt; i++)
 					{
 						Ingredient ingredientModel = item.getIngredientList(i);
@@ -130,8 +121,6 @@ public class DBRecipeManager extends Thread {
 						while(unitRs.next())
 							defaultUnitIdx = unitRs.getInt("unitIdx");
 						
-						
-						
 						String select_ingredient_for_subjectIdx = "SELECT ingredientItemId, unitIdx FROM onetable.ingredient WHERE ingredientSubjectIdx = ? and unitIdx = ? order by idx limit 1";
 						statement = conn.prepareStatement(select_ingredient_for_subjectIdx);
 						statement.setInt(1, ingredientSubjectIdx);
@@ -150,13 +139,47 @@ public class DBRecipeManager extends Thread {
 						statement.setDouble(4, iu.getMin());
 						statement.setDouble(5, iu.getMax());
 						statement.setString(6, iu.getSymbol());
-						System.out.println(ingredientModel.getUnitStr());
+						//System.out.println(ingredientModel.getUnitStr());
 						statement.setString(7, ingredientModel.getName());
 						statement.setString(8, ingredientModel.getUnitStr());
 						statement.executeUpdate();
 						
+						String ingredient_currentDay = "SELECT price, unitAmount FROM ingredient_price_all where ingredientItemId = ? order by priceDate desc limit 1";
+						statement = conn.prepareStatement(ingredient_currentDay);
+						statement.setString(1, ingredientItemId);
+						ResultSet ingPriceRs = statement.executeQuery();
+						int ingPrice = 0;
+						int unitAmount = 0;
+						int perPrice = 0 ;
+						
+						while(ingPriceRs.next())
+						{
+							ingPrice = ingPriceRs.getInt("price");	
+							unitAmount = ingPriceRs.getInt("unitAmount");
+						}
+						
+						if(unitAmount != 0)
+						{
+							perPrice = ingPrice / unitAmount;
+							
+							totalPrice += perPrice * iu.getMin();
+						}
+						else
+							totalPrice += 0;
+						
 						
 					}
+					
+					
+					
+					
+					String updatePrice = "UPDATE recipe SET price = ? WHERE recipeIdx = ?";
+					statement = conn.prepareStatement(updatePrice);
+					statement.setInt(1, totalPrice);
+					statement.setInt(2, recipeIdx);
+					
+					statement.executeUpdate();
+					
 					
 					System.out.println("큐 끝 =============");
 					statement.close();

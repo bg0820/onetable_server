@@ -15,15 +15,7 @@ import Util.PrintColor;
 public class DBIngredientsManager extends Thread {
 	private Connection conn;
 
-	private static final int DEFAULT_UNIT_UUID = 26;
-	private static final int KG_UNIT_UUID = 10;
-	private static final int G_UNIT_UUID = 27;
-	private static final int CM_UNIT_UUID = 30;
-	private static final int AMOUNT_UNIT_UUID = 31;
-	private static final int L_UNIT_UUID = 12;
-	private static final int ML_UNIT_UUID = 28;
-	private static final int CC_UNIT_UUID = 29;
-	private static final int M_UNIT_UUID = 25;
+	private static final int DEFAULT_UNIT_UUID = 1;
 
 	// lazy init 로 인한 싱글톤 멀티스레딩 문제 해결
 	private static class DBIngredientsManagerLazy {

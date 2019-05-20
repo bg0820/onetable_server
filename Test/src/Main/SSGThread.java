@@ -36,8 +36,8 @@ public class SSGThread extends Thread {
 			int maxPageCnt = (int) Math.ceil((double) (recordCnt
 					/ 80.0));
 			
-			if(maxPageCnt > 10)
-				maxPageCnt = 10;
+			if(maxPageCnt > 5)
+				maxPageCnt = 5;
 
 			if (recordCnt == 0) {
 				System.out.println(PrintColor.RED + "[" + ingredientSubject.getVariety() + "] 조회 결과 없음" + PrintColor.RESET);
