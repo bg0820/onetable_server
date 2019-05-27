@@ -3,6 +3,7 @@ package ManagerThread;
 import java.util.ArrayList;
 import java.util.Stack;
 import Main.SSGThread;
+import Main.TestMain;
 import Model.Ingredient;
 import Model.IngredientSubject;
 import Util.PrintColor;
@@ -31,7 +32,7 @@ public class CrawlerManagerThread extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (TestMain.start) {
 			String proxyIP = proxyList.get(proxyIndex);
 			
 			if(list.size() == 0)
@@ -42,15 +43,15 @@ public class CrawlerManagerThread extends Thread {
 			if (var == null)
 				continue;
 
-			if (varietyIgnoreList.contains(var.getVariety()))
+			if (varietyIgnoreList.contains(var.getName()))
 				continue;
 
-			System.out.println(PrintColor.BLUE_BACKGROUND + PrintColor.YELLOW + var.getVariety() + " 조회 스레드 실행" + PrintColor.RESET);
+			System.out.println(PrintColor.BLUE_BACKGROUND + PrintColor.YELLOW + var.getName() + " 조회 스레드 실행" + PrintColor.RESET);
 			SSGThread ssgThread = new SSGThread(var, proxyIP);
 			ssgThread.start();
  
 			try {
-				Thread.sleep(70);
+				Thread.sleep(800);
 			} catch (InterruptedException e) { // TODO Auto-generated
 				e.printStackTrace();
 			}

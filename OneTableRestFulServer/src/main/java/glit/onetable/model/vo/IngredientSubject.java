@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class IngredientSubject {
 	private int ingredientSubjectIdx;
 	private String variety;
+	private long categoryNum;
 
 	public int getIngredientSubjectIdx() {
 		return ingredientSubjectIdx;
@@ -21,6 +22,14 @@ public class IngredientSubject {
 
 	public void setVariety(String variety) {
 		this.variety = variety;
+	}
+
+	public long getCategoryNum() {
+		return categoryNum;
+	}
+
+	public void setCategoryNum(long categoryNum) {
+		this.categoryNum = categoryNum;
 	}
 
 

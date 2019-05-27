@@ -19,7 +19,8 @@ public class Recipe {
 	private String nickName;
 	private Timestamp recipeDate;
 	
-
+	private int queryCnt;
+	
 	private int limitIndex;
 	private int limitCnt;
 
@@ -142,6 +143,14 @@ public class Recipe {
 
 	public void setRecipeDate(Timestamp recipeDate) {
 		this.recipeDate = recipeDate;
+	}
+
+	public int getQueryCnt() {
+		return queryCnt;
+	}
+
+	public void setQueryCnt(int queryCnt) {
+		this.queryCnt = queryCnt;
 	}
 
 

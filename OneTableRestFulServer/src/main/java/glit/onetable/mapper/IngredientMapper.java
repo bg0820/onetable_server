@@ -1,19 +1,18 @@
 package glit.onetable.mapper;
 
 import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
-
 import glit.onetable.model.vo.Ingredient;
 import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.IngredientPriceAll;
 import glit.onetable.model.vo.IngredientSubject;
+import glit.onetable.model.vo.Search;
 
 @Mapper
 public interface IngredientMapper {
 
 	public List<IngredientPriceAll> searchAll(IngredientPriceAll pageLimit);
-	public List<IngredientPriceAll> search(String query);
+	public List<IngredientPriceAll> search(Search query);
 	public List<IngredientSubject> ingredientSubjectSearch(String variety);
 
 

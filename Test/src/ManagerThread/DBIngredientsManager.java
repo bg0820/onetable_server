@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import DB.DBConnectionPool;
 import Model.Ingredient;
 import Model.UnitVO;
@@ -32,13 +31,14 @@ public class DBIngredientsManager extends Thread {
 
 	public LinkedBlockingQueue<ArrayList<Ingredient>> queue =
 			new LinkedBlockingQueue<ArrayList<Ingredient>>();
-		
+
 	@Override
 	public void run() {
 		while (true) {
 			try {
 				Thread.sleep(20000);
-				System.out.println(PrintColor.CYAN_BACKGROUND + PrintColor.WHITE + "[DB Queue] 쓰기 작업 " + queue.size() + "개 시작" + PrintColor.RESET);
+				System.out.println(PrintColor.CYAN_BACKGROUND + PrintColor.WHITE
+						+ "[DB Queue] 쓰기 작업 " + queue.size() + "개 시작" + PrintColor.RESET);
 
 				for (int queueIdx = 0; queueIdx < queue.size(); queueIdx++) {
 
@@ -46,32 +46,31 @@ public class DBIngredientsManager extends Thread {
 
 					for (int varListIdx = 0; varListIdx < item.size(); varListIdx++) {
 
-						Ingredient variety = item.get(varListIdx);						
-					
+						Ingredient variety = item.get(varListIdx);
+
 						String selectSQL =
-								"SELECT unitIdx, unitName, ml, g, cc, cm, amount FROM onetable.unit WHERE unitName = ?";
+								"SELECT unitIdx, unitName, amount FROM onetable.unit WHERE unitName = ?";
 						PreparedStatement statement = conn.prepareStatement(selectSQL);
 
 						statement.setString(1, variety.getAnayUnit().getUnitStr());
-						
+
 						ResultSet rs = statement.executeQuery();
-						
+
 						int cnt = 0;
 						UnitVO unit = new UnitVO();
 						while (rs.next()) {
 							unit.setUnitIdx(rs.getInt("unitIdx"));
 							cnt++;
 						}
-						
-						statement.close();
+
 						// 아무 타입도 속하지 않는경우
 						if (cnt == 0)
 							unit.setUnitIdx(DEFAULT_UNIT_UUID);
-						 
 
-						String sql =
-								"INSERT INTO ingredient (ingredientItemId, ingredientSubjectIdx, unitIdx, unitAmount, displayName, imgURL)"
-										+ " VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE ingredientSubjectIdx=?, unitIdx = ?, unitAmount = ?, displayName = ?, imgURL = ?";
+
+						String sql = "INSERT INTO onetable.ingredient (ingredientItemId, ingredientSubjectIdx, unitIdx, unitAmount, displayName, imgURL) " + 
+								"SELECT ?, ?, ?, ?, ?, ? FROM DUAL WHERE NOT EXISTS (SELECT ingredientItemId FROM onetable.ingredient WHERE ingredientSubjectIdx = ? and ingredientItemId = ?)";
+						
 						statement = conn.prepareStatement(sql);
 						statement.setString(1, variety.getIngredientItemId());
 						statement.setInt(2,
@@ -80,39 +79,27 @@ public class DBIngredientsManager extends Thread {
 						statement.setDouble(4, variety.getAnayUnit().getUnitAmount());
 						statement.setString(5, variety.getDisplayName());
 						statement.setString(6, variety.getImgUrl());
-						
-						statement.setInt(7, variety.getIngredientSubject().getIngredientSubjectIdx());
-						statement.setInt(8, unit.getUnitIdx());
-						statement.setDouble(9,  variety.getAnayUnit().getUnitAmount());
-						statement.setString(10, variety.getDisplayName());
-						statement.setString(11, variety.getImgUrl());
+
+						statement.setInt(7,
+								variety.getIngredientSubject().getIngredientSubjectIdx());
+						statement.setString(8,
+								variety.getIngredientItemId());
 						statement.executeUpdate();
-						
-						statement.close();
-						
-						String todayIsPrice = "SELECT count(ingredientPriceIdx) as ingredientPriceIdx FROM ingredient_price WHERE ingredientItemId = ? and priceDate = CURDATE()";
-						statement = conn.prepareStatement(todayIsPrice);
+
+
+						String priceSql =
+								"INSERT INTO ingredient_price (ingredientItemId, price, priceDate) SELECT "
+										+ "?, ?, CURDATE() FROM DUAL WHERE NOT EXISTS ( SELECT ingredientItemId FROM "
+										+ "ingredient_price where ingredientItemId = ? and priceDate = CURDATE())";
+						statement = conn.prepareStatement(priceSql);
 						statement.setString(1, variety.getIngredientItemId());
-						ResultSet rss = statement.executeQuery();
-						
-						int todayIsPriceCnt = 0;
-						while (rss.next()) {
-							todayIsPriceCnt = rss.getInt("ingredientPriceIdx");
-						}						
+						statement.setInt(2, variety.getPrice());
+						statement.setString(3, variety.getIngredientItemId());
+						statement.executeUpdate();
+
 						statement.close();
-						
-						if(todayIsPriceCnt == 0)
-						{
-							String priceSql =
-									"INSERT INTO ingredient_price (ingredientItemId,  price, priceDate) VALUES(?, ?, CURDATE())";
-							statement = conn.prepareStatement(priceSql);
-							statement.setString(1, variety.getIngredientItemId());
-							statement.setInt(2, variety.getPrice());
-							statement.executeUpdate();
-							
-							statement.close();
-						}
-						
+
+
 					}
 				}
 

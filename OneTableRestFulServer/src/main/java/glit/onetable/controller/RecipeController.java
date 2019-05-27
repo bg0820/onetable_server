@@ -22,6 +22,7 @@ import glit.onetable.model.vo.Ingredient;
 import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.Recipe;
 import glit.onetable.model.vo.RecipeIngredient;
+import glit.onetable.model.vo.Search;
 import glit.onetable.model.vo.Unit;
 import glit.onetable.model.vo.User;
 @CrossOrigin
@@ -34,19 +35,22 @@ public class RecipeController {
 
 	@RequestMapping(value = "/search/all", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponseResult> searchAll(@RequestHeader(value = "API_Version") String version,
-			@RequestParam String startNum, @RequestParam String itemNum) throws CustomException, IOException {
+			@RequestParam int page, @RequestParam int itemNum) throws CustomException, IOException {
 		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
 		HttpStatus hs = HttpStatus.OK;
 
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
-
-
+		
 		ResultIncCnt ric = new ResultIncCnt();
 
+		// 1, 80 => 0, 80
+		// 2, 80 => 80, 80
+		int pageIndex = (page - 1) * itemNum;
+				
 		Recipe recipe = new Recipe();
-		recipe.setLimitIndex(Integer.parseInt(startNum));
-		recipe.setLimitCnt(Integer.parseInt(itemNum));
+		recipe.setLimitIndex(pageIndex);
+		recipe.setLimitCnt(itemNum);
 
 		int allQueryCnt = recipeMapper.allCnt();
 		List<Recipe> recipeList = recipeMapper.searchAll(recipe);
@@ -63,7 +67,7 @@ public class RecipeController {
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponseResult> search(@RequestHeader(value = "API_Version") String version,
 			@RequestParam String query, @RequestParam int page,
-			@RequestParam int itemCnt) throws CustomException, IOException {
+			@RequestParam int itemNum) throws CustomException, IOException {
 		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
 		HttpStatus hs = HttpStatus.OK;
 
@@ -73,8 +77,18 @@ public class RecipeController {
 		Recipe recipe = new Recipe();
 		ResultIncCnt ric = new ResultIncCnt();
 		
+		// 1, 80 => 0, 80
+		// 2, 80 => 80, 80
+		int pageIndex = (page - 1) * itemNum;
+						
+				
+		Search search = new Search();
+		search.setQuery(query);
+		search.setItemNum(itemNum);
+		search.setStartNum(pageIndex);
+		
 		int searchQueryCnt = recipeMapper.searchCnt(query);
-		List<Recipe> recipeList = recipeMapper.search(query);
+		List<Recipe> recipeList = recipeMapper.search(search);
 		
 		ric.setCnt(searchQueryCnt); 
 		ric.setObj(recipeList);

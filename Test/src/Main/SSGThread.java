@@ -1,5 +1,6 @@
 package Main;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import ManagerThread.CrawlerManagerThread;
 import ManagerThread.DBIngredientsManager;
@@ -32,16 +33,19 @@ public class SSGThread extends Thread {
 			ArrayList<Ingredient> insertIngredientList = new ArrayList<Ingredient>();
 
 			SSGCrawler ssgCrawler = new SSGCrawler(proxyIP);
-			int recordCnt = ssgCrawler.getRecordCnt(ingredientSubject.getVariety());
+			int recordCnt = ssgCrawler.getRecordCnt(ingredientSubject.getCategoryNum());
 			int maxPageCnt = (int) Math.ceil((double) (recordCnt
 					/ 80.0));
-			
-			if(maxPageCnt > 5)
-				maxPageCnt = 5;
+
+			System.out.println(
+					PrintColor.BLACK_BACKGROUND + PrintColor.WHITE + recordCnt + PrintColor.RESET);
+			// if(maxPageCnt > 5)
+			// maxPageCnt = 5;
 
 			if (recordCnt == 0) {
-				System.out.println(PrintColor.RED + "[" + ingredientSubject.getVariety() + "] 조회 결과 없음" + PrintColor.RESET);
-				IgnoreManagerThread.varietyIgnoreQueue.offer(ingredientSubject.getVariety());
+				System.out.println(PrintColor.RED + "[" + ingredientSubject.getName() + "] 조회 결과 없음"
+						+ PrintColor.RESET);
+				IgnoreManagerThread.varietyIgnoreQueue.offer(ingredientSubject.getName());
 				return;
 			}
 
@@ -49,39 +53,54 @@ public class SSGThread extends Thread {
 			for (; currentPage <= maxPageCnt;) {
 				ArrayList<Ingredient> anaVarList =
 						ssgCrawler.getItemList(ingredientSubject, currentPage);
-				
-				
-				if (anaVarList != null) {
-					for (int j = 0; j < anaVarList.size(); j++) {
-						AnalyzeUnit analyzeUnit = HangleAnalyze.getInstance()
-								.analyze(anaVarList.get(j).getDisplayName());
 
-						// 분석한 결과값이 null이 아닐경우
-						if (analyzeUnit != null) {
-							anaVarList.get(j).setAnayUnit(analyzeUnit); // 기존 값에 분석한 결과 추가 해서 삽입
-							insertIngredientList.add(anaVarList.get(j));
-						}
-					}
-
-					System.out.println(PrintColor.GREEN + "[" + ingredientSubject.getVariety() + "] 현재 페이지 : "
-							+ currentPage + ", 페이지 끝 : " + maxPageCnt + ", 레코드 개수 : " + recordCnt + PrintColor.RESET);
-					ingredientSubject.setPage((++currentPage));
-					
+				if (anaVarList == null) {
+					System.out.println(PrintColor.GREEN + "[" + ingredientSubject.getName()
+							+ "] 레코드 없음" + PrintColor.RESET);
+					return;
 				}
-				else
-					System.out.println(PrintColor.GREEN + "[" + ingredientSubject.getVariety() + "] 401에러 너무 많은 요청" + PrintColor.RESET);
 
-				Thread.sleep(100);
+				for (int j = 0; j < anaVarList.size(); j++) {
+					AnalyzeUnit analyzeUnit =
+							HangleAnalyze.getInstance().analyze(anaVarList.get(j).getDisplayName());
+
+					// 분석한 결과값이 null이 아닐경우
+					if (analyzeUnit != null) {
+						anaVarList.get(j).setAnayUnit(analyzeUnit); // 기존 값에 분석한 결과 추가 해서 삽입
+						insertIngredientList.add(anaVarList.get(j));
+					}
+				}
+
+				System.out.println(PrintColor.GREEN + "[" + ingredientSubject.getName()
+						+ "] 현재 페이지 : " + currentPage + ", 페이지 끝 : " + maxPageCnt + ", 레코드 개수 : "
+						+ recordCnt + PrintColor.RESET);
+				ingredientSubject.setPage((++currentPage));
+
+
+				Thread.sleep(4000);
 			}
 
-			System.out.println(PrintColor.BLUE_BACKGROUND + PrintColor.YELLOW +  "[" + ingredientSubject.getVariety() + "] 스레드 종료" + PrintColor.RESET);
+			System.out.println(PrintColor.BLUE_BACKGROUND + PrintColor.YELLOW + "["
+					+ ingredientSubject.getName() + "] 스레드 종료" + PrintColor.RESET);
 			DBIngredientsManager.getInstance().queue.offer(insertIngredientList);
 
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			CrawlerManagerThread.getInstance().list.push(ingredientSubject);
 
-			System.out.println(PrintColor.RED_BACKGROUND + PrintColor.WHITE + "[에러] " + ingredientSubject.getVariety() + "(" + proxyIP + ") - "
-					+ e.getMessage() + PrintColor.RESET);
+			System.out.println(PrintColor.RED_BACKGROUND + PrintColor.WHITE + "[에러] "
+					+ ingredientSubject.getCategoryNum() + "-" + ingredientSubject.getName() + "(" + proxyIP + ") - " + e.getMessage()
+					+ PrintColor.RESET);
+			
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			CrawlerManagerThread.getInstance().list.push(ingredientSubject);
+
+			System.out.println(PrintColor.RED_BACKGROUND + PrintColor.WHITE + "[에러] "
+					+ ingredientSubject.getCategoryNum()  + "-" +ingredientSubject.getName()+ "(" + proxyIP + ") - " + e.getMessage()
+					+ PrintColor.RESET);
 		}
 
 

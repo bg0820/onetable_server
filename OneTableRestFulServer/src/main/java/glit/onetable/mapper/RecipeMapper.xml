@@ -16,8 +16,8 @@
 		SELECT recipeIdx, userIdx, name, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit order by recipeIdx LIMIT #{limitIndex}, #{limitCnt}
 	</select>
 	
-	<select id='search' parameterType="String" resultType="Recipe">
-		SELECT recipeIdx, userIdx, name, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit WHERE name LIKE CONCAT('%',#{query},'%')
+	<select id='search' parameterType="Search" resultType="Recipe">
+		SELECT recipeIdx, userIdx, name, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit WHERE name LIKE CONCAT('%',#{query},'%') LIMIT #{startNum}, #{itemNum}
 	</select>
 	
 	<select id='detail' parameterType="int" resultType="Recipe">

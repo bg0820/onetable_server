@@ -27,6 +27,7 @@ import glit.onetable.model.vo.Ingredient;
 import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.IngredientPriceAll;
 import glit.onetable.model.vo.IngredientSubject;
+import glit.onetable.model.vo.Search;
 @CrossOrigin
 @RestController
 @RequestMapping("/ingredient")
@@ -37,17 +38,21 @@ public class IngredientsController {
 
 	@RequestMapping(value = "/search/all", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponseResult> searchAll(@RequestHeader(value = "API_Version") String version,
-			@RequestParam String startNum,
-			@RequestParam String itemNum) throws CustomException, IOException {
+			@RequestParam int page,
+			@RequestParam int itemNum) throws CustomException, IOException {
 		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
 		HttpStatus hs = HttpStatus.OK;
 
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
+		// 1, 80 => 0, 80
+		// 2, 80 => 80, 80
+		int pageIndex = (page - 1) * itemNum;
+		
 		IngredientPriceAll ipa = new IngredientPriceAll();
-		ipa.setLimitIndex(Integer.parseInt(startNum));
-		ipa.setLimitCnt(Integer.parseInt(itemNum));
+		ipa.setLimitIndex(pageIndex);
+		ipa.setLimitCnt(itemNum);
 
 		List<IngredientPriceAll> ipaList = ingredientMapper.searchAll(ipa);
 
@@ -58,14 +63,16 @@ public class IngredientsController {
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponseResult> search(@RequestHeader(value = "API_Version") String version,
-			@RequestParam String query) throws CustomException, IOException {
+			@RequestParam String query,
+			@RequestParam int page,
+			@RequestParam int itemNum) throws CustomException, IOException {
 		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
 		HttpStatus hs = HttpStatus.OK;
 
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
-
+/*
 		IngredientSubject is = new IngredientSubject();
 		is.setVariety(query);
 		// 품종 없을때 품종 삽입
@@ -115,8 +122,17 @@ public class IngredientsController {
 			}
 
 		}
+		*/
+		
+		// 1, 80 => 0, 80
+		// 2, 80 => 80, 80
+		int pageIndex = (page - 1) * itemNum;
 
-		List<IngredientPriceAll> ingredientPriceAll = ingredientMapper.search(query);
+		Search search = new Search();
+		search.setQuery(query);
+		search.setStartNum(pageIndex);
+		search.setItemNum(itemNum);
+		List<IngredientPriceAll> ingredientPriceAll = ingredientMapper.search(search);
 
 		resResult.setData(ingredientPriceAll);
 

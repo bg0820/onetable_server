@@ -227,7 +227,7 @@ public class AuthController {
 		message.setFrom("onetable@onetable.com");
         message.setTo(email);
         message.setSubject("한상차림  - 아이디 찾기");
-        message.setText("아이디 : " + user.getId());
+        message.setText("아이디 : " + user.getId() + "</br>디자인 예정");
         javaMailSender.send(message);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
@@ -274,7 +274,7 @@ public class AuthController {
 		message.setFrom("onetable@onetable.com");
         message.setTo(email);
         message.setSubject("한상차림 - 비밀번호 찾기");
-        message.setText("변경된 비밀번호 : " + temp.toString());
+        message.setText("변경된 비밀번호 : " + temp.toString() + "</br>디자인 예정");
         javaMailSender.send(message);
         
 
