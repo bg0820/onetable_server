@@ -26,7 +26,7 @@
 	
 	<!--  레시피재료 테이블에 레시피 아이디로 조회 -->
 	<select id='recipeIngredientToRecipeIdx' parameterType="int" resultType="RecipeIngredient">
-		SELECT * FROM onetable.recipe_ingredient where recipeIdx = #{recipeIdx};
+		SELECT * FROM onetable.recipe_ingredient  where recipeIdx = #{recipeIdx};
 	</select>
 	
 	<!--  unitIdx 로 유닛 테이블 조회 -->
@@ -45,5 +45,9 @@
 	<select id="getUserInfo" parameterType="int" resultType="User">
 		SELECT * FROM user where userIdx = #{userIdx}
 	</select>
+	
+	<insert id='recipeInsert' parameterType="Recipe" useGeneratedKeys="true"  keyProperty="recipeIdx">
+		INSERT INTO onetable.recipe(userIdx, name, price, servingMin, servingMax, recipeImg, cookTimeMin, kcal, contentHtml, nickName, recipeDate) VALUES (#{userIdx}, #{name}, #{price}, #{servingMin}, #{servingMax}, #{recipeImg}, #{cookTimeMin}, #{kcal}, #{contentHtml}, #{nickName}, #{recipeDate});
+	</insert>
 	
 </mapper>

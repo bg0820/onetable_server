@@ -1,16 +1,31 @@
 package glit.onetable.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import glit.onetable.enums.ErrorCode;
 import glit.onetable.exception.CustomException;
 import glit.onetable.mapper.RecipeMapper;
@@ -41,13 +56,13 @@ public class RecipeController {
 
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
-		
+
 		ResultIncCnt ric = new ResultIncCnt();
 
 		// 1, 80 => 0, 80
 		// 2, 80 => 80, 80
 		int pageIndex = (page - 1) * itemNum;
-				
+
 		Recipe recipe = new Recipe();
 		recipe.setLimitIndex(pageIndex);
 		recipe.setLimitCnt(itemNum);
@@ -57,8 +72,8 @@ public class RecipeController {
 
 		ric.setCnt(allQueryCnt);
 		ric.setObj(recipeList);
-		
-		
+
+
 		resResult.setData(ric);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
@@ -76,23 +91,23 @@ public class RecipeController {
 
 		Recipe recipe = new Recipe();
 		ResultIncCnt ric = new ResultIncCnt();
-		
+
 		// 1, 80 => 0, 80
 		// 2, 80 => 80, 80
 		int pageIndex = (page - 1) * itemNum;
-						
-				
+
+
 		Search search = new Search();
 		search.setQuery(query);
 		search.setItemNum(itemNum);
 		search.setStartNum(pageIndex);
-		
+
 		int searchQueryCnt = recipeMapper.searchCnt(query);
 		List<Recipe> recipeList = recipeMapper.search(search);
-		
-		ric.setCnt(searchQueryCnt); 
+
+		ric.setCnt(searchQueryCnt);
 		ric.setObj(recipeList);
-		
+
 		resResult.setData(ric);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
@@ -106,12 +121,12 @@ public class RecipeController {
 
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
-		
+
 		RecipeIngredient recipeIngredient = new RecipeIngredient();
 		recipeIngredient.setRecipeIdx(recipeIdx);
-		
+
 		Recipe recipe = recipeMapper.detail(recipeIdx);
-		
+
 		RecipeDetail resultData = new RecipeDetail();
 		resultData.setCookTimeMin(recipe.getCookTimeMin());
 		resultData.setKcal(recipe.getKcal());
@@ -121,18 +136,18 @@ public class RecipeController {
 		resultData.setServingMin(recipe.getServingMin());
 		resultData.setPrice(recipe.getPrice());
 		resultData.setContentHtml(recipe.getContentHtml());
-		
+
 		User user = recipeMapper.getUserInfo(recipe.getUserIdx());
 		resultData.setUserName(user.getNickname());
-		
-		
+
+
 		List<RecipeIngredient> recipeIngreList = recipeMapper.recipeIngredientToRecipeIdx(recipeIdx);
 		int totalPrice = 0;
-		
+
 		for(int i = 0; i < recipeIngreList.size(); i++)
 		{
 			RecipeIngredient item = recipeIngreList.get(i);
-			
+
 			IngredientPrice ingredientPrice = recipeMapper.ingredientCurrentDayPrice(item.getIngredientItemId());
 			if(ingredientPrice == null)
 				continue;
@@ -143,26 +158,65 @@ public class RecipeController {
 			double pricePerUnit = ingredientPrice.getPrice() / ingredientUnit.getUnitAmount();
 			// 레시피 재료에 대한 유닛 조회
 			Unit unit = recipeMapper.getUnitName(item.getUnitIdx());
-			double recipeIngredientPrice = (double)item.getMinAmount() * pricePerUnit;
+			double recipeIngredientPrice = item.getMinAmount() * pricePerUnit;
 
 			RecipeDetailIngredient rdi = new RecipeDetailIngredient();
 			rdi.setName(item.getDisplayName());
 			rdi.setCalcPrice(recipeIngredientPrice);
 			rdi.setUnitStr(unit.getUnitName());
 			rdi.setUnitDisplayName(item.getDisplayAmount());
-			
-			
+
+
 			totalPrice += recipeIngredientPrice;
-			
+
 			if(item.getResult() != 0.0)
 				rdi.setUnitAmount(item.getResult());
 			else
 				rdi.setUnitAmount(item.getMinAmount());
-			
+
 			resultData.recipeIngredient.add(rdi);
 		}
 
 		resResult.setData(resultData);
+
+		return new ResponseEntity<ApiResponseResult>(resResult, hs);
+	}
+
+    @RequestMapping(value = "/image/{imageName}.{extension}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+    public @ResponseBody byte[] getImage(
+        @PathVariable(name = "imageName") String imageName,
+        @PathVariable(name = "extension", required = false) String extension,
+        HttpServletRequest request) throws IOException {
+
+        InputStream imageStream = new FileInputStream("uploads/" + imageName + "." + extension);
+        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+        imageStream.close();
+
+        return imageByteArray;
+    }
+
+	@RequestMapping(value = "/reg", method = RequestMethod.POST)
+	public ResponseEntity<ApiResponseResult> register(@RequestHeader(value = "API_Version") String version,
+			MultipartFile multipartFile) throws CustomException, IOException, FileNotFoundException {
+		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
+		HttpStatus hs = HttpStatus.OK;
+
+		if (!version.equals("1.0"))
+			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
+
+		if(multipartFile.isEmpty())
+			throw new CustomException(ErrorCode.FILE_NOT_UPLOADED);
+
+		byte[] bytes = multipartFile.getBytes();
+
+		File fi = new File("uploads/" + new Timestamp(System.currentTimeMillis()).getTime() + "_" + multipartFile.getOriginalFilename());
+
+		FileUtils.writeByteArrayToFile(fi, bytes);
+
+		System.out.println(fi.getAbsolutePath());
+		System.out.println(fi.getName());
+		resResult.setData("/recipe/image/" + fi.getName());
+
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
