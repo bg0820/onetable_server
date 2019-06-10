@@ -1,7 +1,9 @@
 package glit.onetable.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+
 import glit.onetable.model.vo.Ingredient;
 import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.Recipe;
@@ -17,13 +19,14 @@ public interface RecipeMapper {
 	public Recipe detail(int recipeIdx);
 	public List<RecipeIngredient> recipeIngredientToRecipeIdx(int recipeIdx);
 	public Unit getUnitName(int unitIdx);
-	
+
 	public IngredientPrice ingredientCurrentDayPrice(String ingredientItemId);
 	public Ingredient getIngredientToItemId(String ingredientItemId);
-	
+
 	public User getUserInfo(int userIdx);
-	
-	public int searchCnt(String query );
+
+	public int searchCnt(String query);
 	public int allCnt();
+	public void recipeInsert(Recipe recipe);
 
 }
