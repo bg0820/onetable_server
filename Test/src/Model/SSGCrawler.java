@@ -17,15 +17,19 @@ public class SSGCrawler {
 		this.proxyIP = proxyIP;
 	}
 
-	public ArrayList<Ingredient> getItemList(IngredientSubject ingredientSubject, int page)
+	public IngredientResult getItemList(IngredientSubject ingredientSubject, int page)
 			throws IOException {
-		ArrayList<Ingredient> lis = new ArrayList<Ingredient>();
-
+		
+		IngredientResult ir = new IngredientResult();
+		
 		Response resp = getResponse(QUERY_URL + ingredientSubject.getCategoryNum() + "&page=" + page);
 
 		if (resp.statusCode() == 200) {
 			Document doc = resp.parse();
 
+			int recordCnt = Integer.parseInt(doc.selectFirst("em[id='area_item_total_count']").text().replaceAll("\\,", ""));
+			ir.setRecordCnt(recordCnt);
+			
 			if (doc.selectFirst("#ty_thmb_view").selectFirst("ul") == null)
 				return null;
 
@@ -60,11 +64,11 @@ public class SSGCrawler {
 				
 				if (itemId != null) {
 					if (!itemId.equals("")) {
-						lis.add(ingredient);
+						ir.list.add(ingredient);
 					}
 				}
 			}
-			return lis;
+			return ir;
 		} else {
 			return null;
 		}

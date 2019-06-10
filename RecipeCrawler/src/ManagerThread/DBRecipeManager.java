@@ -77,18 +77,15 @@ public class DBRecipeManager extends Thread {
 					ResultSet recipeIdxRs = statement.executeQuery();
 					recipeIdxRs.next();
 					int recipeIdx = recipeIdxRs.getInt("recipeIdx");
-						
-					
-					int ingredientCnt = item.getIngredientSize();
-					System.out.println(ingredientCnt);
-					
+
 					// 레시피 재료 테이블에 넣기전에 기존에 등록된 재료 삭제 하고 재료 넣기
 					String deleteSQL_recipeInf = "DELETE FROM onetable.recipe_ingredient WHERE recipeIdx = ?";
 					statement = conn.prepareStatement(deleteSQL_recipeInf);
 					statement.setInt(1, recipeIdx); //앞에 처음 insert에서 입력한 recipeIdx 넣어야함
 					statement.executeUpdate();
 					int totalPrice = 0;
-					for(int i = 0 ; i < ingredientCnt; i++)
+					
+					for(int i = 0 ; i < item.getIngredientSize(); i++)
 					{
 						Ingredient ingredientModel = item.getIngredientList(i);
 						IngredientUnit iu = ingredientModel.getIngredientUnit();
@@ -96,24 +93,15 @@ public class DBRecipeManager extends Thread {
 						if(iu == null)
 							continue;
 						
-						String selectSQL_ingredientSubject = "SELECT ingredientSubjectIdx FROM onetable.ingredient_subject WHERE name = ?";
-						statement = conn.prepareStatement(selectSQL_ingredientSubject);	
-						//int idx문제
-						statement.setString(1, iu.getUnitStr());
-						ResultSet rs = statement.executeQuery();
+						double result = iu.getMin();
+						if(iu.getSymbol().equals("/"))
+							result = iu.getMin() / iu.getMax();	
 						
-						int ingredientSubjectIdx = 1;
-						while(rs.next())
-							 ingredientSubjectIdx = rs.getInt("ingredientSubjectIdx");
-						
+						/*******************************************
+						 *		레시피 재료의 단위를 DB에 있는 단위로 맵핑하기
+						 *******************************************/
 						String selectUnitQuery = "SELECT unitIdx FROM unit WHERE unitName = ?";
 						statement = conn.prepareStatement(selectUnitQuery);	
-						
-						switch(iu.getUnitStr())
-						{
-							
-						}
-						
 						statement.setString(1, iu.getUnitStr());
 						ResultSet unitRs = statement.executeQuery();
 						
@@ -121,21 +109,43 @@ public class DBRecipeManager extends Thread {
 						while(unitRs.next())
 							defaultUnitIdx = unitRs.getInt("unitIdx");
 						
-						String select_ingredient_for_subjectIdx = "SELECT ingredientIdx, ingredientItemId, unitIdx FROM onetable.ingredient WHERE ingredientSubjectIdx = ? and unitIdx = ? and displayName LIKE ? order by ingredientIdx limit 1";
-						statement = conn.prepareStatement(select_ingredient_for_subjectIdx);
-						statement.setInt(1, ingredientSubjectIdx);
-						statement.setInt(2, defaultUnitIdx);
-						statement.setString(3, "%" + iu.getUnitStr() + "%");
-						ResultSet subjectRs = statement.executeQuery();
-						int ingredientIdx = 1;
-						String ingredientItemId = "0";
 						
-						while(subjectRs.next()) {
-							ingredientIdx = subjectRs.getInt("ingredientIdx");
-							ingredientItemId = subjectRs.getString("ingredientItemId");
+						
+						/*******************************************
+						 *		ingredientSubject IDX 가져오기, 재료명을 기준으로 검색
+						 *******************************************/
+						String selectSQL_ingredientSubject = "SELECT ingredientSubjectIdx FROM onetable.ingredient_subject WHERE name = ?";
+						statement = conn.prepareStatement(selectSQL_ingredientSubject);	
+						//int idx문제
+						statement.setString(1, ingredientModel.getName());
+						ResultSet rs = statement.executeQuery();
+						
+						int ingredientSubjectIdx = 1;
+						while(rs.next()) {
+							ingredientSubjectIdx = rs.getInt("ingredientSubjectIdx");
+							
+							
+							// TODO :: ingredientSubject 가 여러개임 
+							/*******************************************
+							 *		레시피 재료랑 DB에 있는 재료랑 매칭하기
+							 *******************************************/
+							String select_ingredient_for_subjectIdx = "SELECT price, unitAmount, ingredientIdx, ingredientItemId, unitIdx FROM onetable.ingredient_price_all WHERE ingredientSubjectIdx = ? and unitIdx = ? and displayName LIKE ? order by ingredientIdx limit 1";
+							statement = conn.prepareStatement(select_ingredient_for_subjectIdx);
+							statement.setInt(1, ingredientSubjectIdx);
+							statement.setInt(2, defaultUnitIdx);
+							statement.setString(3, "%" + ingredientModel.getName() + "%");
+							ResultSet subjectRs = statement.executeQuery();
+							int ingredientIdx = 1;
+							String ingredientItemId = "0";
+							
+							while(subjectRs.next()) {
+								ingredientIdx = subjectRs.getInt("ingredientIdx");
+								ingredientItemId = subjectRs.getString("ingredientItemId");
+							}
+							
 						}
 						
-						
+						/*
 						String ingredient_currentDay = "SELECT price, unitAmount FROM ingredient_price_all where ingredientItemId = ? order by priceDate desc limit 1";
 						statement = conn.prepareStatement(ingredient_currentDay);
 						statement.setString(1, ingredientItemId);
@@ -144,9 +154,6 @@ public class DBRecipeManager extends Thread {
 						int unitAmount = 0;
 						int perPrice = 0 ;
 						
-						double result = iu.getMin();
-						if(iu.getSymbol().equals("/"))
-							result = iu.getMin() / iu.getMax();	
 						
 						while(ingPriceRs.next())
 						{
@@ -162,6 +169,7 @@ public class DBRecipeManager extends Thread {
 						else
 							totalPrice += 0;
 						
+						*/
 						
 						String insertSQL_recipeIngredient = "INSERT INTO recipe_ingredient (recipeIdx, ingredientIdx, unitIdx, minAmount, maxAmount, result, symbol, price, displayName, displayAmount, unitStr ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 						statement = conn.prepareStatement(insertSQL_recipeIngredient);

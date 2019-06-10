@@ -54,7 +54,7 @@ public class CrawlerManagerThread extends Thread {
 			ssgThread.start();
  
 			try {
-				Thread.sleep(300);
+				Thread.sleep(400);
 			} catch (InterruptedException e) { // TODO Auto-generated
 				e.printStackTrace();
 			}

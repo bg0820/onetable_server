@@ -8,6 +8,7 @@ import ManagerThread.IgnoreManagerThread;
 import Model.AnalyzeUnit;
 import Model.HangleAnalyze;
 import Model.Ingredient;
+import Model.IngredientResult;
 import Model.IngredientSubject;
 import Model.SSGCrawler;
 import Util.PrintColor;
@@ -31,14 +32,11 @@ public class SSGThread extends Thread {
 
 		try {
 			SSGCrawler ssgCrawler = new SSGCrawler(proxyIP);
-			int recordCnt = ssgCrawler.getRecordCnt(ingredientSubject.getCategoryNum());
+			// int recordCnt = ssgCrawler.getRecordCnt(ingredientSubject.getCategoryNum());
+			IngredientResult ir = ssgCrawler.getItemList(ingredientSubject, currentPage);
+			int recordCnt = ir.getRecordCnt();
 			int maxPageCnt = (int) Math.ceil((double) (recordCnt
 					/ 80.0));
-
-			System.out.println(
-					PrintColor.BLACK_BACKGROUND + PrintColor.WHITE + recordCnt + PrintColor.RESET);
-			// if(maxPageCnt > 5)
-			// maxPageCnt = 5;
 
 			if (recordCnt == 0) {
 				System.out.println(PrintColor.RED + "[" + ingredientSubject.getName() + "] 조회 결과 없음"
@@ -47,12 +45,11 @@ public class SSGThread extends Thread {
 				return;
 			}
 
-
+			ArrayList<Ingredient> anaVarList = ir.list;
+			
 			for (; currentPage <= maxPageCnt;) {
 				ArrayList<Ingredient> insertIngredientList = new ArrayList<Ingredient>();
 				
-				ArrayList<Ingredient> anaVarList =
-						ssgCrawler.getItemList(ingredientSubject, currentPage);
 
 				if (anaVarList == null) {
 					System.out.println(PrintColor.GREEN + "[" + ingredientSubject.getName()
