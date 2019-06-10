@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import glit.onetable.model.HangleAnalyze;
 
+
 @SpringBootApplication
 public class OneTableRestFulServerApplication {
 

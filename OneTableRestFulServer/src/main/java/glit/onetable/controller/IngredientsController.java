@@ -1,7 +1,6 @@
 package glit.onetable.controller;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import glit.onetable.enums.ErrorCode;
 import glit.onetable.exception.CustomException;
 import glit.onetable.mapper.IngredientMapper;
-import glit.onetable.model.AnalyzeUnit;
 import glit.onetable.model.ApiResponseResult;
-import glit.onetable.model.HangleAnalyze;
-import glit.onetable.model.IngredientModel;
-import glit.onetable.model.SSGCrawler;
-import glit.onetable.model.vo.Ingredient;
+import glit.onetable.model.vo.Category;
 import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.IngredientPriceAll;
-import glit.onetable.model.vo.IngredientSubject;
 import glit.onetable.model.vo.Search;
 @CrossOrigin
 @RestController
@@ -49,7 +43,7 @@ public class IngredientsController {
 		// 1, 80 => 0, 80
 		// 2, 80 => 80, 80
 		int pageIndex = (page - 1) * itemNum;
-		
+
 		IngredientPriceAll ipa = new IngredientPriceAll();
 		ipa.setLimitIndex(pageIndex);
 		ipa.setLimitCnt(itemNum);
@@ -123,7 +117,7 @@ public class IngredientsController {
 
 		}
 		*/
-		
+
 		// 1, 80 => 0, 80
 		// 2, 80 => 80, 80
 		int pageIndex = (page - 1) * itemNum;
@@ -156,5 +150,36 @@ public class IngredientsController {
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
+	////////////////////////////////////////////////////////////
+	@RequestMapping(value = "/category", method = RequestMethod.GET)
+	public ResponseEntity<ApiResponseResult> category(@RequestHeader(value = "API_Version") String version,
+			@RequestParam String childCategory,
+			@RequestParam int page,
+			@RequestParam int itemNum) throws CustomException {
+		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
+		HttpStatus hs = HttpStatus.OK;
+
+		if (!version.equals("1.0"))
+			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
+
+		Category cate = new Category();
+		int pageIndex = (page - 1) * itemNum;
+
+		cate.setStartNum(pageIndex);
+		cate.setItemNum(itemNum);
+
+		List<Integer> subjectIdxList = ingredientMapper.getsubjectIdx(childCategory);
+		List<IngredientPriceAll> ingredientPriceAllList = new ArrayList<IngredientPriceAll>();
+
+		for(int i=0; i<subjectIdxList.size(); i++) {
+			cate.setIngredientSubjectIdx(subjectIdxList.get(i));
+			ingredientPriceAllList = ingredientMapper.categoryIngredient(cate);
+		}
+
+		resResult.setData(ingredientPriceAllList);
+
+		return new ResponseEntity<ApiResponseResult>(resResult, hs);
+	}
+
 
 }
