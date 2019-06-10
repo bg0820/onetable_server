@@ -1,7 +1,10 @@
 package glit.onetable.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+
+import glit.onetable.model.vo.Category;
 import glit.onetable.model.vo.Ingredient;
 import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.IngredientPriceAll;
@@ -27,5 +30,7 @@ public interface IngredientMapper {
 	public int ingredientNotExistsInsert(Ingredient ingredient);
 
 	public int insertIngredientPrice(IngredientPrice ingredientPrice);
+	public List<Integer> getsubjectIdx(String childCategory);
+	public List<IngredientPriceAll> categoryIngredient(Category cate);
 
 }
