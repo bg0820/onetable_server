@@ -150,7 +150,7 @@ public class IngredientsController {
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
-	////////////////////////////////////////////////////////////
+
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponseResult> category(@RequestHeader(value = "API_Version") String version,
 			@RequestParam String childCategory,
