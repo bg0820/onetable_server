@@ -30,8 +30,6 @@ public class SSGThread extends Thread {
 		int currentPage = ingredientSubject.getPage();
 
 		try {
-			ArrayList<Ingredient> insertIngredientList = new ArrayList<Ingredient>();
-
 			SSGCrawler ssgCrawler = new SSGCrawler(proxyIP);
 			int recordCnt = ssgCrawler.getRecordCnt(ingredientSubject.getCategoryNum());
 			int maxPageCnt = (int) Math.ceil((double) (recordCnt
@@ -51,6 +49,8 @@ public class SSGThread extends Thread {
 
 
 			for (; currentPage <= maxPageCnt;) {
+				ArrayList<Ingredient> insertIngredientList = new ArrayList<Ingredient>();
+				
 				ArrayList<Ingredient> anaVarList =
 						ssgCrawler.getItemList(ingredientSubject, currentPage);
 
@@ -76,13 +76,13 @@ public class SSGThread extends Thread {
 						+ recordCnt + PrintColor.RESET);
 				ingredientSubject.setPage((++currentPage));
 
-
+				DBIngredientsManager.getInstance().queue.offer(insertIngredientList);
 				Thread.sleep(4000);
 			}
 
-			System.out.println(PrintColor.BLUE_BACKGROUND + PrintColor.YELLOW + "["
+			System.out.println(PrintColor.PURPLE_BACKGROUND + PrintColor.WHITE + "["
 					+ ingredientSubject.getName() + "] 스레드 종료" + PrintColor.RESET);
-			DBIngredientsManager.getInstance().queue.offer(insertIngredientList);
+			
 
 		} catch (NullPointerException e) {
 			CrawlerManagerThread.getInstance().list.push(ingredientSubject);

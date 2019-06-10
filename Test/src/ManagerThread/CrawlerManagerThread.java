@@ -40,6 +40,9 @@ public class CrawlerManagerThread extends Thread {
 			
 			IngredientSubject var = list.pop();
 
+			if(var.getCategoryNum() == 1)
+				continue;
+			
 			if (var == null)
 				continue;
 
@@ -51,7 +54,7 @@ public class CrawlerManagerThread extends Thread {
 			ssgThread.start();
  
 			try {
-				Thread.sleep(800);
+				Thread.sleep(300);
 			} catch (InterruptedException e) { // TODO Auto-generated
 				e.printStackTrace();
 			}

@@ -5,6 +5,6 @@
 <mapper namespace="glit.onetable.mapper.HomeMapper">
 
 	<select id="popularRecipe" resultType="Recipe">
-	SELECT * FROM onetable.recipe order by queryCnt desc, name limit 0, 30;
+		SELECT recipeIdx, userIdx, name, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit order by queryCnt desc, name limit 0, 30
 	</select>
 </mapper>
