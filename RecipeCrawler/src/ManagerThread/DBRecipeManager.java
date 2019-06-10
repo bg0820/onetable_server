@@ -96,10 +96,10 @@ public class DBRecipeManager extends Thread {
 						if(iu == null)
 							continue;
 						
-						String selectSQL_ingredientSubject = "SELECT ingredientSubjectIdx FROM onetable.ingredient_subject WHERE variety = ?";
+						String selectSQL_ingredientSubject = "SELECT ingredientSubjectIdx FROM onetable.ingredient_subject WHERE name = ?";
 						statement = conn.prepareStatement(selectSQL_ingredientSubject);	
 						//int idx문제
-						statement.setString(1, item.getIngredientList(i).getName());
+						statement.setString(1, iu.getUnitStr());
 						ResultSet rs = statement.executeQuery();
 						
 						int ingredientSubjectIdx = 1;
@@ -117,32 +117,24 @@ public class DBRecipeManager extends Thread {
 						statement.setString(1, iu.getUnitStr());
 						ResultSet unitRs = statement.executeQuery();
 						
-						int defaultUnitIdx = 26; // 개
+						int defaultUnitIdx = 1; // 개
 						while(unitRs.next())
 							defaultUnitIdx = unitRs.getInt("unitIdx");
 						
-						String select_ingredient_for_subjectIdx = "SELECT ingredientItemId, unitIdx FROM onetable.ingredient WHERE ingredientSubjectIdx = ? and unitIdx = ? order by idx limit 1";
+						String select_ingredient_for_subjectIdx = "SELECT ingredientIdx, ingredientItemId, unitIdx FROM onetable.ingredient WHERE ingredientSubjectIdx = ? and unitIdx = ? and displayName LIKE ? order by ingredientIdx limit 1";
 						statement = conn.prepareStatement(select_ingredient_for_subjectIdx);
 						statement.setInt(1, ingredientSubjectIdx);
 						statement.setInt(2, defaultUnitIdx);
+						statement.setString(3, "%" + iu.getUnitStr() + "%");
 						ResultSet subjectRs = statement.executeQuery();
+						int ingredientIdx = 1;
 						String ingredientItemId = "0";
 						
-						while(subjectRs.next())
+						while(subjectRs.next()) {
+							ingredientIdx = subjectRs.getInt("ingredientIdx");
 							ingredientItemId = subjectRs.getString("ingredientItemId");
+						}
 						
-						String insertSQL_recipeIngredient = "INSERT INTO recipe_ingredient (recipeIdx, ingredientItemId, unitIdx, minAmount, maxAmount, symbol, displayName, displayAmount ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-						statement = conn.prepareStatement(insertSQL_recipeIngredient);
-						statement.setInt(1, recipeIdx); //앞에 처음 insert에서 입력한 recipeIdx 넣어야함
-						statement.setString(2, ingredientItemId); //위에서 얻어온 ingredientItemIdx
-						statement.setInt(3, defaultUnitIdx);
-						statement.setDouble(4, iu.getMin());
-						statement.setDouble(5, iu.getMax());
-						statement.setString(6, iu.getSymbol());
-						//System.out.println(ingredientModel.getUnitStr());
-						statement.setString(7, ingredientModel.getName());
-						statement.setString(8, ingredientModel.getUnitStr());
-						statement.executeUpdate();
 						
 						String ingredient_currentDay = "SELECT price, unitAmount FROM ingredient_price_all where ingredientItemId = ? order by priceDate desc limit 1";
 						statement = conn.prepareStatement(ingredient_currentDay);
@@ -151,6 +143,10 @@ public class DBRecipeManager extends Thread {
 						int ingPrice = 0;
 						int unitAmount = 0;
 						int perPrice = 0 ;
+						
+						double result = iu.getMin();
+						if(iu.getSymbol().equals("/"))
+							result = iu.getMin() / iu.getMax();	
 						
 						while(ingPriceRs.next())
 						{
@@ -161,25 +157,30 @@ public class DBRecipeManager extends Thread {
 						if(unitAmount != 0)
 						{
 							perPrice = ingPrice / unitAmount;
-							
-							totalPrice += perPrice * iu.getMin();
+							totalPrice += perPrice * result;
 						}
 						else
 							totalPrice += 0;
 						
 						
+						String insertSQL_recipeIngredient = "INSERT INTO recipe_ingredient (recipeIdx, ingredientIdx, unitIdx, minAmount, maxAmount, result, symbol, price, displayName, displayAmount, unitStr ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+						statement = conn.prepareStatement(insertSQL_recipeIngredient);
+						statement.setInt(1, recipeIdx); //앞에 처음 insert에서 입력한 recipeIdx 넣어야함
+						statement.setInt(2, ingredientIdx); //위에서 얻어온 ingredientIdx
+						statement.setInt(3, defaultUnitIdx);
+						statement.setDouble(4, iu.getMin());
+						statement.setDouble(5, iu.getMax());
+											
+						statement.setDouble(6, result);
+						statement.setString(7, iu.getSymbol());
+						statement.setInt(8, perPrice);
+						statement.setString(9, ingredientModel.getName());
+						statement.setString(10, ingredientModel.getUnitStr());
+						statement.setString(11, iu.getUnitStr());
+						statement.executeUpdate();
+						
 					}
-					
-					
-					
-					
-					String updatePrice = "UPDATE recipe SET price = ? WHERE recipeIdx = ?";
-					statement = conn.prepareStatement(updatePrice);
-					statement.setInt(1, totalPrice);
-					statement.setInt(2, recipeIdx);
-					
-					statement.executeUpdate();
-					
+				
 					
 					System.out.println("큐 끝 =============");
 					statement.close();

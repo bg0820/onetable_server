@@ -20,7 +20,7 @@ public class DBConnection {
 		try (Connection conn = DriverManager.getConnection(url, "onetable", "62066407")) {
 
 
-			String sql = "SELECT ingredientSubjectIdx, name, categoryNum FROM ingredient_subject";
+			String sql = "SELECT ingredientSubjectIdx, name, categoryNum FROM ingredient_subject order by ingredientSubjectIdx desc";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
