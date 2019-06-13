@@ -86,6 +86,7 @@ public class FavoritesController {
 		favorites.setUserIdx(userIdx);
 		favorites.setFavoritesType(favoritesType);
 
+		//레시피 : 1, 재료 : 2
 		if (favoritesType == 1) {
 			List<Integer> recipeIdxList = favoritesMapper.myRecipe(favorites);
 
