@@ -1,7 +1,10 @@
 package glit.onetable.model.request;
 
 import java.util.ArrayList;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import glit.onetable.model.vo.RecipeMethod;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class RecipeDetail {
@@ -12,8 +15,18 @@ public class RecipeDetail {
 	private double servingMax;
 	private String cookTimeMin;
 	private double kcal;
-	private String contentHtml;
 	private int price;
+
+	private ArrayList<RecipeMethod> recipeMethod =
+			new ArrayList<RecipeMethod>();
+
+	public ArrayList<RecipeMethod> getRecipeMethod() {
+		return recipeMethod;
+	}
+
+	public void setRecipeMethod(ArrayList<RecipeMethod> recipeMethod) {
+		this.recipeMethod = recipeMethod;
+	}
 
 	public ArrayList<RecipeDetailIngredient> recipeIngredient =
 			new ArrayList<RecipeDetailIngredient>();
@@ -72,14 +85,6 @@ public class RecipeDetail {
 
 	public void setKcal(double kcal) {
 		this.kcal = kcal;
-	}
-
-	public String getContentHtml() {
-		return contentHtml;
-	}
-
-	public void setContentHtml(String contentHtml) {
-		this.contentHtml = contentHtml;
 	}
 
 	public int getPrice() {

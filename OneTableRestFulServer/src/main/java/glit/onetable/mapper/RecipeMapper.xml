@@ -50,4 +50,8 @@
 		INSERT INTO onetable.recipe(userIdx, name, price, servingMin, servingMax, recipeImg, cookTimeMin, kcal, contentHtml, nickName, recipeDate) VALUES (#{userIdx}, #{name}, #{price}, #{servingMin}, #{servingMax}, #{recipeImg}, #{cookTimeMin}, #{kcal}, #{contentHtml}, #{nickName}, #{recipeDate});
 	</insert>
 	
+	<select id="getMethod" parameterType="int" resultType="RecipeMethod">
+		SELECT * FROM onetable.recipe_method where recipeIdx = #{recipeIdx};
+	</select>
+	
 </mapper>

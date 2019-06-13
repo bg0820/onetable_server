@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,7 @@ import glit.onetable.model.vo.Ingredient;
 import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.Recipe;
 import glit.onetable.model.vo.RecipeIngredient;
+import glit.onetable.model.vo.RecipeMethod;
 import glit.onetable.model.vo.Search;
 import glit.onetable.model.vo.Unit;
 import glit.onetable.model.vo.User;
@@ -135,11 +137,12 @@ public class RecipeController {
 		resultData.setServingMax(recipe.getServingMax());
 		resultData.setServingMin(recipe.getServingMin());
 		resultData.setPrice(recipe.getPrice());
-		resultData.setContentHtml(recipe.getContentHtml());
+
+		ArrayList<RecipeMethod> recipeMethod = recipeMapper.getMethod(recipeIdx);
+		resultData.setRecipeMethod(recipeMethod);
 
 		User user = recipeMapper.getUserInfo(recipe.getUserIdx());
 		resultData.setUserName(user.getNickname());
-
 
 		List<RecipeIngredient> recipeIngreList = recipeMapper.recipeIngredientToRecipeIdx(recipeIdx);
 		int totalPrice = 0;

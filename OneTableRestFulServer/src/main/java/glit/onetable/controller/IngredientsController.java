@@ -154,6 +154,7 @@ public class IngredientsController {
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponseResult> category(@RequestHeader(value = "API_Version") String version,
 			@RequestParam String childCategory,
+			@RequestParam String parentCategory,
 			@RequestParam int page,
 			@RequestParam int itemNum) throws CustomException {
 		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
@@ -168,15 +169,25 @@ public class IngredientsController {
 		cate.setStartNum(pageIndex);
 		cate.setItemNum(itemNum);
 
-		List<Integer> subjectIdxList = ingredientMapper.getsubjectIdx(childCategory);
-		List<IngredientPriceAll> ingredientPriceAllList = new ArrayList<IngredientPriceAll>();
+		if(parentCategory.equals("전체")) {
+			IngredientPriceAll ipa = new IngredientPriceAll();
+			ipa.setLimitIndex(pageIndex);
+			ipa.setLimitCnt(itemNum);
 
-		for(int i=0; i<subjectIdxList.size(); i++) {
-			cate.setIngredientSubjectIdx(subjectIdxList.get(i));
-			ingredientPriceAllList = ingredientMapper.categoryIngredient(cate);
+			List<IngredientPriceAll> ipaList = ingredientMapper.searchAll(ipa);
+
+			resResult.setData(ipaList);
+		} else {
+			List<Integer> subjectIdxList = ingredientMapper.getsubjectIdx(childCategory);
+			List<IngredientPriceAll> ipaList = new ArrayList<IngredientPriceAll>();
+
+			for(int i=0; i<subjectIdxList.size(); i++) {
+				cate.setIngredientSubjectIdx(subjectIdxList.get(i));
+				ipaList = ingredientMapper.categoryIngredient(cate);
+
+				resResult.setData(ipaList);
+			}
 		}
-
-		resResult.setData(ingredientPriceAllList);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
