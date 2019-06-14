@@ -19,17 +19,17 @@ public class Recipe {
 	private double kcal;
 	private String nickName;
 	private Timestamp recipeDate;
-
+	private double avg;
+	private int num;
+	private String img;
 
 	private int queryCnt;
 
-	private List<ingredients> recipeIngredient;
-
+	private List<Ingredient> recipeIngredient;
 	private List<RecipeMethod> recipeMethod;
-	private List<method> recipeMethod;
+
 	private int limitIndex;
 	private int limitCnt;
-
 
 	public double getAvg() {
 		return avg;
@@ -170,24 +170,15 @@ public class Recipe {
 	public void setNum(int num) {
 		this.num = num;
 	}
+	
 
-	public List<ingredients> getRecipeIngredient() {
+	public List<Ingredient> getRecipeIngredient() {
 		return recipeIngredient;
 	}
 
-	public void setRecipeIngredient(List<ingredients> recipeIngredient) {
+	public void setRecipeIngredient(List<Ingredient> recipeIngredient) {
 		this.recipeIngredient = recipeIngredient;
 	}
-
-	public List<method> getRecipeMethod() {
-		return recipeMethod;
-	}
-
-	public void setRecipeMethod(List<method> recipeMethod) {
-		this.recipeMethod = recipeMethod;
-	}
-	
-
 
 	public void setRecipeDate(Timestamp recipeDate) {
 		this.recipeDate = recipeDate;
@@ -200,6 +191,5 @@ public class Recipe {
 	public void setQueryCnt(int queryCnt) {
 		this.queryCnt = queryCnt;
 	}
-
 
 }
