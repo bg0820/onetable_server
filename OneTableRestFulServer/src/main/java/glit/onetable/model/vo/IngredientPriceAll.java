@@ -1,11 +1,12 @@
 package glit.onetable.model.vo;
 
 import java.sql.Date;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class IngredientPriceAll {
-	private int idx;
+	private int ingredientIdx;
 	private String displayName;
 	private int price;
 	private String imgUrl;
@@ -15,6 +16,14 @@ public class IngredientPriceAll {
 
 	private int limitIndex;
 	private int limitCnt;
+
+	public int getIngredientIdx() {
+		return ingredientIdx;
+	}
+
+	public void setIngredientIdx(int ingredientIdx) {
+		this.ingredientIdx = ingredientIdx;
+	}
 
 
 	public int getLimitIndex() {

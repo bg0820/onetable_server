@@ -31,6 +31,22 @@ public class Recipe {
 	private int limitCnt;
 
 
+	public double getAvg() {
+		return avg;
+	}
+
+	public void setAvg(double avg) {
+		this.avg = avg;
+	}
+
+	public List<RecipeMethod> getRecipeMethod() {
+		return recipeMethod;
+	}
+
+	public void setRecipeMethod(List<RecipeMethod> recipeMethod) {
+		this.recipeMethod = recipeMethod;
+	}
+
 	public int getLimitIndex() {
 		return limitIndex;
 	}
