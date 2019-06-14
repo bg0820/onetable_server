@@ -13,7 +13,7 @@
 	</insert>
 	
 	<insert id='onetablerecipeInsert' parameterType="Onetablesetrecipe">
-		INSERT INTO onetable.onetablesetrecipe(onetablesetIdx, recipeIdx) VALUES (#{onetablesetIdx}, #{recipeIdx});
+		INSERT INTO onetable.onetablesetrecipe(onetablesetIdx, recipeIdx, x, y) VALUES (#{onetablesetIdx}, #{recipeIdx}, #{x}, #{y});
 	</insert>
 	
 	<select id='history' parameterType="int" resultType="Onetableset">

@@ -32,5 +32,6 @@ public interface RecipeMapper {
 	public void recipeInsert(Recipe recipe);
 
 	public ArrayList<RecipeMethod> getMethod(int recipeIdx);
+	public List<Unit> getUnit();
 
 }

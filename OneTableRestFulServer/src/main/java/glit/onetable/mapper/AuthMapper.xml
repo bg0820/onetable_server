@@ -8,7 +8,7 @@
 	</insert>
 	
 	<select id="login" parameterType="User" resultType="User">
-		SELECT token FROM user where id = #{id} and pw = #{pw}
+		SELECT token, userIdx, nickname FROM user where id = #{id} and pw = #{pw}
 	</select>
 	
 	<select id="registerDuplicateId" resultType="int" parameterType="String">

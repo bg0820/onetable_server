@@ -51,8 +51,10 @@ public class OnetableController {
 		for(int i=0; i < parmOnetable.getRecipes().size(); i++) {
 			Onetablesetrecipe onerecipe = new Onetablesetrecipe();
 			onerecipe.setOnetablesetIdx(onetablesetIdx);
-			onerecipe.setRecipeIdx(parmOnetable.getRecipes().get(i));
+			onerecipe.setRecipeIdx(parmOnetable.getRecipes().get(i).getRecipeIdx());
 			//System.out.println(onerecipe.getRecipeIdx());
+			onerecipe.setX(parmOnetable.getRecipes().get(i).getX());
+			onerecipe.setY(parmOnetable.getRecipes().get(i).getY());
 			onetableMapper.onetablerecipeInsert(onerecipe);
 		}
 

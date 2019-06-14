@@ -223,4 +223,20 @@ public class RecipeController {
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
+
+	@RequestMapping(value = "/unit", method = RequestMethod.GET)
+	public ResponseEntity<ApiResponseResult> unit(@RequestHeader(value = "API_Version") String version) throws CustomException, IOException, FileNotFoundException {
+		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
+		HttpStatus hs = HttpStatus.OK;
+
+		if (!version.equals("1.0"))
+			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
+
+		List<Unit> unitList = recipeMapper.getUnit();
+
+		resResult.setData(unitList);
+
+
+		return new ResponseEntity<ApiResponseResult>(resResult, hs);
+	}
 }

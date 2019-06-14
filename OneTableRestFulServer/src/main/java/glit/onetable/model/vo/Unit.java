@@ -3,11 +3,16 @@ package glit.onetable.model.vo;
 public class Unit {
 	private int unitIdx;
 	private String unitName;
-	private double ml;
-	private double g;
-	private double cc;
-	private double cm;
 	private double amount;
+	private boolean minUnit;
+
+	public boolean isMinUnit() {
+		return minUnit;
+	}
+
+	public void setMinUnit(boolean minUnit) {
+		this.minUnit = minUnit;
+	}
 
 	public int getUnitIdx() {
 		return unitIdx;
@@ -23,38 +28,6 @@ public class Unit {
 
 	public void setUnitName(String unitName) {
 		this.unitName = unitName;
-	}
-
-	public double getMl() {
-		return ml;
-	}
-
-	public void setMl(double ml) {
-		this.ml = ml;
-	}
-
-	public double getG() {
-		return g;
-	}
-
-	public void setG(double g) {
-		this.g = g;
-	}
-
-	public double getCc() {
-		return cc;
-	}
-
-	public void setCc(double cc) {
-		this.cc = cc;
-	}
-
-	public double getCm() {
-		return cm;
-	}
-
-	public void setCm(double cm) {
-		this.cm = cm;
 	}
 
 	public double getAmount() {

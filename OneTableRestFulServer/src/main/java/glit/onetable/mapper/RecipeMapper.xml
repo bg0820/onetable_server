@@ -54,4 +54,7 @@
 		SELECT * FROM onetable.recipe_method where recipeIdx = #{recipeIdx};
 	</select>
 	
+	<select id="getUnit" resultType="Unit">
+		SELECT * FROM onetable.unit;
+	</select>
 </mapper>
