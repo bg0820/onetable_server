@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Fri May 17 09:41:14 KST 2019
+onejar.license.required=true
+excludes=
+manifest.removesigners=true
+manifest.mergeall=true
+includes=
+onejar.checkbox=false
+onejar.expand=
+manifest.classpath=
+jarname=RecipeCrawler_fat.jar
+jarname.isextern=false
+manifest.file=<createnew>
+manifest.mainclass=Main.Main

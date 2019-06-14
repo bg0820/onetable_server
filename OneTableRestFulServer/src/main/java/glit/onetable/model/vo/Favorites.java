@@ -1,5 +1,8 @@
 package glit.onetable.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Favorites {
 	int userIdx;
 	int favoriteIdx;

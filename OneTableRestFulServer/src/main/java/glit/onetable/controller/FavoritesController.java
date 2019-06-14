@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +20,7 @@ import glit.onetable.model.ApiResponseResult;
 import glit.onetable.model.vo.Favorites;
 import glit.onetable.model.vo.IngredientPriceAll;
 import glit.onetable.model.vo.Recipe;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/favorites")
 public class FavoritesController {
@@ -85,9 +86,15 @@ public class FavoritesController {
 		favorites.setUserIdx(userIdx);
 		favorites.setFavoritesType(favoritesType);
 
+		//레시피 : 1, 재료 : 2
 		if (favoritesType == 1) {
-			List<Recipe> recipeList = favoritesMapper.myRecipeFavorites(favorites);
-			resResult.setData(recipeList);
+			List<Integer> recipeIdxList = favoritesMapper.myRecipe(favorites);
+
+			if (recipeIdxList != null) {
+				List<Recipe> recipeList = favoritesMapper.myRecipeFavorites(recipeIdxList);
+				resResult.setData(recipeList);
+			}
+
 		} else {
 			List<Integer> ingredientIdxList = favoritesMapper.myIngredient(favorites);
 

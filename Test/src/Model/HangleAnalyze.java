@@ -26,14 +26,16 @@ public class HangleAnalyze {
 	public void initilze() {
 		ma = new MorphemeAnalyzer();
 		ma.createLogger(null);
-		unitList.add("kg");
+		//unitList.add("kg");
 		unitList.add("g");
 		unitList.add("cm");
 		unitList.add("개");
-		unitList.add("l");
+		//unitList.add("l");
 		unitList.add("ml");
 		unitList.add("cc");
-		unitList.add("m");
+		//unitList.add("m");
+		unitList.add("봉");
+		unitList.add("입");
 	}
 
 	public AnalyzeUnit analyze(String content) {
@@ -51,21 +53,28 @@ public class HangleAnalyze {
 
 			List<Sentence> stl = ma.divideToSentences(ret);
 			Sentence st = stl.get(0);
-
+/*
+			System.out.println("_________________________________");*/
 			for (int i = 0; i < st.size(); i++) {
 				Eojeol eoj = st.get(i);
 				// System.out.println(eoj.getSmplStr2());
-
+				
 				//  = 띄어쓰기
 				// j = 형태소
 				for (int k = 0; k < eoj.size(); k++) {
 					Morpheme mo = eoj.get(k);
+					/*
 					
+					System.out.println("=================");
+					System.out.println(mo.getString());
+					System.out.println(mo.getTag());
+					System.out.println(mo.getCharSet());
+					System.out.println("=================");*/
 					
 						if (mo.getCharSet() == CharSetType.NUMBER) {
 							if (k + 1 < eoj.size()) {
 								
-								Morpheme nextMo = eoj.get(k + 1);
+								Morpheme nextMo  = eoj.get(k + 1);
 								//System.out.println(nextMo.getString());
 								
 								for(int unitIdx = 0; unitIdx < unitList.size(); unitIdx++)
@@ -75,11 +84,28 @@ public class HangleAnalyze {
 										// 곱하기 기호가 없는경우에만
 										//if(!nextMo.getString().toLowerCase().contentEquals("x") || !nextMo.getString().toLowerCase().contentEquals("*"))
 										//{
-											unitNum = Double.parseDouble(mo.getString().replaceAll("\\,", ""));
-											isSelect = true;
-											unitStr = unitList.get(unitIdx); 
-											break;
-										//}				
+										
+										unitNum = Double.parseDouble(mo.getString().replaceAll("\\,", ""));
+										isSelect = true;
+										unitStr = unitList.get(unitIdx); //unitList.get(unitIdx); 
+										
+										switch(nextMo.getString().toLowerCase())
+										{
+											case "kg" :
+												unitNum = unitNum * 1000;
+												unitStr = "g";
+												break;
+											case "l" :
+												unitNum = unitNum * 1000;
+												unitStr = "ml";
+												break;
+											case "m" :
+												unitNum = unitNum * 100;
+												unitStr = "cm";
+												break;
+										}
+										
+										break;		
 										
 									}
 								}

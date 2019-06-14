@@ -10,39 +10,51 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class SSGCrawler {
-	private final String QUERY_URL = "http://www.ssg.com/search/jsonSearch.ssg?target=item&query="; //http://www.ssg.com/search.ssg?target=all&query=";
+	private final String QUERY_URL = "http://www.ssg.com/disp/category.ssg?ctgId=";//"http://www.ssg.com/search/jsonSearch.ssg?target=item&query="; //http://www.ssg.com/search.ssg?target=all&query=";
 	private String proxyIP;
 	
 	public SSGCrawler(String proxyIP) {
 		this.proxyIP = proxyIP;
 	}
 
-	public ArrayList<Ingredient> getItemList(IngredientSubject ingredientSubject, int page)
+	public IngredientResult getItemList(IngredientSubject ingredientSubject, int page)
 			throws IOException {
-		ArrayList<Ingredient> lis = new ArrayList<Ingredient>();
-
-		Response resp = getResponse(QUERY_URL + ingredientSubject.getVariety() + "&page=" + page);
+		
+		IngredientResult ir = new IngredientResult();
+		
+		Response resp = getResponse(QUERY_URL + ingredientSubject.getCategoryNum() + "&page=" + page);
 
 		if (resp.statusCode() == 200) {
 			Document doc = resp.parse();
 
-			if (doc.selectFirst("ul[id='idProductImg']") == null)
+			int recordCnt = Integer.parseInt(doc.selectFirst("em[id='area_item_total_count']").text().replaceAll("\\,", ""));
+			ir.setRecordCnt(recordCnt);
+			
+			if (doc.selectFirst("#ty_thmb_view").selectFirst("ul") == null)
 				return null;
 
-			Elements liList = doc.selectFirst("ul[id='idProductImg']").select("li");
+			Elements liList = doc.selectFirst("#ty_thmb_view").selectFirst("ul").children();
 
 			for (int i = 0; i < liList.size(); i++) {
 				Element liListItem = liList.get(i);
 
-				Element prod = liListItem.selectFirst("div[class='cunit_prod']");
-				Element info = liListItem.selectFirst("div[class='cunit_info']");
 				
-				String itemId = liListItem.attr("data-adtgtid");
-				String displayName = prod.selectFirst("input[name='notiTitle']").val();
-				String imgUrl = "http:" + prod.selectFirst("input[name='notiImgPath']").val();
+				Element prod = liListItem.selectFirst("div[class*='cunit_prod']");
+				Element info = liListItem.selectFirst("div[class*='cunit_info']");
+
+				String itemId = info.selectFirst("div[class='title'] a").attr("data-info"); // prod.selectFirst("input[name='attnTgtIdnfNo1']").val();
+				String displayName = info.selectFirst("div[class='title'] a em").text(); // prod.selectFirst("input[name='notiTitle']").val().replaceAll("\\[.*?\\]", "");
+
+				String imgUrl = "http:" + prod.selectFirst("img").attr("src"); //[name='notiImgPath']").val();
 				String priceStr =  info.selectFirst("em[class='ssg_price']").text().replaceAll(",", "");
 				int price = Integer.parseInt(priceStr);
-			
+				
+				displayName = displayName.replaceAll("\\[.*?\\]", "");
+				/*System.out.println(itemId);
+				System.out.println(displayName);
+				System.out.println(imgUrl);
+				System.out.println(priceStr);*/
+				
 				Ingredient ingredient = new Ingredient();
 				ingredient.setImgUrl(imgUrl);
 				ingredient.setDisplayName(displayName);
@@ -52,24 +64,24 @@ public class SSGCrawler {
 				
 				if (itemId != null) {
 					if (!itemId.equals("")) {
-						lis.add(ingredient);
+						ir.list.add(ingredient);
 					}
 				}
 			}
-			return lis;
+			return ir;
 		} else {
 			return null;
 		}
 	}
 
-	public int getRecordCnt(String query) throws IOException {
-		Response resp = getResponse(QUERY_URL + query);
+	public int getRecordCnt(long categoryId) throws IOException, InterruptedException {
+		Response resp = getResponse(QUERY_URL + categoryId);
 
 		if (resp.statusCode() == 200) {
 			Document doc = resp.parse();
-
+			
 			// 페이지 개수만큼 반복
-			return Integer.parseInt(doc.selectFirst("input[id='target_item_count']").attr("value"));
+			return Integer.parseInt(doc.selectFirst("em[id='area_item_total_count']").text().replaceAll("\\,", ""));
 		}
 
 		return 0;

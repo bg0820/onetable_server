@@ -8,7 +8,7 @@
 	</select>
 	-->
 	<select id='searchAll' parameterType="IngredientPriceAll" resultType="IngredientPriceAll">
-		SELECT displayName, ingredientItemId, price, priceDate, imgUrl, queryCnt FROM onetable.ingredient_price_all order by queryCnt LIMIT #{limitIndex}, #{limitCnt};
+		SELECT ingredientItemId, min(displayName) as displayName, min(imgUrl) as imgUrl, min(queryCnt) as queryCnt, min(price) as price, min(priceDate) as priceDate FROM onetable.ingredient_price_all WHERE priceDate in (SELECT MAX(priceDate) FROM onetable.ingredient_price) group by ingredientItemId LIMIT #{limitIndex}, #{limitCnt}
 	</select>
 	
 	<select id='getIngredientSubjectIdx' parameterType="String" resultType="int">
@@ -16,12 +16,12 @@
 	</select>
 	
 	<select id="ingredientSubjectSearch" parameterType="String" resultType="IngredientSubject">
-		SELECT ingredientSubjectIdx FROM ingredient_subject WHERE variety LIKE CONCAT('%', #{variety}, '%')
+		SELECT ingredientSubjectIdx FROM ingredient_subject WHERE variety LIKE CONCAT('%', #{variety}, '%');
 	</select>
 	
 	
-	<select id='search' parameterType="String" resultType="IngredientPriceAll">
-		SELECT displayName, price, ingredientItemId, imgUrl, priceDate FROM ingredient_price_all WHERE displayName LIKE CONCAT('%',#{query},'%');
+	<select id='search' parameterType="Search" resultType="IngredientPriceAll">
+		SELECT ingredientItemId, displayName, imgUrl, queryCnt, price, priceDate FROM onetable.ingredient_price_all WHERE ingredientIdx in (SELECT ingredientIdx from onetable.ingredient Where displayName like CONCAT('%',#{query},'%')) and priceDate in (SELECT MAX(priceDate) FROM onetable.ingredient_price) LIMIT #{startNum}, #{itemNum}
 	</select>
 	
 	<select id='priceHistroy' parameterType="String" resultType="IngredientPrice">
@@ -37,7 +37,7 @@
 	</insert>
 	
 	<insert id='varietyNotExistsInsert' parameterType="IngredientSubject" useGeneratedKeys="true"  keyProperty="ingredientSubjectIdx">
-		INSERT INTO onetable.ingredient_subject (variety) SELECT #{variety} from DUAL WHERE NOT EXISTS (SELECT variety FROM onetable.ingredient_subject WHERE variety = #{variety});
+		INSERT INTO onetable.ingredient_subject (name, categoryNum) SELECT #{variety} from DUAL WHERE NOT EXISTS (SELECT name FROM onetable.ingredient_subject WHERE name = #{variety});
 	</insert>
 
 	<insert id='ingredientNotExistsInsert' parameterType="Ingredient" useGeneratedKeys="true"  keyProperty="idx">
@@ -51,6 +51,14 @@
 	<insert id='insertIngredientPrice' parameterType="IngredientPrice" useGeneratedKeys="true"  keyProperty="ingredientPriceIdx">
 		INSERT INTO onetable.ingredient_price (ingredientItemId, price, priceDate) SELECT #{ingredientItemId}, #{price}, CURDATE() from DUAL WHERE NOT EXISTS (SELECT priceDate FROM onetable.ingredient_price WHERE ingredientItemId = #{ingredientItemId} and priceDate = CURDATE());
 	</insert>
+	
+	<select id='getsubjectIdx' parameterType="String" resultType="Integer">
+		SELECT ingredientSubjectIdx FROM ingredient_subject WHERE childCategory = #{childCategory};
+	</select>
+	
+	<select id='categoryIngredient' parameterType="Category" resultType="IngredientPriceAll">
+		SELECT ingredientItemId, displayName, imgUrl, queryCnt, price, priceDate FROM onetable.ingredient_price_all WHERE ingredientIdx in (SELECT ingredientIdx from onetable.ingredient Where ingredientSubjectIdx = #{ingredientSubjectIdx} and priceDate in (SELECT MAX(priceDate) FROM onetable.ingredient_price)) LIMIT #{startNum}, #{itemNum};
+	</select>
 	
 
 </mapper>

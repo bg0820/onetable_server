@@ -4,5 +4,28 @@
 
 <mapper namespace="glit.onetable.mapper.OnetableMapper">
 
-
+	<select id='searchRecipe' parameterType="String" resultType="Recipe">
+		SELECT recipeIdx, recipeName as name, recipeImg, nickname, price FROM onetable.recipe_price where recipeName like concat('%', #{query}, '%');
+	</select>
+	
+	<insert id='onetablesetInsert' parameterType="Onetableset" useGeneratedKeys="true"  keyProperty="onetablesetIdx">
+		INSERT INTO onetable.onetableset(userIdx, name, classify) VALUES (#{userIdx}, #{name}, #{classify});
+	</insert>
+	
+	<insert id='onetablerecipeInsert' parameterType="Onetablesetrecipe">
+		INSERT INTO onetable.onetablesetrecipe(onetablesetIdx, recipeIdx, x, y) VALUES (#{onetablesetIdx}, #{recipeIdx}, #{x}, #{y});
+	</insert>
+	
+	<select id='history' parameterType="int" resultType="Onetableset">
+		SELECT name, classify FROM onetable.onetableset;
+	</select>
+	
+	<delete id='onetablesetDelete' parameterType="int">
+		DELETE FROM onetable.onetableset WHERE onetablesetIdx = #{onetablesetIdx};
+	</delete>
+	
+	<delete id='onetablesetrecipeDelete' parameterType="int">
+		DELETE FROM onetable.onetablesetrecipe WHERE onetablesetIdx = #{onetablesetIdx};
+	</delete>
+	
 </mapper>

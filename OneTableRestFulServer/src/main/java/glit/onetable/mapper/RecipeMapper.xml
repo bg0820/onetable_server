@@ -4,12 +4,20 @@
 
 <mapper namespace="glit.onetable.mapper.RecipeMapper">
 	
-	<select id='searchAll' parameterType="Recipe" resultType="Recipe">
-		SELECT recipeIdx, userIdx, name, price, recipeImg FROM onetable.recipe order by recipeIdx DESC LIMIT #{limitIndex}, #{limitCnt};
+	<select id='searchCnt' parameterType="String" resultType="int">
+		select count(1) from recipe where name LIKE CONCAT('%',#{query},'%')
 	</select>
 	
-	<select id='search' parameterType="String" resultType="Recipe">
-		SELECT recipeIdx, userIdx, name, price, recipeImg FROM onetable.recipe WHERE name LIKE CONCAT('%',#{query},'%');
+	<select id='allCnt' resultType="int">
+		select count(1) from recipe
+	</select>
+	
+	<select id='searchAll' parameterType="Recipe" resultType="Recipe">
+		SELECT recipeIdx, userIdx, name, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit order by recipeIdx LIMIT #{limitIndex}, #{limitCnt}
+	</select>
+	
+	<select id='search' parameterType="Search" resultType="Recipe">
+		SELECT recipeIdx, userIdx, name, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit WHERE name LIKE CONCAT('%',#{query},'%') LIMIT #{startNum}, #{itemNum}
 	</select>
 	
 	<select id='detail' parameterType="int" resultType="Recipe">
@@ -32,4 +40,37 @@ result symbol price displayName displayAmount unitStr
 	</select>
 	
 	
+	<!--  레시피재료 테이블에 레시피 아이디로 조회 -->
+	<select id='recipeIngredientToRecipeIdx' parameterType="int" resultType="RecipeIngredient">
+		SELECT * FROM onetable.recipe_ingredient  where recipeIdx = #{recipeIdx};
+	</select>
+	
+	<!--  unitIdx 로 유닛 테이블 조회 -->
+	<select id='getUnitName' parameterType="int" resultType="Unit">
+		SELECT * FROM onetable.unit where unitIdx = #{unitIdx} LIMIT 1
+	</select>
+	
+	<select id="ingredientCurrentDayPrice" parameterType="String" resultType="IngredientPrice">
+		SELECT * FROM ingredient_price where ingredientItemId=#{ingredientItemId} order by priceDate desc LIMIT 1
+	</select>
+	
+	<select id="getIngredientToItemId" parameterType="String" resultType="Ingredient">
+		SELECT * FROM ingredient where ingredientItemId=#{ingredientItemId} LIMIT 1
+	</select>
+	
+	<select id="getUserInfo" parameterType="int" resultType="User">
+		SELECT * FROM user where userIdx = #{userIdx}
+	</select>
+	
+	<insert id='recipeInsert' parameterType="Recipe" useGeneratedKeys="true"  keyProperty="recipeIdx">
+		INSERT INTO onetable.recipe(userIdx, name, price, servingMin, servingMax, recipeImg, cookTimeMin, kcal, contentHtml, nickName, recipeDate) VALUES (#{userIdx}, #{name}, #{price}, #{servingMin}, #{servingMax}, #{recipeImg}, #{cookTimeMin}, #{kcal}, #{contentHtml}, #{nickName}, #{recipeDate});
+	</insert>
+	
+	<select id="getMethod" parameterType="int" resultType="RecipeMethod">
+		SELECT * FROM onetable.recipe_method where recipeIdx = #{recipeIdx};
+	</select>
+	
+	<select id="getUnit" resultType="Unit">
+		SELECT * FROM onetable.unit;
+	</select>
 </mapper>

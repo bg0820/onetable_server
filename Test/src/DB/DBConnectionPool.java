@@ -11,7 +11,7 @@ public class DBConnectionPool {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 
-			String url = "jdbc:mysql://1.240.181.56:3306/onetable?characterEncoding=UTF-8&amp;serverTimezone=UTC&useSSL=false";
+			String url = "jdbc:mysql://222.238.100.247:3306/onetable?characterEncoding=UTF-8&amp;serverTimezone=UTC&useSSL=false";
 			conn = DriverManager.getConnection(url, "onetable", "62066407");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

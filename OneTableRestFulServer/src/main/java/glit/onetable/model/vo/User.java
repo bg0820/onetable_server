@@ -16,6 +16,7 @@ public class User {
 	private Date birthday;
 	private Timestamp regTime;
 	private String profileImgUrl;
+	private int status;
 
 	public String getToken() {
 		return token;
@@ -107,6 +108,16 @@ public class User {
 
 	public void setUserIdx(int userIdx) {
 		this.userIdx = userIdx;
+	}
+
+
+	public int getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	

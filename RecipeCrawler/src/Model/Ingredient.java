@@ -5,7 +5,6 @@ import Analyze.HangleAnalyze;
 public class Ingredient {
 	private String name;
 	private String unitStr;
-
 	private IngredientUnit ingredientUnit;
 	
 	public void anaylze() {

@@ -7,18 +7,15 @@ import java.util.Base64.Encoder;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.UUID;
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,12 +25,10 @@ import glit.onetable.enums.ErrorCode;
 import glit.onetable.exception.CustomException;
 import glit.onetable.mapper.AuthMapper;
 import glit.onetable.model.ApiResponseResult;
-import glit.onetable.model.EmailServiceImpl;
-import glit.onetable.model.request.Login;
-import glit.onetable.model.request.Register;
 import glit.onetable.model.vo.User;
 import glit.onetable.util.Util;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 @Validated
@@ -47,8 +42,8 @@ public class AuthController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponseResult> login(
 			@RequestHeader(value = "API_Version") String version,
-			@NotBlank(message = "아이디를 입력해 주세요.") @Size(max = 20) @RequestParam String id,
-			@NotBlank(message = "비밀번호를 입력해 주세요.") @Size(min = 8) @RequestParam String pw)
+			@RequestParam String id,
+			@RequestParam String pw)
 			throws CustomException {
 
 		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
@@ -232,7 +227,7 @@ public class AuthController {
 		message.setFrom("onetable@onetable.com");
         message.setTo(email);
         message.setSubject("한상차림  - 아이디 찾기");
-        message.setText("아이디 : " + user.getId());
+        message.setText("아이디 : " + user.getId() + "</br>디자인 예정");
         javaMailSender.send(message);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
@@ -279,7 +274,7 @@ public class AuthController {
 		message.setFrom("onetable@onetable.com");
         message.setTo(email);
         message.setSubject("한상차림 - 비밀번호 찾기");
-        message.setText("변경된 비밀번호 : " + temp.toString());
+        message.setText("변경된 비밀번호 : " + temp.toString() + "</br>디자인 예정");
         javaMailSender.send(message);
         
 

@@ -1,5 +1,8 @@
 package glit.onetable.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Onetableset {
 	public int onetablesetIdx;
 	public int userIdx;
