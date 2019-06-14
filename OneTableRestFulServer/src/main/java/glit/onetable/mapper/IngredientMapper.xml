@@ -21,7 +21,7 @@
 	
 	
 	<select id='search' parameterType="Search" resultType="IngredientPriceAll">
-		SELECT ingredientItemId, displayName, imgUrl, queryCnt, price, priceDate FROM onetable.ingredient_price_all WHERE ingredientIdx in (SELECT ingredientIdx from onetable.ingredient Where displayName like CONCAT('%',#{query},'%')) and priceDate in (SELECT MAX(priceDate) FROM onetable.ingredient_price) LIMIT #{startNum}, #{itemNum}
+		SELECT ingredientIdx, ingredientItemId, displayName, imgUrl, queryCnt, price, priceDate FROM onetable.ingredient_price_all WHERE ingredientIdx in (SELECT ingredientIdx from onetable.ingredient Where displayName like CONCAT('%',#{query},'%')) and priceDate in (SELECT MAX(priceDate) FROM onetable.ingredient_price) LIMIT #{startNum}, #{itemNum}
 	</select>
 	
 	<select id='priceHistroy' parameterType="String" resultType="IngredientPrice">

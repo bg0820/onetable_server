@@ -20,6 +20,7 @@ public class Recipe {
 	private String nickName;
 	private Timestamp recipeDate;
 
+	private double avg;
 	private List<RecipeMethod> recipeMethod;
 
 	private int queryCnt;
@@ -27,6 +28,22 @@ public class Recipe {
 	private int limitIndex;
 	private int limitCnt;
 
+
+	public double getAvg() {
+		return avg;
+	}
+
+	public void setAvg(double avg) {
+		this.avg = avg;
+	}
+
+	public List<RecipeMethod> getRecipeMethod() {
+		return recipeMethod;
+	}
+
+	public void setRecipeMethod(List<RecipeMethod> recipeMethod) {
+		this.recipeMethod = recipeMethod;
+	}
 
 	public int getLimitIndex() {
 		return limitIndex;
