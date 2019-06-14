@@ -11,5 +11,8 @@ public interface RecipeMapper {
 	public List<Recipe> searchAll(Recipe recipe);
 	public List<Recipe> search(String query);
 	public Recipe detail(int recipeIdx);
+	public List<Recipe> insert(Recipe recipe);
+	public List<Recipe> insertRecipeMethod(Recipe recipe);
+	public List<Recipe> insertRecipeIngrdient(Recipe recipe);
 
 }

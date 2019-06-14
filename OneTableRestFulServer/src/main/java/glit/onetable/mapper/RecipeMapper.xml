@@ -15,5 +15,21 @@
 	<select id='detail' parameterType="int" resultType="Recipe">
 		SELECT * FROM onetable.recipe WHERE recipeIdx = #{recipeIdx};
 	</select>
+
+	<select id='insertRecipe' resultType="Recipe">
+		INSERT into onetable.recipe (userIdx, name, servingMin, servingMax, cookTimeMin, kcal , recipeDate) values (#{userIdx},#{name},#{servingMin},#{servingMax},#{cookTimeMin}, #{kcal}, CURRENT_TIMESTAMP());
+	</select>
+	
+		<select id='insertRecipeMethod' resultType="Recipe">
+		INSERT into onetable.recipe_method (recipeIdx, num, img, content) values (#{recipeIdx},#{num},#{img},#{content});
+	</select>
+	
+	  ingredientIdx unitIdx minAmount maxAmount
+result symbol price displayName displayAmount unitStr
+
+		<select id='insertRecipeIngrdient' resultType="Recipe">
+		INSERT into onetable.recipe (recipeIdx, ingredientIdx,) values (#{userIdx},#{name},#{servingMin},#{servingMax},#{cookTimeMin}, #{kcal}, CURRENT_TIMESTAMP());
+	</select>
+	
 	
 </mapper>

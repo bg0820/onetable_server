@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="glit.onetable.mapper.EvaluateMapper">
+
+	<insert id='evaluateInsert' parameterType='Evaluate'>
+		INSERT INTO
+		onetable.evaluate (userIdx,recipeIdx,gradePoint)
+		SELECT #{userIdx}, #{recipeIdx}, #{gradePoint} FROM DUAL WHERE NOT EXISTS (SELECT userIdx FROM evaluate WHERE userIdx=#{userIdx} AND recipeIdx=#{recipeIdx});
+	</insert>
+
+</mapper>

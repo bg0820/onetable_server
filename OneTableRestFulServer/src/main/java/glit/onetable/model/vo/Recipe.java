@@ -1,5 +1,7 @@
 package glit.onetable.model.vo;
 
+import java.util.List;
+
 public class Recipe {
 	public int recipeIdx;
 	public int recipePageId;
@@ -11,7 +13,12 @@ public class Recipe {
 	public String recipeImg;
 	public int cookTimeSec;
 	public double kcal;
-	public String contentHtml;
+	public String content;
+	public String img;
+	public int num;
+
+	private List<ingredients> recipeIngredient;
+	private List<method> recipeMethod;
 
 	private int limitIndex;
 	private int limitCnt;
@@ -93,12 +100,48 @@ public class Recipe {
 	public void setKcal(double kcal) {
 		this.kcal = kcal;
 	}
-	public String getContentHtml() {
-		return contentHtml;
+
+	public String getContent() {
+		return content;
 	}
-	public void setContentHtml(String contentHtml) {
-		this.contentHtml = contentHtml;
+
+	public void setContent(String content) {
+		this.content = content;
 	}
+
+
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public List<ingredients> getRecipeIngredient() {
+		return recipeIngredient;
+	}
+
+	public void setRecipeIngredient(List<ingredients> recipeIngredient) {
+		this.recipeIngredient = recipeIngredient;
+	}
+
+	public List<method> getRecipeMethod() {
+		return recipeMethod;
+	}
+
+	public void setRecipeMethod(List<method> recipeMethod) {
+		this.recipeMethod = recipeMethod;
+	}
+	
 
 
 }

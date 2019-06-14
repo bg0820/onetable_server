@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="glit.onetable.mapper.RecipeCommentMapper">
+	
+	<insert id="commentInsert"  parameterType="RecipeComment" >
+		insert into recipecomment (recipeIdx,userIdx,comment,commentTime) values (#{recipeIdx},#{userIdx},#{comment},CURRENT_TIMESTAMP());
+	</insert>
+
+	<select id="listAll" parameterType="RecipeComment" resultType="RecipeComment">
+		select * from recipecomment where recipeIdx=#{recipeIdx} order by commentIdx asc;
+	</select>
+
+</mapper>
