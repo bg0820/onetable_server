@@ -124,9 +124,9 @@ public class RecipeController {
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
 
-	@RequestMapping(value = "/insert", method = RequestMethod.GET)
+	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponseResult> search(@RequestHeader(value = "API_Version") String version,
-			@RequestBody Recipe Recipe  )
+			@RequestBody Recipe recipe)
 			throws CustomException, IOException {
 		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
 		HttpStatus hs = HttpStatus.OK;
@@ -134,11 +134,21 @@ public class RecipeController {
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
-		List<Recipe> recipeList = recipeMapper.insert(Recipe);
-		
-		List<Recipe> recipeListRecipeMethod = recipeMapper.insertRecipeMethod(Recipe);
-		
-		List<Recipe> recipeListRecipeIngredient = recipeMapper.insertRecipeIngrdient(Recipe);
+
+		int recipeIdx = recipeMapper.insertRecipe(recipe);
+
+		System.out.println(recipeIdx);
+
+		for(int i=0; i<recipe.getRecipeIngredient().size(); i++) {
+			recipeMapper.insertRecipeIngrdient(recipe.getRecipeIngredient().get(i));
+		}
+
+		for(int i=0; i<recipe.getRecipeMethod().size(); i++) {
+			recipeMapper.insertRecipeMethod(recipe.getRecipeMethod().get(i));
+		}
+
+		resResult.setData(recipe);
+
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}

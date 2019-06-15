@@ -24,20 +24,17 @@
 		SELECT * FROM onetable.recipe WHERE recipeIdx = #{recipeIdx};
 	</select>
 
-	<select id='insertRecipe' resultType="Recipe">
-		INSERT into onetable.recipe (userIdx, name, servingMin, servingMax, cookTimeMin, kcal , recipeDate) values (#{userIdx},#{name},#{servingMin},#{servingMax},#{cookTimeMin}, #{kcal}, CURRENT_TIMESTAMP());
-	</select>
+	<insert id='insertRecipe' useGeneratedKeys="true"  keyProperty="recipeIdx">
+		INSERT into onetable.recipe (userIdx, name, servingMin, servingMax, cookTimeMin, kcal) values (#{userIdx},#{name},#{servingMin},#{servingMax},#{cookTimeMin}, #{kcal});
+	</insert>
 	
-		<select id='insertRecipeMethod' resultType="Recipe">
-		INSERT into onetable.recipe_method (recipeIdx, num, img, content) values (#{recipeIdx},#{num},#{img},#{content});
-	</select>
-	
-	  ingredientIdx unitIdx minAmount maxAmount
-result symbol price displayName displayAmount unitStr
+		<insert id='insertRecipeMethod'>
+		INSERT into onetable.recipe_method (recipeIdx, img, content) values (#{recipeIdx},#{img},#{content});
+	</insert>
 
-		<select id='insertRecipeIngrdient' resultType="Recipe">
-		INSERT into onetable.recipe (recipeIdx, ingredientIdx,) values (#{userIdx},#{name},#{servingMin},#{servingMax},#{cookTimeMin}, #{kcal}, CURRENT_TIMESTAMP());
-	</select>
+		<insert id='insertRecipeIngrdient'>
+		INSERT into onetable.recipe_ingredient(recipeIdx, ingredientIdx, unitIdx, minAmount) values (#{recipeIdx},#{IngredientIdx},#{unitIdx},#{minAmount});
+	</insert>
 	
 	
 	<!--  레시피재료 테이블에 레시피 아이디로 조회 -->

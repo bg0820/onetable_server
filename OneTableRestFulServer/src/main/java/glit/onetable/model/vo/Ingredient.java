@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Ingredient {
-	private int idx;
-	
+	private int ingredientidx;
+
 	private String ingredientItemId;
 	private int ingredientSubjectIdx;
 	private int unitIdx;
 	private double unitAmount;
-	
+
 	private int queryCnt;
 	private String displayName;
 	private String imgUrl;
@@ -72,12 +72,12 @@ public class Ingredient {
 		this.unitIdx = unitIdx;
 	}
 
-	public int getIdx() {
-		return idx;
+	public int getIngredientidx() {
+		return ingredientidx;
 	}
 
-	public void setIdx(int idx) {
-		this.idx = idx;
+	public void setIngredientidx(int ingredientidx) {
+		this.ingredientidx = ingredientidx;
 	}
 
 }

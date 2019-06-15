@@ -21,9 +21,9 @@ public interface RecipeMapper {
 	public Recipe detail(int recipeIdx);
 	public List<RecipeIngredient> recipeIngredientToRecipeIdx(int recipeIdx);
 	public Unit getUnitName(int unitIdx);
-	public List<Recipe> insert(Recipe recipe);
-	public List<Recipe> insertRecipeMethod(Recipe recipe);
-	public List<Recipe> insertRecipeIngrdient(Recipe recipe);
+	public int insertRecipe(Recipe recipe);
+	public void insertRecipeMethod(RecipeMethod method);
+	public void insertRecipeIngrdient(Ingredient ingredient);
 
 	public IngredientPrice ingredientCurrentDayPrice(String ingredientItemId);
 	public Ingredient getIngredientToItemId(String ingredientItemId);
