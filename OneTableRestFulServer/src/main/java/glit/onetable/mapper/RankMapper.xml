@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="glit.onetable.mapper.RankMapper">
+
+	<select id="searchTeen" resultType="Rank">
+		SELECT favoriteIdx,
+		count(favoriteIdx) as count FROM
+		onetable.favorites where userIdx in
+		(select userIdx from user where
+		birthday >= 10 and birthday < 20) and
+		favoritesType = 1 group by
+		favoriteIdx order by count;
+	</select>
+
+	<select id="searchTwnt" resultType="Rank">
+		SELECT favoriteIdx,
+		count(favoriteIdx) as count FROM onetable.favorites where userIdx in
+		(select userIdx from user where birthday >= 20 and birthday < 30) and
+		favoritesType = 1 group by favoriteIdx order by count;
+	</select>
+
+	<select id="searchThree" resultType="Rank">
+		SELECT favoriteIdx,
+		count(favoriteIdx) as count FROM onetable.favorites where userIdx in
+		(select userIdx from user where birthday >= 30 and birthday < 40) and
+		favoritesType = 1 group by favoriteIdx order by count;
+	</select>
+
+	<select id="searchFour" resultType="Rank">
+		SELECT favoriteIdx,
+		count(favoriteIdx) as count FROM onetable.favorites
+		where userIdx in
+		(select userIdx from user where birthday >= 40 and birthday < 50) and
+		favoritesType = 1 group by favoriteIdx order by count;
+	</select>
+
+	<select id="searchFive" resultType="Rank">
+		SELECT favoriteIdx,
+		count(favoriteIdx) as count FROM onetable.favorites where userIdx in
+		(select userIdx from user where birthday >= 50 and birthday < 60) and
+		favoritesType = 1 group by favoriteIdx order by count;
+	</select>
+
+	<select id="rankRecipe" resultType="Ranking">
+		select userIdx,
+		AVG(avgGradePoint) from recipe_avg_grade GROUP BY recipeIdx
+	</select>
+
+	<select id="rakeChief" resultType="Ranking">
+		<!-- 쿼리문짜야함 -->
+	</select>
+
+
+
+</mapper>
