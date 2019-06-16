@@ -17,7 +17,11 @@
 	</insert>
 	
 	<select id='history' parameterType="int" resultType="Onetableset">
-		SELECT name, classify FROM onetable.onetableset;
+		SELECT onetablesetIdx, name, classify FROM onetable.onetableset where userIdx = #{userIdx};
+	</select>
+	
+	<select id='detail' parameterType="int" resultType="Onetableset">
+		select * from onetable_detail where onetablesetIdx = #{onetablesetIdx}
 	</select>
 	
 	<delete id='onetablesetDelete' parameterType="int">
