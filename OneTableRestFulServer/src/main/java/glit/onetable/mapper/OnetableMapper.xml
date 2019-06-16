@@ -5,7 +5,7 @@
 <mapper namespace="glit.onetable.mapper.OnetableMapper">
 
 	<select id='searchRecipe' parameterType="String" resultType="Recipe">
-		SELECT recipeIdx, recipeName as name, recipeImg, nickname, price FROM onetable.recipe_price where recipeName like concat('%', #{query}, '%');
+		SELECT recipeIdx, recipeName, recipeImg, nickname, price FROM onetable.recipe_price where recipeName like concat('%', #{query}, '%');
 	</select>
 	
 	<insert id='onetablesetInsert' parameterType="Onetableset" useGeneratedKeys="true"  keyProperty="onetablesetIdx">
