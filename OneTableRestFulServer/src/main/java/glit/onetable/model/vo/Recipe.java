@@ -10,7 +10,7 @@ public class Recipe {
 	private int recipeIdx;
 	private int recipePageId;
 	private int userIdx;
-	private String name;
+	private String recipeName;
 	private int price;
 	private double servingMin;
 	private double servingMax;
@@ -98,12 +98,12 @@ public class Recipe {
 		this.userIdx = userIdx;
 	}
 
-	public String getName() {
-		return name;
+	public String getRecipeName() {
+		return recipeName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setRecipeName(String recipeName) {
+		this.recipeName = recipeName;
 	}
 
 	public int getPrice() {

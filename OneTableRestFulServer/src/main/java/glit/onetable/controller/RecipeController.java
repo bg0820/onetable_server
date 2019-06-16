@@ -48,8 +48,6 @@ import glit.onetable.model.vo.User;
 @CrossOrigin
 
 
-
-
 @RestController
 @RequestMapping("/recipe")
 public class RecipeController {
@@ -187,7 +185,7 @@ public class RecipeController {
 		resultData.setCookTimeMin(recipe.getCookTimeMin());
 		resultData.setKcal(recipe.getKcal());
 		resultData.setRecipeImg(recipe.getRecipeImg());
-		resultData.setRecipeName(recipe.getName());
+		resultData.setRecipeName(recipe.getRecipeName());
 		resultData.setServingMax(recipe.getServingMax());
 		resultData.setServingMin(recipe.getServingMin());
 		resultData.setPrice(recipe.getPrice());
