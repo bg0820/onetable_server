@@ -154,10 +154,6 @@ public class RecipeController {
 		recipeMapper.insertRecipe(recipe);
 		int recipeIdx = recipe.getRecipeIdx(); 
 		
-		System.out.println(recipeIdx);
-		System.out.println(recipe.getRecipeIngredient().size());
-		System.out.println(recipe.getRecipeMethod().size());
-		
 		for(int i=0; i < temp.getRecipeIngredient().size(); i++) {
 			RecipeIngredient ri = recipe.getRecipeIngredient().get(i);
 			ri.setRecipeIdx(recipeIdx);

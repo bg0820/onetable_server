@@ -22,7 +22,7 @@
 	
 	
 	<select id='searchAll' parameterType="Recipe" resultType="Recipe">
-		SELECT recipeIdx, userIdx, recipeName, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit order by recipeIdx LIMIT #{limitIndex}, #{limitCnt}
+		SELECT recipeIdx, userIdx, recipeName, price, recipeImg, nickName, recipeDate FROM onetable.recipe_user_price order by recipeIdx LIMIT #{limitIndex}, #{limitCnt}
 	</select>
 	
 	<select id="recipeIngredientPriceDetail" parameterType="int" resultType="RecipeIngredientPrice">
@@ -30,11 +30,11 @@
 	</select>
 	
 	<select id='search' parameterType="Search" resultType="Recipe">
-		SELECT recipeIdx, userIdx, recipeName, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit WHERE name LIKE CONCAT('%',#{query},'%') LIMIT #{startNum}, #{itemNum}
+		SELECT recipeIdx, userIdx, recipeName, price, recipeImg, nickName, recipeDate FROM onetable.recipe_user_price WHERE name LIKE CONCAT('%',#{query},'%') LIMIT #{startNum}, #{itemNum}
 	</select>
 	
 	<select id='detail' parameterType="int" resultType="Recipe">
-		SELECT * FROM onetable.recipe_price WHERE recipeIdx = #{recipeIdx};
+		SELECT * FROM onetable.recipe_user_price WHERE recipeIdx = #{recipeIdx};
 	</select>
 
 	<insert id='insertRecipe' useGeneratedKeys="true"  keyProperty="recipeIdx">
