@@ -1,17 +1,20 @@
 package glit.onetable.model.vo;
 
 public class RecipeIngredient {
+	private int recipeIngredientIdx;
+	
 	private int recipeIdx;
-	private String ingredientItemId;
+	private int ingredientIdx;
 	private int unitIdx;
 	private int minAmount;
 	private int maxAmount;
+	private double result;
 	private String symbol;
 	private String displayName;
 	private int idx;
 	private String displayAmount;
-
-	private double result = 0.0;
+	private String unitStr;
+	private int price;
 
 	public int getRecipeIdx() {
 		return recipeIdx;
@@ -21,12 +24,12 @@ public class RecipeIngredient {
 		this.recipeIdx = recipeIdx;
 	}
 
-	public String getIngredientItemId() {
-		return ingredientItemId;
+	public int getIngredientIdx() {
+		return ingredientIdx;
 	}
 
-	public void setIngredientItemId(String ingredientItemId) {
-		this.ingredientItemId = ingredientItemId;
+	public void setIngredientIdx(int ingredientIdx) {
+		this.ingredientIdx = ingredientIdx;
 	}
 
 	public int getUnitIdx() {
@@ -53,14 +56,19 @@ public class RecipeIngredient {
 		this.maxAmount = maxAmount;
 	}
 
+	public double getResult() {
+		return result;
+	}
+
+	public void setResult(double result) {
+		this.result = result;
+	}
+
 	public String getSymbol() {
 		return symbol;
 	}
 
 	public void setSymbol(String symbol) {
-		if (symbol.equals("/"))
-			this.setResult(this.minAmount
-					/ this.maxAmount);
 		this.symbol = symbol;
 	}
 
@@ -88,13 +96,30 @@ public class RecipeIngredient {
 		this.displayAmount = displayAmount;
 	}
 
-	public double getResult() {
-		return result;
+	public String getUnitStr() {
+		return unitStr;
 	}
 
-	public void setResult(double result) {
-		this.result = result;
+	public void setUnitStr(String unitStr) {
+		this.unitStr = unitStr;
 	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public int getRecipeIngredientIdx() {
+		return recipeIngredientIdx;
+	}
+
+	public void setRecipeIngredientIdx(int recipeIngredientIdx) {
+		this.recipeIngredientIdx = recipeIngredientIdx;
+	}
+
 
 
 }

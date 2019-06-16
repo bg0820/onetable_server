@@ -41,6 +41,7 @@ import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.Recipe;
 import glit.onetable.model.vo.RecipeComment;
 import glit.onetable.model.vo.RecipeIngredient;
+import glit.onetable.model.vo.RecipeIngredientPrice;
 import glit.onetable.model.vo.RecipeMethod;
 import glit.onetable.model.vo.Search;
 import glit.onetable.model.vo.Unit;
@@ -148,19 +149,29 @@ public class RecipeController {
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
-
-		int recipeIdx = recipeMapper.insertRecipe(recipe);
-
+		Recipe temp = recipe;
+		
+		recipeMapper.insertRecipe(recipe);
+		int recipeIdx = recipe.getRecipeIdx(); 
+		
 		System.out.println(recipeIdx);
-
-		for(int i=0; i<recipe.getRecipeIngredient().size(); i++) {
-			recipeMapper.insertRecipeIngrdient(recipe.getRecipeIngredient().get(i));
+		System.out.println(recipe.getRecipeIngredient().size());
+		System.out.println(recipe.getRecipeMethod().size());
+		
+		for(int i=0; i < temp.getRecipeIngredient().size(); i++) {
+			RecipeIngredient ri = recipe.getRecipeIngredient().get(i);
+			ri.setRecipeIdx(recipeIdx);
+			ri.setResult(ri.getMinAmount());
+			recipeMapper.insertRecipeIngrdient(ri);
 		}
 
-		for(int i=0; i<recipe.getRecipeMethod().size(); i++) {
-			recipeMapper.insertRecipeMethod(recipe.getRecipeMethod().get(i));
+		for(int i=0; i < temp.getRecipeMethod().size(); i++) {
+			RecipeMethod rm = recipe.getRecipeMethod().get(i);
+			rm.setRecipeIdx(recipeIdx);
+			recipeMapper.insertRecipeMethod(rm);
 		}
 
+		
 		resResult.setData(recipe);
 
 
@@ -175,12 +186,32 @@ public class RecipeController {
 
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
-
+		
+		RecipeDetail resultData = new RecipeDetail();
+		
+		Recipe recipe = recipeMapper.detail(recipeIdx);
+		resultData.setCookTimeMin(recipe.getCookTimeMin());
+		resultData.setKcal(recipe.getKcal());
+		resultData.setRecipeImg(recipe.getRecipeImg());
+		resultData.setRecipeName(recipe.getRecipeName());
+		resultData.setServingMax(recipe.getServingMax());
+		resultData.setServingMin(recipe.getServingMin());
+		resultData.setPrice(recipe.getPrice());
+		resultData.setNickName(recipe.getNickName());
+		
+		
+		List<RecipeMethod> recipeMethod = recipeMapper.getMethod(recipeIdx);
+		resultData.setRecipeMethod(recipeMethod);
+		
+		List<RecipeIngredientPrice> recipeIngredientPrice = recipeMapper.recipeIngredientPriceDetail(recipeIdx);
+		resultData.setRecipeIngredient(recipeIngredientPrice);
+		
+/*
 		RecipeIngredient recipeIngredient = new RecipeIngredient();
 		recipeIngredient.setRecipeIdx(recipeIdx);
 
-		Recipe recipe = recipeMapper.detail(recipeIdx);
-
+		Recipe recipe = recipeMapper.detail(recipeIdx);*/
+		/*
 		RecipeDetail resultData = new RecipeDetail();
 		resultData.setCookTimeMin(recipe.getCookTimeMin());
 		resultData.setKcal(recipe.getKcal());
@@ -203,11 +234,11 @@ public class RecipeController {
 		{
 			RecipeIngredient item = recipeIngreList.get(i);
 
-			IngredientPrice ingredientPrice = recipeMapper.ingredientCurrentDayPrice(item.getIngredientItemId());
+			IngredientPrice ingredientPrice = recipeMapper.ingredientCurrentDayPrice(item.getIngredientIdx());
 			if(ingredientPrice == null)
 				continue;
 			// 재료에 대한 유닛당 가격
-			Ingredient ingredientUnit = recipeMapper.getIngredientToItemId(item.getIngredientItemId());
+			Ingredient ingredientUnit = recipeMapper.getIngredientToItemId(item.getIngredientIdx());
 			if(ingredientUnit == null)
 				continue;
 			double pricePerUnit = ingredientPrice.getPrice() / ingredientUnit.getUnitAmount();
@@ -231,7 +262,7 @@ public class RecipeController {
 
 			resultData.recipeIngredient.add(rdi);
 		}
-
+*/
 		resResult.setData(resultData);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);

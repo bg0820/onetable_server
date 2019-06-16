@@ -23,10 +23,10 @@ public class Recipe {
 	private double avg;
 	private int num;
 	private String img;
-
+	private String profileImg;
 	private int queryCnt;
 
-	private List<Ingredient> recipeIngredient;
+	private List<RecipeIngredient> recipeIngredient;
 	private List<RecipeMethod> recipeMethod;
 
 	private int limitIndex;
@@ -183,11 +183,11 @@ public class Recipe {
 	}
 
 
-	public List<Ingredient> getRecipeIngredient() {
+	public List<RecipeIngredient> getRecipeIngredient() {
 		return recipeIngredient;
 	}
 
-	public void setRecipeIngredient(List<Ingredient> recipeIngredient) {
+	public void setRecipeIngredient(List<RecipeIngredient> recipeIngredient) {
 		this.recipeIngredient = recipeIngredient;
 	}
 
@@ -201,6 +201,14 @@ public class Recipe {
 
 	public void setQueryCnt(int queryCnt) {
 		this.queryCnt = queryCnt;
+	}
+
+	public String getProfileImg() {
+		return profileImg;
+	}
+
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
 	}
 
 }

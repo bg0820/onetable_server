@@ -16,24 +16,28 @@
 		SELECT recipeIdx, userIdx, recipeName, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit order by recipeIdx LIMIT #{limitIndex}, #{limitCnt}
 	</select>
 	
+	<select id="recipeIngredientPriceDetail" parameterType="int" resultType="RecipeIngredientPrice">
+		select * from recipe_ingredient_price where recipeIdx = #{recipeIdx}
+	</select>
+	
 	<select id='search' parameterType="Search" resultType="Recipe">
 		SELECT recipeIdx, userIdx, recipeName, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit WHERE name LIKE CONCAT('%',#{query},'%') LIMIT #{startNum}, #{itemNum}
 	</select>
 	
 	<select id='detail' parameterType="int" resultType="Recipe">
-		SELECT * FROM onetable.recipe WHERE recipeIdx = #{recipeIdx};
+		SELECT * FROM onetable.recipe_price WHERE recipeIdx = #{recipeIdx};
 	</select>
 
 	<insert id='insertRecipe' useGeneratedKeys="true"  keyProperty="recipeIdx">
-		INSERT into onetable.recipe (userIdx, recipeName, servingMin, servingMax, cookTimeMin, kcal) values (#{userIdx},#{recipeName},#{servingMin},#{servingMax},#{cookTimeMin}, #{kcal});
+		INSERT into onetable.recipe (userIdx, recipeName, servingMin, servingMax, recipeImg, cookTimeMin, kcal, recipeDate, category) values (#{userIdx},#{recipeName},#{servingMin}, #{servingMax}, #{recipeImg}, #{cookTimeMin}, #{kcal}, current_timestamp(), #{category} );
 	</insert>
 	
 		<insert id='insertRecipeMethod'>
-		INSERT into onetable.recipe_method (recipeIdx, img, content) values (#{recipeIdx},#{img},#{content});
+		INSERT into onetable.recipe_method (recipeIdx, num, img, content) values (#{recipeIdx}, #{num}, #{img},#{content})
 	</insert>
 
-		<insert id='insertRecipeIngrdient'>
-		INSERT into onetable.recipe_ingredient(recipeIdx, ingredientIdx, unitIdx, minAmount) values (#{recipeIdx},#{IngredientIdx},#{unitIdx},#{minAmount});
+	<insert id="insertRecipeIngrdient" parameterType="RecipeIngredient">
+		INSERT into onetable.recipe_ingredient (recipeIdx, ingredientIdx, unitIdx, minAmount, result) values (#{recipeIdx},#{ingredientIdx},#{unitIdx},#{minAmount}, #{result})
 	</insert>
 	
 	
@@ -47,31 +51,29 @@
 		SELECT * FROM onetable.unit where unitIdx = #{unitIdx} LIMIT 1
 	</select>
 	
-	<select id="ingredientCurrentDayPrice" parameterType="String" resultType="IngredientPrice">
-		SELECT * FROM ingredient_price where ingredientItemId=#{ingredientItemId} order by priceDate desc LIMIT 1
+	<select id="ingredientCurrentDayPrice" parameterType="int" resultType="IngredientPrice">
+		SELECT * FROM ingredient_price where ingredientIdx=#{ingredientIdx} order by priceDate desc LIMIT 1
 	</select>
 	
-	<select id="getIngredientToItemId" parameterType="String" resultType="Ingredient">
-		SELECT * FROM ingredient where ingredientItemId=#{ingredientItemId} LIMIT 1
+	<select id="getIngredientToItemId" parameterType="int" resultType="Ingredient">
+		SELECT * FROM ingredient where ingredientIdx=#{ingredientIdx} LIMIT 1
 	</select>
 	
 	<select id="getUserInfo" parameterType="int" resultType="User">
 		SELECT * FROM user where userIdx = #{userIdx}
 	</select>
 	
-	<insert id='recipeInsert' parameterType="Recipe" useGeneratedKeys="true"  keyProperty="recipeIdx">
-		INSERT INTO onetable.recipe(userIdx, recipeName, price, servingMin, servingMax, recipeImg, cookTimeMin, kcal, contentHtml, nickName, recipeDate) VALUES (#{userIdx}, #{recipeName}, #{price}, #{servingMin}, #{servingMax}, #{recipeImg}, #{cookTimeMin}, #{kcal}, #{contentHtml}, #{nickName}, #{recipeDate});
-	</insert>
+	
 	
 	<select id="getMethod" parameterType="int" resultType="RecipeMethod">
-		SELECT * FROM onetable.recipe_method where recipeIdx = #{recipeIdx};
+		SELECT * FROM onetable.recipe_method where recipeIdx = #{recipeIdx}
 	</select>
 	
 	<select id="getUnit" resultType="Unit">
-		SELECT * FROM onetable.unit;
+		SELECT * FROM onetable.unit
 	</select>
 	
 	<select id="history" parameterType="int" resultType="Recipe">
-		SELECT * FROM onetable.recipe where userIdx = #{userIdx};
+		SELECT * FROM onetable.recipe where userIdx = #{userIdx}
 	</select>
 </mapper>
