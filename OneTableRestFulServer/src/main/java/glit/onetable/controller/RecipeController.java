@@ -210,15 +210,12 @@ public class RecipeController {
 		RecipeIngredient recipeIngredient = new RecipeIngredient();
 		recipeIngredient.setRecipeIdx(recipeIdx);
 
-		Recipe recipe = recipeMapper.detail(recipeIdx);*/
-		/*
+		Recipe recipe = recipeMapper.detail(recipeIdx);
+
+		//RecipeAvgGrade recipeAvgGrade = recipeMapper.
+		//recipe_avg_grade에서 평점 받아오려고 하던중이었음. mapper아직 안만들어서 그거도 만들어야돼
+
 		RecipeDetail resultData = new RecipeDetail();
-		resultData.setCookTimeMin(recipe.getCookTimeMin());
-		resultData.setKcal(recipe.getKcal());
-		resultData.setRecipeImg(recipe.getRecipeImg());
-		resultData.setRecipeName(recipe.getRecipeName());
-		resultData.setServingMax(recipe.getServingMax());
-		resultData.setServingMin(recipe.getServingMin());
 		resultData.setPrice(recipe.getPrice());
 
 		ArrayList<RecipeMethod> recipeMethod = recipeMapper.getMethod(recipeIdx);
