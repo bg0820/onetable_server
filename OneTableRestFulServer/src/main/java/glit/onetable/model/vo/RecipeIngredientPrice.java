@@ -1,18 +1,20 @@
 package glit.onetable.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class RecipeIngredientPrice {
 	private int ingredientIdx;
 	private int recipeIdx;
 	private String ingredientDisplayName;
 	private String imgUrl;
-	private int price;
+	private int originalPrice;
 	private int unitIdx;
 	private double result;
 	private String displayName;
 	private String displayAmount;
 	private String unitStr;
-	private double ingredientPrice;
-	private int originalPrice;
+	private double recipeIngredientPrice;
 	private String originalUnitStr;
 
 
@@ -64,14 +66,6 @@ public class RecipeIngredientPrice {
 		this.imgUrl = imgUrl;
 	}
 
-	public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int price) {
-		this.price = price;
-	}
-
 	public int getUnitIdx() {
 		return unitIdx;
 	}
@@ -112,12 +106,12 @@ public class RecipeIngredientPrice {
 		this.unitStr = unitStr;
 	}
 
-	public double getIngredientPrice() {
-		return ingredientPrice;
+	public double getRecipeIngredientPrice() {
+		return recipeIngredientPrice;
 	}
 
-	public void setIngredientPrice(double ingredientPrice) {
-		this.ingredientPrice = ingredientPrice;
+	public void setRecipeIngredientPrice(double recipeIngredientPrice) {
+		this.recipeIngredientPrice = recipeIngredientPrice;
 	}
 
 

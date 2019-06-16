@@ -187,7 +187,7 @@ public class RecipeController {
 		resultData.setServingMin(recipe.getServingMin());
 		resultData.setPrice(recipe.getPrice());
 		resultData.setNickName(recipe.getNickName());
-		
+		resultData.setGradePoint(recipe.getAvgGradePoint());
 		
 		List<RecipeMethod> recipeMethod = recipeMapper.getMethod(recipeIdx);
 		resultData.setRecipeMethod(recipeMethod);
@@ -195,70 +195,9 @@ public class RecipeController {
 		List<RecipeIngredientPrice> recipeIngredientPrice = recipeMapper.recipeIngredientPriceDetail(recipeIdx);
 		resultData.setRecipeIngredient(recipeIngredientPrice);
 		
-		Double recipeAvgGrade = recipeMapper.getGradePoint(recipeIdx);
-		if(recipeAvgGrade != null)
-			resultData.setGradePoint(recipeAvgGrade);
-		else
-			resultData.setGradePoint(0.0);
-		
 		List<RecipeComment> recipeComment = recipeMapper.getRecipeComment(recipeIdx);
-		if(recipeComment != null)
-			resultData.setRecipeComment(recipeComment);
+		resultData.setRecipeComment(recipeComment);
 		
-/*
-		RecipeIngredient recipeIngredient = new RecipeIngredient();
-		recipeIngredient.setRecipeIdx(recipeIdx);
-
-		Recipe recipe = recipeMapper.detail(recipeIdx);
-
-		//RecipeAvgGrade recipeAvgGrade = recipeMapper.
-		//recipe_avg_grade에서 평점 받아오려고 하던중이었음. mapper아직 안만들어서 그거도 만들어야돼
-
-		RecipeDetail resultData = new RecipeDetail();
-		resultData.setPrice(recipe.getPrice());
-
-		ArrayList<RecipeMethod> recipeMethod = recipeMapper.getMethod(recipeIdx);
-		resultData.setRecipeMethod(recipeMethod);
-
-		User user = recipeMapper.getUserInfo(recipe.getUserIdx());
-		resultData.setUserName(user.getNickname());
-
-		List<RecipeIngredient> recipeIngreList = recipeMapper.recipeIngredientToRecipeIdx(recipeIdx);
-		int totalPrice = 0;
-
-		for(int i = 0; i < recipeIngreList.size(); i++)
-		{
-			RecipeIngredient item = recipeIngreList.get(i);
-
-			IngredientPrice ingredientPrice = recipeMapper.ingredientCurrentDayPrice(item.getIngredientIdx());
-			if(ingredientPrice == null)
-				continue;
-			// 재료에 대한 유닛당 가격
-			Ingredient ingredientUnit = recipeMapper.getIngredientToItemId(item.getIngredientIdx());
-			if(ingredientUnit == null)
-				continue;
-			double pricePerUnit = ingredientPrice.getPrice() / ingredientUnit.getUnitAmount();
-			// 레시피 재료에 대한 유닛 조회
-			Unit unit = recipeMapper.getUnitName(item.getUnitIdx());
-			double recipeIngredientPrice = item.getMinAmount() * pricePerUnit;
-
-			RecipeDetailIngredient rdi = new RecipeDetailIngredient();
-			rdi.setName(item.getDisplayName());
-			rdi.setCalcPrice(recipeIngredientPrice);
-			rdi.setUnitStr(unit.getUnitName());
-			rdi.setUnitDisplayName(item.getDisplayAmount());
-
-
-			totalPrice += recipeIngredientPrice;
-
-			if(item.getResult() != 0.0)
-				rdi.setUnitAmount(item.getResult());
-			else
-				rdi.setUnitAmount(item.getMinAmount());
-
-			resultData.recipeIngredient.add(rdi);
-		}
-*/
 		resResult.setData(resultData);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
@@ -319,7 +258,7 @@ public class RecipeController {
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
 
-	@RequestMapping(value = "/comment", method = RequestMethod.GET)
+	@RequestMapping(value = "/comment", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponseResult> comment(@RequestHeader(value = "API_Version") String version,
 			@RequestParam int recipeIdx, @RequestParam int userIdx, @RequestParam String comment)
 			throws CustomException, IOException {
@@ -335,9 +274,6 @@ public class RecipeController {
 		recipeCmt.setComment(comment);
 
 		recipeCommentMapper.commentInsert(recipeCmt);
-
-		List<RecipeComment> recipe = recipeCommentMapper.listAll(recipeCmt);
-		resResult.setData(recipe);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}

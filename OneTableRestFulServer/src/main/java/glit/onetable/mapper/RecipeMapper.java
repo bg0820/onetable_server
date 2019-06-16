@@ -33,7 +33,6 @@ public interface RecipeMapper {
 
 	public User getUserInfo(int userIdx);
 
-	public Double getGradePoint(int recipeIdx);
 	
 	public int searchCnt(String query);
 	public int allCnt();

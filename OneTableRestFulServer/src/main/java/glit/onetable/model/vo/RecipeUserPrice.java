@@ -20,6 +20,7 @@ public class RecipeUserPrice {
 	private String nickName;
 	private String profileImg;
 	private int price;
+	private double avgGradePoint;
 
 	private List<RecipeIngredient> recipeIngredient;
 	private List<RecipeMethod> recipeMethod;
@@ -169,6 +170,14 @@ public class RecipeUserPrice {
 
 	public void setLimitCnt(int limitCnt) {
 		this.limitCnt = limitCnt;
+	}
+
+	public double getAvgGradePoint() {
+		return avgGradePoint;
+	}
+
+	public void setAvgGradePoint(double avgGradePoint) {
+		this.avgGradePoint = avgGradePoint;
 	}
 
 
