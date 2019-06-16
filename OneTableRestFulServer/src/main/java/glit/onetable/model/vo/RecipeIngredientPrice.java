@@ -12,6 +12,25 @@ public class RecipeIngredientPrice {
 	private String displayAmount;
 	private String unitStr;
 	private double ingredientPrice;
+	private int originalPrice;
+	private String originalUnitStr;
+
+
+	public int getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(int originalPrice) {
+		this.originalPrice = originalPrice;
+	}
+
+	public String getOriginalUnitStr() {
+		return originalUnitStr;
+	}
+
+	public void setOriginalUnitStr(String originalUnitStr) {
+		this.originalUnitStr = originalUnitStr;
+	}
 
 	public int getIngredientIdx() {
 		return ingredientIdx;

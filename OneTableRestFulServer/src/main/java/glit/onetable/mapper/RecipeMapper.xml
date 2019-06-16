@@ -21,19 +21,19 @@
 	</select>
 	
 	
-	<select id='searchAll' parameterType="Recipe" resultType="Recipe">
-		SELECT recipeIdx, userIdx, recipeName, price, recipeImg, nickName, recipeDate FROM onetable.recipe_user_price order by recipeIdx LIMIT #{limitIndex}, #{limitCnt}
+	<select id='searchAll' parameterType="Recipe" resultType="RecipeUserPrice">
+		SELECT * FROM onetable.recipe_user_price order by recipeIdx LIMIT #{limitIndex}, #{limitCnt}
 	</select>
 	
 	<select id="recipeIngredientPriceDetail" parameterType="int" resultType="RecipeIngredientPrice">
 		select * from recipe_ingredient_price where recipeIdx = #{recipeIdx}
 	</select>
 	
-	<select id='search' parameterType="Search" resultType="Recipe">
-		SELECT recipeIdx, userIdx, recipeName, price, recipeImg, nickName, recipeDate FROM onetable.recipe_user_price WHERE name LIKE CONCAT('%',#{query},'%') LIMIT #{startNum}, #{itemNum}
+	<select id='search' parameterType="Search" resultType="RecipeUserPrice">
+		SELECT * FROM onetable.recipe_user_price WHERE name LIKE CONCAT('%',#{query},'%') LIMIT #{startNum}, #{itemNum}
 	</select>
 	
-	<select id='detail' parameterType="int" resultType="Recipe">
+	<select id='detail' parameterType="int" resultType="RecipeUserPrice">
 		SELECT * FROM onetable.recipe_user_price WHERE recipeIdx = #{recipeIdx};
 	</select>
 

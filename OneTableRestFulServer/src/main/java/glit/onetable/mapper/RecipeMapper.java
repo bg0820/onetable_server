@@ -9,15 +9,16 @@ import glit.onetable.model.vo.RecipeComment;
 import glit.onetable.model.vo.RecipeIngredient;
 import glit.onetable.model.vo.RecipeIngredientPrice;
 import glit.onetable.model.vo.RecipeMethod;
+import glit.onetable.model.vo.RecipeUserPrice;
 import glit.onetable.model.vo.Search;
 import glit.onetable.model.vo.Unit;
 import glit.onetable.model.vo.User;
 
 @Mapper
 public interface RecipeMapper {
-	public List<Recipe> searchAll(Recipe recipe);
-	public List<Recipe> search(Search query);
-	public Recipe detail(int recipeIdx);
+	public List<RecipeUserPrice> searchAll(Recipe recipe);
+	public List<RecipeUserPrice> search(Search query);
+	public RecipeUserPrice detail(int recipeIdx);
 	public List<RecipeIngredient> recipeIngredientToRecipeIdx(int recipeIdx);
 	public Unit getUnitName(int unitIdx);
 	

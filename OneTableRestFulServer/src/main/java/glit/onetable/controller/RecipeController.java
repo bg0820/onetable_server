@@ -6,11 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,25 +24,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import glit.onetable.enums.ErrorCode;
 import glit.onetable.exception.CustomException;
 import glit.onetable.mapper.RecipeCommentMapper;
 import glit.onetable.mapper.RecipeMapper;
 import glit.onetable.model.ApiResponseResult;
 import glit.onetable.model.request.RecipeDetail;
-import glit.onetable.model.request.RecipeDetailIngredient;
 import glit.onetable.model.request.ResultIncCnt;
-import glit.onetable.model.vo.Ingredient;
-import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.Recipe;
 import glit.onetable.model.vo.RecipeComment;
 import glit.onetable.model.vo.RecipeIngredient;
 import glit.onetable.model.vo.RecipeIngredientPrice;
 import glit.onetable.model.vo.RecipeMethod;
+import glit.onetable.model.vo.RecipeUserPrice;
 import glit.onetable.model.vo.Search;
 import glit.onetable.model.vo.Unit;
-import glit.onetable.model.vo.User;
 @CrossOrigin
 
 
@@ -78,7 +71,7 @@ public class RecipeController {
 		recipe.setLimitCnt(itemNum);
 
 		int allQueryCnt = recipeMapper.allCnt();
-		List<Recipe> recipeList = recipeMapper.searchAll(recipe);
+		List<RecipeUserPrice> recipeList = recipeMapper.searchAll(recipe);
 
 		ric.setCnt(allQueryCnt);
 		ric.setObj(recipeList);
@@ -113,7 +106,7 @@ public class RecipeController {
 		search.setStartNum(pageIndex);
 
 		int searchQueryCnt = recipeMapper.searchCnt(query);
-		List<Recipe> recipeList = recipeMapper.search(search);
+		List<RecipeUserPrice> recipeList = recipeMapper.search(search);
 
 		ric.setCnt(searchQueryCnt);
 		ric.setObj(recipeList);
@@ -185,7 +178,7 @@ public class RecipeController {
 		
 		RecipeDetail resultData = new RecipeDetail();
 		
-		Recipe recipe = recipeMapper.detail(recipeIdx);
+		RecipeUserPrice recipe = recipeMapper.detail(recipeIdx);
 		resultData.setCookTimeMin(recipe.getCookTimeMin());
 		resultData.setKcal(recipe.getKcal());
 		resultData.setRecipeImg(recipe.getRecipeImg());
@@ -203,7 +196,6 @@ public class RecipeController {
 		resultData.setRecipeIngredient(recipeIngredientPrice);
 		
 		Double recipeAvgGrade = recipeMapper.getGradePoint(recipeIdx);
-		
 		if(recipeAvgGrade != null)
 			resultData.setGradePoint(recipeAvgGrade);
 		else
