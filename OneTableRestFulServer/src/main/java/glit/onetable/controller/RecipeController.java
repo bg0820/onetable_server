@@ -206,6 +206,17 @@ public class RecipeController {
 		List<RecipeIngredientPrice> recipeIngredientPrice = recipeMapper.recipeIngredientPriceDetail(recipeIdx);
 		resultData.setRecipeIngredient(recipeIngredientPrice);
 		
+		Double recipeAvgGrade = recipeMapper.getGradePoint(recipeIdx);
+		
+		if(recipeAvgGrade != null)
+			resultData.setGradePoint(recipeAvgGrade);
+		else
+			resultData.setGradePoint(0.0);
+		
+		List<RecipeComment> recipeComment = recipeMapper.getRecipeComment(recipeIdx);
+		if(recipeComment != null)
+			resultData.setRecipeComment(recipeComment);
+		
 /*
 		RecipeIngredient recipeIngredient = new RecipeIngredient();
 		recipeIngredient.setRecipeIdx(recipeIdx);

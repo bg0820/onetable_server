@@ -1,11 +1,11 @@
 package glit.onetable.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import glit.onetable.model.vo.Ingredient;
 import glit.onetable.model.vo.IngredientPrice;
 import glit.onetable.model.vo.Recipe;
+import glit.onetable.model.vo.RecipeComment;
 import glit.onetable.model.vo.RecipeIngredient;
 import glit.onetable.model.vo.RecipeIngredientPrice;
 import glit.onetable.model.vo.RecipeMethod;
@@ -32,6 +32,8 @@ public interface RecipeMapper {
 
 	public User getUserInfo(int userIdx);
 
+	public Double getGradePoint(int recipeIdx);
+	
 	public int searchCnt(String query);
 	public int allCnt();
 
@@ -39,5 +41,7 @@ public interface RecipeMapper {
 	public List<Unit> getUnit();
 	
 	public List<RecipeIngredientPrice> recipeIngredientPriceDetail(int recipeIdx);
+	
+	public List<RecipeComment> getRecipeComment(int recipeIdx);
 
 }

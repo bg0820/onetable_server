@@ -1,12 +1,12 @@
 package glit.onetable.model.request;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import glit.onetable.model.vo.RecipeComment;
 import glit.onetable.model.vo.RecipeIngredientPrice;
 import glit.onetable.model.vo.RecipeMethod;
 
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RecipeDetail {
 	private String recipeName;
 	private String nickName = "SYSTEM";
@@ -16,13 +16,22 @@ public class RecipeDetail {
 	private String cookTimeMin;
 	private double kcal;
 	private int price;
-
+	private double gradePoint;
+	
 	public List<RecipeMethod> recipeMethod;
 	public List<RecipeIngredientPrice> recipeIngredient;
+	public List<RecipeComment> recipeComment;
 	
 	
 	
-	
+
+	public List<RecipeComment> getRecipeComment() {
+		return recipeComment;
+	}
+
+	public void setRecipeComment(List<RecipeComment> recipeComment) {
+		this.recipeComment = recipeComment;
+	}
 
 	public String getRecipeName() {
 		return recipeName;
@@ -103,6 +112,14 @@ public class RecipeDetail {
 
 	public void setRecipeIngredient(List<RecipeIngredientPrice> recipeIngredient) {
 		this.recipeIngredient = recipeIngredient;
+	}
+
+	public double getGradePoint() {
+		return gradePoint;
+	}
+
+	public void setGradePoint(double gradePoint) {
+		this.gradePoint = gradePoint;
 	}
 
 

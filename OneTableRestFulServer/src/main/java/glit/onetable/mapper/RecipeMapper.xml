@@ -12,6 +12,15 @@
 		select count(1) from recipe
 	</select>
 	
+	<select id='getGradePoint' parameterType="int" resultType="Double">
+		select avgGradePoint from recipe_avg_grade where recipeIdx = #{recipeIdx}
+	</select>
+	
+	<select id="getRecipeComment" parameterType="int" resultType="RecipeComment">
+		select * from recipecomment where recipeIdx = #{recipeIdx}
+	</select>
+	
+	
 	<select id='searchAll' parameterType="Recipe" resultType="Recipe">
 		SELECT recipeIdx, userIdx, recipeName, price, recipeImg, nickName, recipeDate FROM onetable.recipe_unit order by recipeIdx LIMIT #{limitIndex}, #{limitCnt}
 	</select>
