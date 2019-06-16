@@ -70,4 +70,8 @@
 	<select id="getUnit" resultType="Unit">
 		SELECT * FROM onetable.unit;
 	</select>
+	
+	<select id="history" parameterType="int" resultType="Recipe">
+		SELECT * FROM onetable.recipe where userIdx = #{userIdx};
+	</select>
 </mapper>

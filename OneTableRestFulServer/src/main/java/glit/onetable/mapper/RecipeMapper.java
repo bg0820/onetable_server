@@ -24,6 +24,7 @@ public interface RecipeMapper {
 	public int insertRecipe(Recipe recipe);
 	public void insertRecipeMethod(RecipeMethod method);
 	public void insertRecipeIngrdient(Ingredient ingredient);
+	public List<Recipe> history(int userIdx);
 
 	public IngredientPrice ingredientCurrentDayPrice(String ingredientItemId);
 	public Ingredient getIngredientToItemId(String ingredientItemId);

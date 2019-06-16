@@ -17,6 +17,7 @@ public class Recipe {
 	private String recipeImg;
 	private String cookTimeMin;
 	private double kcal;
+	private int category;
 	private String nickName;
 	private Timestamp recipeDate;
 	private double avg;
@@ -30,6 +31,16 @@ public class Recipe {
 
 	private int limitIndex;
 	private int limitCnt;
+
+
+
+	public int getCategory() {
+		return category;
+	}
+
+	public void setCategory(int category) {
+		this.category = category;
+	}
 
 	public double getAvg() {
 		return avg;
@@ -170,7 +181,7 @@ public class Recipe {
 	public void setNum(int num) {
 		this.num = num;
 	}
-	
+
 
 	public List<Ingredient> getRecipeIngredient() {
 		return recipeIngredient;

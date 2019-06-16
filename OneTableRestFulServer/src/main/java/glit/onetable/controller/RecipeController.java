@@ -124,6 +124,22 @@ public class RecipeController {
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
 
+	@RequestMapping(value = "/history", method = RequestMethod.GET)
+	public ResponseEntity<ApiResponseResult> history(@RequestHeader(value = "API_Version") String version,
+			@RequestParam int userIdx) throws CustomException, IOException {
+		ApiResponseResult<Object> resResult = new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
+		HttpStatus hs = HttpStatus.OK;
+
+		if (!version.equals("1.0"))
+			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
+
+		List<Recipe> recipeList = recipeMapper.history(userIdx);
+		resResult.setData(recipeList);
+
+		return new ResponseEntity<ApiResponseResult>(resResult, hs);
+
+	}
+
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public ResponseEntity<ApiResponseResult> search(@RequestHeader(value = "API_Version") String version,
 			@RequestBody Recipe recipe)
