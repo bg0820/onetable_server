@@ -16,8 +16,8 @@
 		INSERT INTO onetable.onetablesetrecipe(onetablesetIdx, recipeIdx, x, y) VALUES (#{onetablesetIdx}, #{recipeIdx}, #{x}, #{y});
 	</insert>
 	
-	<select id='history' parameterType="int" resultType="Onetableset">
-		SELECT onetablesetIdx, name, classify FROM onetable.onetable_detail where userIdx = #{userIdx};
+	<select id='history' parameterType="int" resultType="OnetableUser">
+		SELECT * FROM onetable.onetable_user where userIdx = #{userIdx};
 	</select>
 	
 	<select id='detail' parameterType="int" resultType="OnetableDetail">

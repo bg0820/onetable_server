@@ -18,6 +18,7 @@ import glit.onetable.mapper.OnetableMapper;
 import glit.onetable.model.ApiResponseResult;
 import glit.onetable.model.request.Onetable;
 import glit.onetable.model.vo.OnetableDetail;
+import glit.onetable.model.vo.OnetableUser;
 import glit.onetable.model.vo.Onetableset;
 import glit.onetable.model.vo.Onetablesetrecipe;
 import glit.onetable.model.vo.RecipeUserPrice;
@@ -76,7 +77,6 @@ public class OnetableController {
 		resResult.setData(recipeList);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
-
 	}
 
 	@RequestMapping(value = "/history", method = RequestMethod.GET)
@@ -88,7 +88,16 @@ public class OnetableController {
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
-		List<Onetableset> onetableList = onetableMapper.history(userIdx);
+		List<OnetableUser> onetableList = onetableMapper.history(userIdx);
+		
+		for(int i = 0 ; i < onetableList.size(); i++)
+		{
+			OnetableUser item = onetableList.get(i);
+			List<OnetableDetail> onetableDetailList = onetableMapper.detail(item.getOnetablesetIdx());
+			onetableList.get(i).setOnetableDetail(onetableDetailList);
+		}
+		
+		
 		resResult.setData(onetableList);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);

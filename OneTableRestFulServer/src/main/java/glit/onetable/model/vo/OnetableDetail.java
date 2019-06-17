@@ -3,6 +3,7 @@ package glit.onetable.model.vo;
 public class OnetableDetail {
 	private int onetablesetIdx;
 	private int recipeIdx;
+	private String name;
 	private String recipeName;
 	private String recipeImg;
 	private String nickname;
@@ -82,5 +83,13 @@ public class OnetableDetail {
 
 	public void setProfileImg(String profileImg) {
 		this.profileImg = profileImg;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
