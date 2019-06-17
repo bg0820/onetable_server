@@ -3,26 +3,31 @@ package glit.onetable.model.vo;
 import java.util.List;
 
 public class Home {
-	private List<Recipe> popular;
-	private List<Recipe> count;
-	private List<Recipe> recent;
+	private List<RecipeUserPrice> popular;
+	private List<RecipeUserPrice> count;
+	private List<RecipeUserPrice> recent;
 
-	public List<Recipe> getPopular() {
+	public List<RecipeUserPrice> getPopular() {
 		return popular;
 	}
-	public void setPopular(List<Recipe> popular) {
+
+	public void setPopular(List<RecipeUserPrice> popular) {
 		this.popular = popular;
 	}
-	public List<Recipe> getCount() {
+
+	public List<RecipeUserPrice> getCount() {
 		return count;
 	}
-	public void setCount(List<Recipe> count) {
+
+	public void setCount(List<RecipeUserPrice> count) {
 		this.count = count;
 	}
-	public List<Recipe> getRecent() {
+
+	public List<RecipeUserPrice> getRecent() {
 		return recent;
 	}
-	public void setRecent(List<Recipe> recent) {
+
+	public void setRecent(List<RecipeUserPrice> recent) {
 		this.recent = recent;
 	}
 

@@ -4,16 +4,16 @@
 
 <mapper namespace="glit.onetable.mapper.HomeMapper">
 
-	<select id="popularRecipe" resultType="Recipe">
-		select recipeIdx, price, recipeName, nickName, recipeImg FROM recipe_avg_grade GROUP BY recipeIdx ORDER BY AVG(avgGradePoint) DESC limit 0, 15;
+	<select id="popularRecipe" resultType="RecipeUserPrice">
+		select recipeIdx, price, recipeName, nickName, recipeImg FROM recipe_user_price GROUP BY recipeIdx ORDER BY AVG(avgGradePoint) DESC limit 0, 15
 	</select>
 	
-	<select id="countRecipe" resultType="Recipe">
-		SELECT recipeIdx, price, recipeName, nickName, recipeImg FROM onetable.recipe_unit order by queryCnt desc, name limit 0, 15;
+	<select id="countRecipe" resultType="RecipeUserPrice">
+		SELECT recipeIdx, price, recipeName, nickName, recipeImg FROM recipe_user_price order by queryCnt desc, recipeName limit 0, 15
 	</select>
 	
-	<select id="recentRecipe" resultType="Recipe">
-		select recipeIdx, price, recipeName, nickName, recipeImg FROM recipe_price ORDER BY recipeDate DESC limit 0, 15;
+	<select id="recentRecipe" resultType="RecipeUserPrice">
+		select recipeIdx, price, recipeName, nickName, recipeImg FROM recipe_user_price ORDER BY recipeDate DESC limit 0, 15
 	</select>
 	
 </mapper>
