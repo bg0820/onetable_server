@@ -95,6 +95,6 @@
 	</select>
 	
 	<select id="history" parameterType="int" resultType="Recipe">
-		SELECT * FROM onetable.recipe where userIdx = #{userIdx}
+		SELECT * FROM onetable.recipe_user_price where userIdx = #{userIdx}
 	</select>
 </mapper>

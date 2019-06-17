@@ -20,7 +20,7 @@ import glit.onetable.model.request.Onetable;
 import glit.onetable.model.vo.OnetableDetail;
 import glit.onetable.model.vo.Onetableset;
 import glit.onetable.model.vo.Onetablesetrecipe;
-import glit.onetable.model.vo.Recipe;
+import glit.onetable.model.vo.RecipeUserPrice;
 @CrossOrigin
 @RestController
 @RequestMapping("/onetable")
@@ -72,7 +72,7 @@ public class OnetableController {
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
-		List<Recipe> recipeList = onetableMapper.searchRecipe(query);
+		List<RecipeUserPrice> recipeList = onetableMapper.searchRecipe(query);
 		resResult.setData(recipeList);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);

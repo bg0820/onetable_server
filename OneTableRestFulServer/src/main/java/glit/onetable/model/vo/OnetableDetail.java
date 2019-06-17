@@ -6,6 +6,8 @@ public class OnetableDetail {
 	private String recipeName;
 	private String recipeImg;
 	private String nickname;
+	private String profileImg;
+	
 	private int price;
 	private double x;
 	private double y;
@@ -72,5 +74,13 @@ public class OnetableDetail {
 
 	public void setY(double y) {
 		this.y = y;
+	}
+
+	public String getProfileImg() {
+		return profileImg;
+	}
+
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
 	}
 }

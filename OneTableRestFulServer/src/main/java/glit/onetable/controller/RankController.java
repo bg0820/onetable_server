@@ -34,7 +34,7 @@ public class RankController {
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
 		
-		
+		/*
 		List<Rank> rankListTeen = RankMapper.searchTeen();
 		List<Rank> rankListTwnt = RankMapper.searchTwnt();
 		List<Rank> rankListThree = RankMapper.searchThree();
@@ -42,7 +42,7 @@ public class RankController {
 		List<Rank> rankListFive = RankMapper.searchFive();
 
 		List<Rank> rankListRecipe = RankMapper.rankRecipe();
-		List<Rank> rankListChief = RankMapper.rankChief();
+		List<Rank> rankListChief = RankMapper.rankChief();*/
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 

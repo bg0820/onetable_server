@@ -8,15 +8,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class IngredientPrice {
 	private int ingredientPriceIdx;
 
-	private String ingredientItemId;
+	private int ingredientItemId;
 	private int price;
 	private Date priceDate;
 
-	public String getIngredientItemId() {
+	public int getIngredientItemId() {
 		return ingredientItemId;
 	}
 
-	public void setIngredientItemId(String ingredientItemId) {
+	public void setIngredientItemId(int ingredientItemId) {
 		this.ingredientItemId = ingredientItemId;
 	}
 

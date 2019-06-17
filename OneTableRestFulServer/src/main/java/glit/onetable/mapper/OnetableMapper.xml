@@ -4,8 +4,8 @@
 
 <mapper namespace="glit.onetable.mapper.OnetableMapper">
 
-	<select id='searchRecipe' parameterType="String" resultType="Recipe">
-		SELECT recipeIdx, recipeName, recipeImg, nickname, price FROM onetable.recipe_price where recipeName like concat('%', #{query}, '%');
+	<select id='searchRecipe' parameterType="String" resultType="RecipeUserPrice">
+		SELECT recipeIdx, recipeName, recipeImg, nickName, price FROM onetable.recipe_user_price where recipeName like concat('%', #{query}, '%');
 	</select>
 	
 	<insert id='onetablesetInsert' parameterType="Onetableset" useGeneratedKeys="true"  keyProperty="onetablesetIdx">
@@ -17,10 +17,10 @@
 	</insert>
 	
 	<select id='history' parameterType="int" resultType="Onetableset">
-		SELECT onetablesetIdx, name, classify FROM onetable.onetableset where userIdx = #{userIdx};
+		SELECT onetablesetIdx, name, classify FROM onetable.onetable_detail where userIdx = #{userIdx};
 	</select>
 	
-	<select id='detail' parameterType="int" resultType="Onetableset">
+	<select id='detail' parameterType="int" resultType="OnetableDetail">
 		select * from onetable_detail where onetablesetIdx = #{onetablesetIdx}
 	</select>
 	
