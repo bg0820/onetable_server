@@ -10,7 +10,7 @@ public class IngredientPriceAll {
 	private String displayName;
 	private int price;
 	private String imgUrl;
-	private int ingredientItemId;
+	private long ingredientItemId;
 	private Date priceDate;
 	private int queryCnt;
 
@@ -66,11 +66,11 @@ public class IngredientPriceAll {
 		this.imgUrl = imgUrl;
 	}
 
-	public int getIngredientItemId() {
+	public long getIngredientItemId() {
 		return ingredientItemId;
 	}
 
-	public void setIngredientItemId(int ingredientItemId) {
+	public void setIngredientItemId(long ingredientItemId) {
 		this.ingredientItemId = ingredientItemId;
 	}
 

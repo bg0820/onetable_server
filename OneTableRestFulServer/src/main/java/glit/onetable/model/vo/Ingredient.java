@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Ingredient {
 	private int ingredientidx;
 
-	private int ingredientItemId;
+	private long ingredientItemId;
 	private int ingredientSubjectIdx;
 	private int unitIdx;
 	private double unitAmount;
@@ -23,11 +23,11 @@ public class Ingredient {
 		this.unitAmount = unitAmount;
 	}
 
-	public int getIngredientItemId() {
+	public long getIngredientItemId() {
 		return ingredientItemId;
 	}
 
-	public void setIngredientItemId(int ingredientItemId) {
+	public void setIngredientItemId(long ingredientItemId) {
 		this.ingredientItemId = ingredientItemId;
 	}
 

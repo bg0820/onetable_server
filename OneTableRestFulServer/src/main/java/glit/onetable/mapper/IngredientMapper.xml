@@ -8,7 +8,7 @@
 	</select>
 	-->
 	<select id='searchAll' parameterType="IngredientPriceAll" resultType="IngredientPriceAll">
-		SELECT ingredientItemId, min(displayName) as displayName, min(imgUrl) as imgUrl, min(queryCnt) as queryCnt, min(price) as price, min(priceDate) as priceDate FROM onetable.ingredient_price_all WHERE priceDate in (SELECT MAX(priceDate) FROM onetable.ingredient_price) group by ingredientItemId LIMIT #{limitIndex}, #{limitCnt}
+		SELECT * FROM onetable.ingredient_price_all LIMIT #{limitIndex}, #{limitCnt}
 	</select>
 	
 	<select id='getIngredientSubjectIdx' parameterType="String" resultType="int">
@@ -21,7 +21,7 @@
 	
 	
 	<select id='search' parameterType="Search" resultType="IngredientPriceAll">
-		SELECT ingredientIdx, ingredientItemId, displayName, imgUrl, queryCnt, price, priceDate FROM onetable.ingredient_price_all WHERE ingredientIdx in (SELECT ingredientIdx from onetable.ingredient Where displayName like CONCAT('%',#{query},'%')) and priceDate in (SELECT MAX(priceDate) FROM onetable.ingredient_price) LIMIT #{startNum}, #{itemNum}
+		SELECT ingredientIdx, ingredientItemId, displayName, imgUrl, queryCnt, price, priceDate FROM onetable.ingredient_price_all WHERE displayName like CONCAT('%',#{query},'%') LIMIT #{startNum}, #{itemNum}
 	</select>
 	
 	<select id='priceHistroy' parameterType="String" resultType="IngredientPrice">

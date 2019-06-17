@@ -5,7 +5,7 @@
 <mapper namespace="glit.onetable.mapper.HomeMapper">
 
 	<select id="popularRecipe" resultType="RecipeUserPrice">
-		select recipeIdx, price, recipeName, nickName, recipeImg FROM recipe_user_price GROUP BY recipeIdx ORDER BY AVG(avgGradePoint) DESC limit 0, 15
+		select recipeIdx, price, recipeName, nickName, recipeImg FROM recipe_user_price GROUP BY recipeIdx ORDER BY avgGradePoint DESC limit 0, 15
 	</select>
 	
 	<select id="countRecipe" resultType="RecipeUserPrice">
