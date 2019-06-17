@@ -29,7 +29,7 @@
 	
 	
 	<select id='search' parameterType="Search" resultType="RecipeUserPrice">
-		SELECT * FROM onetable.recipe_user_price WHERE name LIKE CONCAT('%',#{query},'%') order by recipeDate desc LIMIT #{startNum}, #{itemNum}
+		SELECT * FROM onetable.recipe_user_price WHERE recipeName LIKE CONCAT('%',#{query},'%') order by recipeDate desc LIMIT #{startNum}, #{itemNum}
 	</select>
 	
 

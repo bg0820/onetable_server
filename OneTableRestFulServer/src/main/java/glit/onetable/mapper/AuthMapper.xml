@@ -31,12 +31,12 @@
 		UPDATE user SET pw = #{pw} WHERE email = #{email} and id = #{id}
 	</select>
 	
-	<update id="withdrawal" parameterType="String">
-		UPDATE user FROM SET status = 0 WHERE token = #{token}
+	<update id="withdrawal" parameterType="int">
+		UPDATE user FROM SET status = 0 WHERE userIdx = #{userIdx}
 	</update>
 	
-	<select id="getUser" parameterType="String" resultType="User">
-		SELECT id, nickname, email, birthday, profileImgUrl FROM user WHERE token = #{token}
+	<select id="getUser" parameterType="int" resultType="User">
+		SELECT * FROM user WHERE userIdx = #{userIdx}
 	</select>
 	
 </mapper>

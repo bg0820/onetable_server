@@ -163,10 +163,10 @@ public class AuthController {
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
 
-	@RequestMapping(value = "/user/{token}", method = RequestMethod.GET)
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponseResult> getUser(
 			@RequestHeader(value = "API_Version") String version,
-			@PathVariable String token) throws CustomException {
+			@RequestParam int userIdx) throws CustomException {
 		ApiResponseResult<Object> resResult =
 				new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
 		HttpStatus hs = HttpStatus.OK;
@@ -174,7 +174,7 @@ public class AuthController {
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
-		User resultUser = authMapper.getUser(token);
+		User resultUser = authMapper.getUser(userIdx);
 		if (resultUser == null)
 			throw new CustomException(ErrorCode.UNTOKENIZED);
 
@@ -183,10 +183,10 @@ public class AuthController {
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}
 
-	@RequestMapping(value = "/withdrawal/{token}", method = RequestMethod.GET)
+	@RequestMapping(value = "/withdrawal", method = RequestMethod.GET)
 	public ResponseEntity<ApiResponseResult> withdrawlToToken (
 			@RequestHeader(value = "API_Version") String version,
-			@PathVariable String token) throws CustomException {
+			@RequestParam int userIdx) throws CustomException {
 		ApiResponseResult<Object> resResult =
 				new ApiResponseResult<Object>(ErrorCode.SUCCESS, "", null);
 		HttpStatus hs = HttpStatus.OK;
@@ -194,11 +194,11 @@ public class AuthController {
 		if (!version.equals("1.0"))
 			throw new CustomException(ErrorCode.API_VERSION_INVAILD);
 
-		User resultUser = authMapper.getUser(token);
+		User resultUser = authMapper.getUser(userIdx);
 		if (resultUser == null)
 			throw new CustomException(ErrorCode.UNTOKENIZED);
 		
-		authMapper.withdrawal(token);
+		authMapper.withdrawal(userIdx);
 
 		return new ResponseEntity<ApiResponseResult>(resResult, hs);
 	}

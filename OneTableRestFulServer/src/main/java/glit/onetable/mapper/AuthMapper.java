@@ -32,8 +32,8 @@ public interface AuthMapper {
 	public User idFindToEmailChange(String email);
 	public void pwFindToEmailChange(User user);
 	
-	public void withdrawal(String token);
+	public void withdrawal(int userIdx);
 	
-	public User getUser(String token);
+	public User getUser(int userIdx);
 
 }
